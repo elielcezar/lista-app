@@ -97,6 +97,7 @@ router.get('/imoveis', async (req, res) => {
                 titulo: true,
                 descricaoLonga: true,
                 fotos: true,
+                status: true,
                 createdAt: true,
                 updatedAt: true,
                 usuarios: {
@@ -192,26 +193,31 @@ router.put('/imoveis/:id', upload.array('fotos'), async (req, res) => {
 });
 
 // Atualizar status da tarefa
-router.patch('/imoveis/:id/status', async (req, res) => {   
+router.patch('/imoveis/:id/status', async (req, res) => {  
     try {
         const { id } = req.params;
-        
-        const imovel = await prisma.imovel.findUnique({
-            where: { id }
-        });
-        
+        const { status } = req.body;        
+
+        const statusBoolean = Boolean(status);        
+
         const updated = await prisma.imovel.update({
             where: { id },
-            data: { status: !imovel.status }
+            data: { 
+                status: statusBoolean,
+                updatedAt: new Date()
+            },
+            select: {
+                id: true,
+                status: true,
+                updatedAt: true
+            }
         });
 
-        return res.status(200).json(updated);
+        return res.json(updated);
     } catch (error) {
         console.error('Erro:', error);
-        return res.status(500).json({ error: 'Erro ao atualizar status' });
+        return res.status(500).json({ error: error.message });
     }
 });
 
 export default router;
-
-

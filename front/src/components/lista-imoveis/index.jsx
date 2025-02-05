@@ -9,19 +9,12 @@ export const ListaImoveis = () => {
 
     const navigate = useNavigate();
 
-    /*async function getImoveis(){
-        const imoveisFromAPI = await api.get('/imoveis')
-        setImoveis(imoveisFromAPI.data);        
-    } 
-  
-    useEffect(() => {
-        getImoveis();        
-    }, [])*/
-
     useEffect(() => {
         const fetchImoveis = async () => {
             try {
-                const response = await api.get('/imoveis')
+                const response = await api.get('/imoveis');
+                const filteredImoveis = response.data.filter(item => item.status === false);
+                //setImoveis(filteredImoveis)
                 setImoveis(response.data)
             } catch (error) {
                 console.error('Erro ao carregar imóveis:', error)
@@ -39,22 +32,27 @@ export const ListaImoveis = () => {
     const handleStatusChange = async (e, imovelId) => {
         e.stopPropagation()
         
-        try {
-            // Adiciona headers à requisição
-            const response = await api.patch(`/imoveis/${imovelId}/status`, {}, {
+        try {            
+            const imovel = imoveis.find(im => im.id === imovelId);
+
+            const response = await api.patch(`/imoveis/${imovelId}/status`, {
+                status: !imovel.status
+            }, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
-            })
+            });
 
             if (response.status === 200) {
                 const updatedImoveis = imoveis.map(imovel => {
                     if (imovel.id === imovelId) {
-                        return { ...imovel, status: !imovel.status }
+                        return { ...imovel, status: !imovel.status };
                     }
-                    return imovel
-                })
-                setImoveis(updatedImoveis)
+                    return imovel;
+                });
+                const filteredImoveis = updatedImoveis.filter(item => item.status === false);
+                setImoveis(filteredImoveis);
+                //console.log(filteredImoveis)
             }
         } catch (error) {
             console.error('Erro detalhado:', error.response?.data || error.message)
@@ -67,7 +65,11 @@ export const ListaImoveis = () => {
             <div className={styles.item} key={imovel.id}>
                 <div className={styles.card}>    
                     <div className={styles.checkbox}>                        
-                        <input type="checkbox" checked={Boolean(imovel.status)} onChange={(e) => handleStatusChange(e, imovel.id)} onClick={(e) => e.stopPropagation()} />
+                        <input type="checkbox" 
+                            checked={Boolean(imovel.status)} 
+                            onChange={(e) => handleStatusChange(e, imovel.id)} 
+                            //onClick={(e) => e.stopPropagation()}                            
+                        />
                     </div>
                     <div className={styles.content} onClick={() => handleClick(imovel.id)}>
                         <h3>{imovel.titulo}</h3>
