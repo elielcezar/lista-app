@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import api from '../../../services/api';
 import FormCategorias from '../../../components/form-categorias';
-import './style.css';
+import styles from './styles.module.css';
 
 function CadastroImovel() {     
     
@@ -78,23 +78,21 @@ function CadastroImovel() {
     }
    
   return (
-    <div id="main">
+    <>
+        <h2 className={styles.pagetitle}>Nova tarefa</h2>
+        <div id="main">
         <div className="container">        
-            <h1>Cadastrar novo imóvel</h1>
-            
             {confirmationMessage ? <p className="confirmation-message">{confirmationMessage}</p> : null}
 
             <form>                
-                <div className="form-item">
-                    <label htmlFor="titulo">Título</label>
-                    <input type="text" name="titulo" className="titulo" ref={inputTitulo} />
+                <div className="form-item">                    
+                    <input type="text" name="titulo" className="titulo" ref={inputTitulo} placeholder="Título" />
                 </div>                                           
-                <div className="form-item">   
-                    <label htmlFor="subtitulo">Descrição longa</label>             
-                    <textarea name="descricaoLonga" className="descricaoLonga" ref={inputDescricaoLonga}></textarea>
+                <div className="form-item">                       
+                    <textarea name="descricaoLonga" className="descricaoLonga" ref={inputDescricaoLonga} placeholder="Descrição"></textarea>
                 </div>
                 <div className="form-item">
-                    <label htmlFor="subtitulo">Enviar para: </label>
+                    <label htmlFor="subtitulo">Colaborador: </label>
                     <FormCategorias endpoint="usuarios" onChange={setSelectedUsers} />
                 </div>
                 <div className="form-item">
@@ -109,6 +107,7 @@ function CadastroImovel() {
             </form>       
         </div>      
     </div>
+    </>    
   )
 }
 

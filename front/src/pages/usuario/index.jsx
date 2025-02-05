@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import api from "../../services/api";
-import './style.css'
+import styles from './styles.module.css';
 
 export const Usuario = () => {
 
@@ -73,8 +73,9 @@ export const Usuario = () => {
 
     return (
 
-        <div className="container">
-            <h1>{userData.name}</h1>
+        <>
+            <h2 className={styles.pagetitle}>Edtar Usuário</h2>
+            <div className="container">            
             {confirmationMessage ? <p className="confirmation-message">{confirmationMessage}</p> : null}
             <form>
                 <div className="form-item">
@@ -91,6 +92,9 @@ export const Usuario = () => {
                 </div>
             </form>   
         </div>
+        </>
+
+        
     )
 }
 

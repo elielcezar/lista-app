@@ -1,3 +1,16 @@
+h2.pagetitle{
+    padding: 7px 0;
+    background: #132972;
+    color: #fff;
+    border: none;
+    font-size: 13px;
+    font-weight: 500;
+    display: block;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
 .listaUsuarios{
     background: #fff;
     padding: 25px;
@@ -31,18 +44,38 @@ form{
     border-radius: 5px;
     box-shadow: 0 3px 3px rgba(0,0,0,.1);
 
-    & .form-item{
+    .form-item{
         margin: 1.5%;
         max-width: 97%;
     }
 
-    & .row{
+    .row{
         flex-wrap: wrap;
 
-        & .form-item{
+        .form-item{
             width: 30.3%;
             padding: 10px;
             border: 1px solid #ccc;            
         }
     }
+
+    .imageitem{
+        border-bottom: 1px solid #ccc;
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        position: relative;
+
+        button.excluir{
+            background: #fff;
+            border: 2px solid red;
+            color: red;
+            padding: 5px;
+            width: auto;
+            position: absolute;
+            bottom: 10px;
+            right: 5px;
+        }
+    }
+
+    
 }

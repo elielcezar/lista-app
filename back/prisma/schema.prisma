@@ -26,7 +26,8 @@ model Imovel {
   id              String   @id @default(auto()) @map("_id") @db.ObjectId
   titulo          String    
   descricaoLonga  String?
-  fotos           String[]      
+  fotos           String[]  
+  status          Boolean  @default(false)     
   usuarios        ImovelUser[]
   createdAt       DateTime? @default(now())
   updatedAt       DateTime? @default(now())

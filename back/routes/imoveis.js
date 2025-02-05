@@ -149,7 +149,6 @@ router.get('/imoveis/id/:id', async (req, res) => {
 
 // Atualizar imovel
 router.put('/imoveis/:id', upload.array('fotos'), async (req, res) => {    
-
     try{
         console.log('Recebendo requisição PUT /imoveis');    
 
@@ -189,6 +188,27 @@ router.put('/imoveis/:id', upload.array('fotos'), async (req, res) => {
     }catch (error){
         console.error('Erro ao atualizar imóvel:', error);
         res.status(500).json({ error: 'Erro ao atualizar imóvel' });
+    }
+});
+
+// Atualizar status da tarefa
+router.patch('/imoveis/:id/status', async (req, res) => {   
+    try {
+        const { id } = req.params;
+        
+        const imovel = await prisma.imovel.findUnique({
+            where: { id }
+        });
+        
+        const updated = await prisma.imovel.update({
+            where: { id },
+            data: { status: !imovel.status }
+        });
+
+        return res.status(200).json(updated);
+    } catch (error) {
+        console.error('Erro:', error);
+        return res.status(500).json({ error: 'Erro ao atualizar status' });
     }
 });
 

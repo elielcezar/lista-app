@@ -49,9 +49,9 @@ function App() {
                     <Route path="login" element={<Login />} />                    
                     
                     <Route path="imoveis" element={<ListarImoveis />} />                    
-                    <Route path="imoveis/:codigo" element={<ExibirImovel />} />
-                    <Route path="imoveis/edit/:id" element={<ProtectedRoute element={EditarImovel} />} />
-                    <Route path="cadastro-imovel" element={<ProtectedRoute element={CadastrarImovel} />} />
+                    <Route path="tarefa/:id" element={<ExibirImovel />} />
+                    <Route path="tarefa/edit/:id" element={<ProtectedRoute element={EditarImovel} />} />
+                    <Route path="cadastro-tarefa" element={<ProtectedRoute element={CadastrarImovel} />} />
                     
                     <Route path="usuarios" element={<ProtectedRoute element={Usuarios} />} />
                     <Route path="usuarios/*" element={<ProtectedRoute element={Usuarios} />} />

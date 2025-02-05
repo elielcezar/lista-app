@@ -1,15 +1,17 @@
-import { EmblaCarousel } from '../../components/carrossel';  
 import ListaImoveis from '@/components/lista-imoveis';
+import CriarTarefaBtn from '@/components/CriarTarefaBtn';
 import './style.css';
 
 function Home() {   
   
   return (
-    <>
-      <EmblaCarousel />
-      <div className="container">  
-        <ListaImoveis />    
-      </div> 
+    <>      
+      <div id="main">
+        <div className="container">  
+          <ListaImoveis />  
+          <CriarTarefaBtn/>  
+        </div> 
+      </div>
     </>
   )
 }

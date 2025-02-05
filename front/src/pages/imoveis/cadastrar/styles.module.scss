@@ -1,16 +1,15 @@
-.listaUsuarios{
-    background: #fff;
-    padding: 25px;
-    margin: 40px 0;
-    box-shadow: 0 5px 5px rgba(0,0,0,.1);
-
-    & .item{
-        margin: 0 0 20px 0;
-        padding: 0 0 20px 0;
-        border-bottom: 1px solid #ccc;
-    }
+h2.pagetitle{
+    padding: 7px 0;
+    background: #132972;
+    color: #fff;
+    border: none;
+    font-size: 13px;
+    font-weight: 500;
+    display: block;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
-
 .confirmation-message{
     display: inline-block;
     transition: all .3s;
@@ -31,15 +30,15 @@ form{
     border-radius: 5px;
     box-shadow: 0 3px 3px rgba(0,0,0,.1);
 
-    & .form-item{
+    .form-item{
         margin: 1.5%;
         max-width: 97%;
     }
 
-    & .row{
+    .row{
         flex-wrap: wrap;
 
-        & .form-item{
+        .form-item{
             width: 30.3%;
             padding: 10px;
             border: 1px solid #ccc;            
