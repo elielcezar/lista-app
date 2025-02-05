@@ -1,0 +1,60 @@
+#main{
+    margin: 0;    
+    
+    & .page-title{
+        width: 100%;
+        background: #3f3a50;
+        padding: 125px 0;
+        text-align: center;
+        margin-bottom: 75px;     
+        
+        & h1{
+            color: #fff;  
+        margin: 0;
+        }
+    }
+
+    .meta{        
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 50px;
+        font-size: 16px;
+
+        h1{
+            margin: 0;
+            padding: ;
+        }          
+        
+        .itens{
+            display: flex;
+            width: 100%;
+            padding: 15px 0;
+            border-top: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
+            justify-content: space-around;
+            
+            & strong{
+                margin-right: 10px;
+            }
+            
+        }
+    }
+
+    .carrossel{
+        & .embla{
+            & .embla__container{
+                & .embla__slide{
+                    background-size: cover;
+                    background-position: center;
+                    height: 70vh;
+                }
+            }
+        }
+    }
+
+    .descricao-longa{
+        margin: 50px 0;
+        font-size: 16px;
+        line-height: 26px;
+    }
+}
