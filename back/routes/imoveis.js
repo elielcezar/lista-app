@@ -129,9 +129,27 @@ router.get('/imoveis/id/:id', async (req, res) => {
         const {id} = req.params;
 
         const imovel = await prisma.imovel.findUnique({
-            where: {
-                id: id
-            }
+            where: { id: id },
+            select: {
+                id: true,
+                titulo: true,
+                descricaoLonga: true,
+                fotos: true,
+                status: true,
+                createdAt: true,
+                updatedAt: true,
+                usuarios: {
+                    select: {
+                        user: {
+                            select: {
+                                id: true,
+                                name: true,
+                                email: true
+                            }
+                        }
+                    }
+                }
+            }  
         });
         if(!imovel){
             return res.status(404).json({
@@ -148,47 +166,76 @@ router.get('/imoveis/id/:id', async (req, res) => {
 });
 
 
-// Atualizar imovel
+// Atualizar tarefa
 router.put('/imoveis/:id', upload.array('fotos'), async (req, res) => {    
     try{
-        console.log('Recebendo requisição PUT /imoveis');    
+
+        console.log('Recebendo requisição /PUT');    
 
         const { id } = req.params;
         const {
             titulo,            
             descricaoLonga,            
-            oldPhotos
-        } = req.body;
-
-        console.log('req.body:', req.body);
+            oldPhotos,
+            usuarios
+        } = req.body;        
 
         let fotos = [];
         if (oldPhotos) {
             fotos = JSON.parse(oldPhotos); // Converte string JSON para array
         }
-        if (req.files && req.files.length > 0) {
+        //if (req.files && req.files.length > 0) {
+        if (req.files?.length > 0) {
             const novasFotos = req.files.map(file => file.filename);
             fotos = [...fotos, ...novasFotos]; // Mescla arrays
         }
 
-        const data = {
-            titulo,           
-            descricaoLonga,           
-            fotos
+        // Prepare update data
+        const updateData = {
+            titulo,
+            descricaoLonga,
+            fotos,
+            updatedAt: new Date()
         };
 
-        console.log('data:', data);
+        // Only include usuarios if it exists
+        if (usuarios) {
+            updateData.usuarios = {
+                deleteMany: {},
+                create: {
+                    user: {
+                        connect: { id: usuarios }
+                    }
+                }
+            };            
+        }
 
-        const response = await prisma.imovel.update({
-            where: { id },
-            data: data            
-        });        
+        const updatedImovel = await prisma.$transaction(async (tx) => {            
+            return await tx.imovel.update({
+                where: { id },
+                data: updateData,
+                include: {
+                    usuarios: {
+                        include: {
+                            user: {
+                                select: {
+                                    id: true,
+                                    name: true,
+                                    email: true
+                                }
+                            }
+                        }
+                    }
+                }
+            });            
+        });
         
-        console.log('Imóvel atualizado:', response);
-        res.status(200).json(response);
+        console.log('tarefa atualizada:', updatedImovel);
+        res.status(200).json(updatedImovel);
+        
     }catch (error){
-        console.error('Erro ao atualizar imóvel:', error);
-        res.status(500).json({ error: 'Erro ao atualizar imóvel' });
+        console.error('Erro ao atualizar tarefa:', error);
+        res.status(500).json({ error: 'Erro ao atualizar tarefa' });
     }
 });
 

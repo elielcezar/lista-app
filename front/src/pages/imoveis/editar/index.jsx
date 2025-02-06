@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom'
+import ListaUsuarios from '../../../components/form-usuarios';
 import api from '../../../services/api';
 import styles from './styles.module.css';
 
@@ -13,9 +14,11 @@ function EditarImovel() {
     const navigate = useNavigate();
     
     const [imovelData, setImovel] = useState(null);
-    /*const [tipo, setTipo] = useState('');
-    const [finalidade, setFinalidade] = useState('');   */
+    
+    const [usuario, setUsuario] = useState('');
+    
     const [currentPhotos, setCurrentPhotos] = useState([]);
+    
     const [formData, setFormData] = useState({
         titulo: '',       
         descricaoLonga: '',       
@@ -35,8 +38,9 @@ function EditarImovel() {
                     descricaoLonga: response.data.descricaoLonga,                    
                     fotos: response.data.fotos
                 });                
-                /*setTipo(response.data.tipo[0]?.tipo.id);
-                setFinalidade(response.data.finalidade[0]?.finalidade.id);   */             
+                
+                setUsuario(response.data.usuarios[0]?.user.id);
+                
                 setCurrentPhotos(response.data.fotos || []);
                 setLoading(false);
             } catch (error) {
@@ -45,28 +49,7 @@ function EditarImovel() {
             }
         }                
         fetchImovel();
-    }, [id]);
-
-    useEffect(() => {
-        console.log(imovelData);
-    });
-
-    /*useEffect(() => {
-        async function fetchCategorias() {
-            try {
-                const [tiposResponse, finalidadesResponse] = await Promise.all([
-                    api.get('/tipo'),
-                    api.get('/finalidade')
-                ]);
-                setTipo(tiposResponse.data);
-                setFinalidade(finalidadesResponse.data);
-            } catch (error) {
-                console.error('Erro ao buscar categorias:', error);
-                setError('Erro ao carregar categorias');
-            }
-        }
-        fetchCategorias();
-    }, []);*/
+    }, [id]);   
 
     async function handleSubmit(e) {    
         e.preventDefault();
@@ -81,8 +64,7 @@ function EditarImovel() {
         });
 
         // Adiciona os selects
-        /*formPayload.append('tipo', tipo);
-        formPayload.append('finalidade', finalidade);*/
+        formPayload.append('usuarios', usuario);        
 
         // Sempre envia as fotos antigas, mesmo que não haja novos arquivos
         formPayload.append('oldPhotos', JSON.stringify(currentPhotos));
@@ -97,21 +79,20 @@ function EditarImovel() {
         try {
             await api.put(`/imoveis/${id}`, formPayload, {
               headers: { 'Content-Type': 'multipart/form-data' }
-            });
-            console.log('Dentro do try:', currentPhotos)
+            });            
+            
             setConfirmationMessage('Tarefa atualizada com sucesso!');
+
             setTimeout(() => {
                 setConfirmationMessage('');
                 navigate('/');
-            }, 1000);
+            }, 2000);
             
         } catch (error) {
             console.error('Erro ao atualizar tarefa:', error);
             setConfirmationMessage('Erro ao atualizar tarefa.');
             setTimeout(() => setConfirmationMessage(''), 5000);
-        }       
-        
-        
+        }           
     }
 
     function handleDeleteImage(image) {        
@@ -130,11 +111,15 @@ function EditarImovel() {
    
   return (
     <>
+        {confirmationMessage ? 
+            <div className={styles.overlay}>
+                <p className={styles.confirmationmessage}>{confirmationMessage}</p>
+            </div> 
+        : null}
+
         <h2 className={styles.pagetitle}>Editar tarefa</h2>  
         <div id="main">
         <div className="container">        
-            {confirmationMessage ? <p className="confirmation-message">{confirmationMessage}</p> : null}          
-
             <form>                
                 <div className="form-item">                    
                     <input type="text" name="titulo" className="titulo" value={formData.titulo} onChange={updateFormData} placeholder='Título' /> 
@@ -143,14 +128,14 @@ function EditarImovel() {
                     <textarea name="descricaoLonga" className="descricaoLonga" value={formData.descricaoLonga} onChange={updateFormData} placeholder='Descrição'></textarea>
                 </div>  
 
-                 {/*<div className="form-item">
-                    <label htmlFor="tipo">Tipo de imóvel</label>
-                    <ListaCategorias endpoint="tipo" selectedId={tipo} onChange={setTipo} />
-                </div>*/}
+                <div className="form-item">     
+                    <label>Responsável: </label>               
+                    <ListaUsuarios selectedId={usuario} onChange={setUsuario} />
+                </div>
                                        
                 <div className="form-item">
                     <label htmlFor="subtitulo">Fotos</label>
-                    <div className="existing-images">
+                    <div className={styles.existingimages}>
                             {currentPhotos.map((image, index) => (
                                 <div key={index} className={styles.imageitem}>
                                     <img src={`http://localhost:3000/uploads/${image}`} alt={`Imagem ${index + 1}`} />

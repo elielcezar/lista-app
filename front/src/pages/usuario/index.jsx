@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
+import PageTitle from '../../components/PageTitle';
 import api from "../../services/api";
 import styles from './styles.module.css';
 
@@ -74,7 +75,7 @@ export const Usuario = () => {
     return (
 
         <>
-            <h2 className={styles.pagetitle}>Edtar Usuário</h2>
+            <PageTitle title="Editar Usuário"/>
             <div className="container">            
             {confirmationMessage ? <p className="confirmation-message">{confirmationMessage}</p> : null}
             <form>

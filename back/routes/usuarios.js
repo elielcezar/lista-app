@@ -104,10 +104,17 @@ router.put('/usuarios/:id', async (req, res) => {
 });
 
 // Excluir usuario
-router.delete('/usuarios/:id', async (req, res) => {    
+router.delete('/usuarios/:id', async (req, res) => {  
+    
+    const userId = req.params.id;
+
+    await prisma.imovelUser.deleteMany({
+        where: { userId }
+    });
+
     await prisma.user.delete({
         where: {
-            id: req.params.id
+            id: userId
         }
     });
     res.status(200).json({

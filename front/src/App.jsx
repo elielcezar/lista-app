@@ -15,6 +15,8 @@ import ListarImoveis from './pages/imoveis/listar';
 import CadastrarImovel from './pages/imoveis/cadastrar';
 import EditarImovel from './pages/imoveis/editar';
 
+import TarefasArquivadas from './pages/arquivo';
+
 import Usuarios from './pages/usuarios';
 import Usuario from './pages/usuario';
 import CadastroUsuario from './pages/cadastro-usuario';
@@ -25,19 +27,17 @@ import ProtectedRoute from './components/protected-route';
 
 function App() {     
 
-    const usePageClass = () => {
+   /* const usePageClass = () => {
         const location = useLocation();
-        useEffect(() => {
-          // Remover classes anteriores (opcional)
-          document.body.className = '';
-          // Adicionar a classe correspondente à rota atual
+        useEffect(() => {          
+          document.body.className = '';          
           if (location.pathname === '/') {
             document.body.classList.add('page-home');
           } else if (location.pathname === '/about') {
             document.body.classList.add('page-about');
           }
         }, [location]);
-      };
+      };*/
         
     return (
         <AuthProvider>
@@ -52,6 +52,8 @@ function App() {
                     <Route path="tarefa/:id" element={<ExibirImovel />} />
                     <Route path="tarefa/edit/:id" element={<ProtectedRoute element={EditarImovel} />} />
                     <Route path="cadastro-tarefa" element={<ProtectedRoute element={CadastrarImovel} />} />
+                    
+                    <Route path="tarefas-arquivadas" element={<ProtectedRoute element={TarefasArquivadas} />} />
                     
                     <Route path="usuarios" element={<ProtectedRoute element={Usuarios} />} />
                     <Route path="usuarios/*" element={<ProtectedRoute element={Usuarios} />} />

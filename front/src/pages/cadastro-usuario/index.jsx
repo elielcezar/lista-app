@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import PageTitle from '../../components/PageTitle';
 import './style.css'
 import api from '../../services/api'
 
@@ -46,30 +47,31 @@ function CadastroUsuario() {
     }
    
   return (
-    <div id="main">
-    
-      <div className="container"> 
+    <>
+        <PageTitle title="Criar novo usuário"/>
 
-        <h1>Cadastrar novo usuário</h1>       
-        {confirmationMessage ? <p className="confirmation-message">{confirmationMessage}</p> : null}
+        <div id="main">    
+            <div className="container">         
+                {confirmationMessage ? <p className="confirmation-message">{confirmationMessage}</p> : null}
 
-        <form>
-            <div className="form-item">
-                <input type="text" name="name" className="name" placeholder='Nome' ref={inputName} />
-            </div>           
-            <div className="form-item">
-                <input type="email" name="email" className="email" placeholder='Email' ref={inputEmail} />
+                <form>
+                    <div className="form-item">
+                        <input type="text" name="name" className="name" placeholder='Nome' ref={inputName} />
+                    </div>           
+                    <div className="form-item">
+                        <input type="email" name="email" className="email" placeholder='Email' ref={inputEmail} />
+                    </div>
+                    <div className="form-item">
+                        <input type="password" name="password" className="password" placeholder='Senha' ref={inputPassword} />
+                    </div>            
+                    <div className="form-item">
+                        <button type='button' onClick={createUser}>- Enviar -</button>
+                    </div>
+                </form>       
+                
+            </div>      
             </div>
-            <div className="form-item">
-                <input type="password" name="password" className="password" placeholder='Senha' ref={inputPassword} />
-            </div>            
-            <div className="form-item">
-                <button type='button' onClick={createUser}>- Enviar -</button>
-            </div>
-        </form>       
-        
-      </div>      
-    </div>
+    </>    
   )
 }
 

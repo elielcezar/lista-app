@@ -19,9 +19,9 @@ export default function Footer() {
                 {isAuthenticated ? (
                     <nav className={styles.nav}>
                         <ul>                               
-                            <li><NavLink to="/">Tarefas</NavLink></li>
-                            <li><NavLink to="usuarios">Prestadores</NavLink></li>                            
-                            <li><NavLink to="/">Pesquisar</NavLink></li>
+                            <li><NavLink to="/">Tarefas</NavLink></li>                            
+                            <li><NavLink to="/tarefas-arquivadas">Arquivo</NavLink></li>
+                            <li><NavLink to="usuarios">Usuários</NavLink></li>                            
                             <li><NavLink to="/">Mais</NavLink></li>                            
                         </ul>
                     </nav>                            

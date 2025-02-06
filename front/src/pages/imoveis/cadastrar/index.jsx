@@ -63,16 +63,16 @@ function CadastroImovel() {
                 inputFotos.current.value = '';     
                 setSelectedUsers([]);                           
 
-                setConfirmationMessage('Imóvel cadastrado com sucesso!');
+                setConfirmationMessage('Tarefa cadastrada com sucesso!');
                 setTimeout(() => setConfirmationMessage(''), 5000);
                 
             } else {
-                throw new Error('Erro ao cadastrar imóvel');
+                throw new Error('Erro ao cadastrar tarefa');
             }
         } catch (error) {
-            console.error('Erro ao cadastrar imóvel:', error);
+            console.error('Erro ao cadastrar tarefa:', error);
             console.error('Detalhes do erro:', error.response ? error.response.data : error.message);
-            setConfirmationMessage('Erro ao cadastrar imóvel.');
+            setConfirmationMessage('Erro ao cadastrar tarefa.');
             setTimeout(() => setConfirmationMessage(''), 5000);
         }
     }

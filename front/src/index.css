@@ -105,6 +105,10 @@ form{
     font-size: 18px;
     font-family: "Montserrat", serif;
   } 
+
+  & input[type="file"]{
+    font-size: 14px;
+  }
   
   & textarea{
     min-height: 100px;
