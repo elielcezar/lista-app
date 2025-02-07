@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom'
 import ListaUsuarios from '../../../components/form-usuarios';
 import api from '../../../services/api';
+import { FaRegTrashAlt } from "react-icons/fa";
 import styles from './styles.module.css';
 
 function EditarImovel() {    
@@ -108,6 +109,8 @@ function EditarImovel() {
     if (loading) return <div>Carregando...</div>;
     if (error) return <div>Erro ao carregar tarefa: {error.message}</div>;
     if (!imovelData) return <div>Tarefa não encontrada</div>;
+
+    const baseUrl = import.meta.env.VITE_UPLOADS_URL + '/';
    
   return (
     <>
@@ -138,8 +141,10 @@ function EditarImovel() {
                     <div className={styles.existingimages}>
                             {currentPhotos.map((image, index) => (
                                 <div key={index} className={styles.imageitem}>
-                                    <img src={`http://localhost:3000/uploads/${image}`} alt={`Imagem ${index + 1}`} />
-                                    <button type="button" onClick={() => handleDeleteImage(image)} className={styles.excluir}>Excluir</button>
+                                    <img src={`${baseUrl}${image}`} alt={`Imagem ${index + 1}`} />
+                                    <button type="button" onClick={() => handleDeleteImage(image)} className={styles.excluir}>
+                                        <FaRegTrashAlt />
+                                    </button>
                                 </div>
                             ))}
                         </div>

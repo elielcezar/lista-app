@@ -16,16 +16,21 @@ export const ListaImoveis = () => {
         const fetchImoveis = async () => {
             try {
                 const response = await api.get('/imoveis');
-                const filteredImoveis = response.data.filter(item => item.status === false);
-                setImoveis(filteredImoveis)                
+                if (Array.isArray(response.data)) {
+                    const filteredImoveis = response.data.filter(item => item.status === false);
+                    setImoveis(filteredImoveis);
+                } else {
+                    console.error("Erro: Dados recebidos não são um array", response.data);
+                }
             } catch (error) {
-                console.error('Erro ao carregar imóveis:', error)
+                console.error('Erro ao carregar imóveis:', error);
             }
         }
-        fetchImoveis()
-    }, [])
+        fetchImoveis();
+    }, []);
    
     const baseUrl = 'http://localhost:3000/uploads/'
+    //const baseUrl = import.meta.env.VITE_UPLOADS_URL + '/';
 
     const handleClick = (id) => {        
         navigate(`/tarefa/edit/${id}`)

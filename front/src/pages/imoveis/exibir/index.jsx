@@ -3,14 +3,15 @@ import { useParams } from 'react-router-dom';
 import useEmblaCarousel from 'embla-carousel-react'
 import Autoplay from 'embla-carousel-autoplay'
 import api from '@/services/api'
-import './style.css'
+import styles from './styles.module.css';
 
 function Imovel() {  
 
   const params = useParams(); 
   const [emblaRef] = useEmblaCarousel({ loop: true }, [Autoplay()]);
   const [imovelData, setImovelData] = useState({ fotos: [] });
-  const baseUrl = 'http://localhost:3000/uploads/'; 
+  //const baseUrl = 'http://localhost:3000/uploads/'; 
+  const baseUrl = import.meta.env.VITE_UPLOADS_URL + '/';
 
   async function getImovelData() { 
     try{
@@ -28,7 +29,7 @@ function Imovel() {
   return (
     <div id="main">
       
-      <div className="page-title">
+      <div className={styles.pagetitle}>
         <h1>{imovelData?.titulo}</h1>
       </div>
       <div className="container">    

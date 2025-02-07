@@ -2,7 +2,7 @@ import React, { useState, useRef, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import api from '../../services/api'
-import './style.css'
+import styles from './styles.module.css';
 
 export const Login = () => { 
     
@@ -40,7 +40,7 @@ export const Login = () => {
     }
    
   return (
-    <div id="main">
+    <div id="main" className={styles.mainlogin}>
       <div className="container">        
         {confirmationMessage ? <p className="confirmation-message">{confirmationMessage}</p> : null}
 
@@ -52,7 +52,7 @@ export const Login = () => {
                 <input type="password" name="password" className="password" placeholder='Senha' ref={inputPassword} onKeyPress={handleKeyPress} />
             </div>
             <div className="form-item">
-                <button type='button' onClick={handleLogin}>- Enviar -</button>
+                <button type='button' onClick={handleLogin}>Enviar</button>
             </div>
         </form>        
         

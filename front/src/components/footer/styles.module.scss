@@ -31,13 +31,36 @@
                   font-size: 13px;
                   line-height: 13px;
                   font-weight: 500;
-  
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  justify-content: space-between;
+
                   &:hover{
                       color: #0932b6;
                   }
+
+                  svg{
+                    width: 16px;
+                    height: 16px;
+                    margin: 0 0 5px 0;
+                  }
               }
           }
+          li.arquivo{
+            svg{
+              width: 19px;
+              height: 19px;
+            }
+          }
+          li.usuarios{
+            svg{
+              width: 17px;
+              height: 17px;
+            }
+          }
       }
+
 
       .logoutbutton {
             margin: 0;

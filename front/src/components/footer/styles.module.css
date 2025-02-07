@@ -33,9 +33,26 @@
   font-size: 13px;
   line-height: 13px;
   font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
 }
 .footer .nav ul li a:hover {
   color: #0932b6;
+}
+.footer .nav ul li a svg {
+  width: 16px;
+  height: 16px;
+  margin: 0 0 5px 0;
+}
+.footer .nav ul li.arquivo svg {
+  width: 19px;
+  height: 19px;
+}
+.footer .nav ul li.usuarios svg {
+  width: 17px;
+  height: 17px;
 }
 .footer .nav .logoutbutton {
   margin: 0;

@@ -33,7 +33,7 @@ export const Usuarios = () => {
   
   return (
     <>
-      <PageTitle title="Usuários -"/>
+      <PageTitle title="Usuários"/>
       <div id="main">
         <div className="container">           
           <div className={styles.listaUsuarios}>

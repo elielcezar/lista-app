@@ -48,39 +48,43 @@ form .form-item {
   max-width: 97%;
 }
 form .row {
-  flex-wrap: wrap;
+  display: flex;
+  flex-direction: column;
 }
 form .row .form-item {
-  width: 30.3%;
   padding: 10px;
   border: 1px solid #ccc;
 }
-form .imageitem {
+
+.existingimages {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.existingimages .imageitem {
   border-bottom: 1px solid #ccc;
   margin-bottom: 15px;
   padding-bottom: 15px;
   position: relative;
-  width: 31%;
-  text-align: center;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
-form .imageitem button.excluir {
+.existingimages .imageitem img {
+  max-width: 30%;
+}
+.existingimages .imageitem button.excluir {
   background: #fff;
-  border: 2px solid red;
   color: red;
-  padding: 5px;
   width: auto;
-  /*position: absolute;
-  bottom: 10px;
-  right: 5px;*/
   padding: 2px 7px;
   width: auto;
-  margin: 0 auto;
+  margin: 0;
 }
-
-.existingimages {
-  flex-wrap: wrap;
-  display: flex;
-  gap: 10px;
+.existingimages .imageitem button.excluir svg {
+  width: 21px;
+  height: 21px;
 }
 
 .overlay {
