@@ -20,6 +20,7 @@ import TarefasArquivadas from './pages/arquivo';
 import Usuarios from './pages/usuarios';
 import Usuario from './pages/usuario';
 import CadastroUsuario from './pages/cadastro-usuario';
+import Extras from './pages/extras';
 
 import Footer from './components/footer';
 
@@ -27,25 +28,14 @@ import ProtectedRoute from './components/protected-route';
 
 function App() {     
 
-   /* const usePageClass = () => {
-        const location = useLocation();
-        useEffect(() => {          
-          document.body.className = '';          
-          if (location.pathname === '/') {
-            document.body.classList.add('page-home');
-          } else if (location.pathname === '/about') {
-            document.body.classList.add('page-about');
-          }
-        }, [location]);
-      };*/
-        
+  
     return (
         <AuthProvider>
             <Router>
                 <Header />                
                 
-                <Routes>
-                    <Route path="/" element={<Home />}/>
+                <Routes>                    
+                    <Route path="/" element={<ProtectedRoute element={Home} />} />
                     <Route path="login" element={<Login />} />                    
                     
                     <Route path="imoveis" element={<ListarImoveis />} />                    
@@ -62,7 +52,9 @@ function App() {
                     
                     <Route path="about" element={<About />} />
                     <Route path="contact" element={<Contact />} />                    
-                    <Route path="*" element={<NotFound />} />                    
+                    <Route path="*" element={<NotFound />} />  
+                    <Route path="extras" element={<Extras />} />
+
                 </Routes>
                 <Footer />
             </Router>

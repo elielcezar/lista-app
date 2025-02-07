@@ -27,11 +27,12 @@ h2.pagetitle {
 }
 .listaUsuarios .item button {
   background: #fff;
-  padding: 5px;
+  padding: 5px 10px;
   width: auto;
   position: absolute;
   font-size: 11px;
-  bottom: 7px;
+  top: 25px;
+  letter-spacing: 0;
 }
 .listaUsuarios .item button.excluir {
   border: 1px solid red;
@@ -41,7 +42,7 @@ h2.pagetitle {
 .listaUsuarios .item button.editar {
   border: 1px solid rgb(82, 87, 148);
   color: rgb(82, 87, 148);
-  right: 75px;
+  right: 95px;
 }
 
 .confirmation-message {

@@ -1,14 +1,14 @@
 #main{
     margin: 0;    
     
-    & .page-title{
+    .page-title{
         width: 100%;
         background: #3f3a50;
         padding: 125px 0;
         text-align: center;
         margin-bottom: 75px;     
         
-        & h1{
+        h1{
             color: #fff;  
         margin: 0;
         }
@@ -21,8 +21,7 @@
         font-size: 16px;
 
         h1{
-            margin: 0;
-            padding: ;
+            margin: 0;            
         }          
         
         .itens{

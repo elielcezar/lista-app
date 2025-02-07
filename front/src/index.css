@@ -1,9 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
 body{
-  font-family: "Roboto", serif;
-  /*background: #f5f5f5;*/
-  /*background: #eff2f8;*/
+  font-family: "Roboto", serif;  
   background: #f9fafc;
   font-size: 18px;
 }
@@ -117,9 +115,8 @@ form{
 
 
 button{
-  color: #fff;
-  background: green;  
-  border-radius: 5px;
+  color: #fff;  
+  border-radius: 10px;
   border: none;
   width: 100%;
   max-width: 300px;
@@ -128,6 +125,14 @@ button{
   cursor: pointer;  
   font-weight: bold;
   padding: 15px;
+  margin: auto;
+  width: 100%;
+  max-width: 100%;
+  background: #1b0855;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 2px;
+  font-size: 14px;
 
   &:hover{    
     background-color: blue;
@@ -135,7 +140,8 @@ button{
 }
 
 #main{
-  padding: 20px 0 90px 0;  
+  padding: 20px 0 90px 0; 
+  margin: 0; 
 }
 
 .row{
@@ -169,8 +175,7 @@ button{
     }
   }
 
-#main{
-  margin: 50px 0;
+#main{  
   & h1{
     margin: 40px 0;
   }

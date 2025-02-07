@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom'
 import ListaUsuarios from '../../../components/form-usuarios';
 import api from '../../../services/api';
+import { FaRegTrashAlt } from "react-icons/fa";
 import styles from './styles.module.css';
 
 function EditarImovel() {    
@@ -139,7 +140,9 @@ function EditarImovel() {
                             {currentPhotos.map((image, index) => (
                                 <div key={index} className={styles.imageitem}>
                                     <img src={`http://localhost:3000/uploads/${image}`} alt={`Imagem ${index + 1}`} />
-                                    <button type="button" onClick={() => handleDeleteImage(image)} className={styles.excluir}>Excluir</button>
+                                    <button type="button" onClick={() => handleDeleteImage(image)} className={styles.excluir}>
+                                        <FaRegTrashAlt />
+                                    </button>
                                 </div>
                             ))}
                         </div>

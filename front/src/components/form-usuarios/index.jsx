@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import api from '../../services/api';
-import './style.css';
+import styles from './styles.module.css';
 
 const ListaUsuarios = ( {selectedId, onChange} ) => {
 

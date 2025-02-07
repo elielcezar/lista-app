@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import useEmblaCarousel from 'embla-carousel-react'
 import Autoplay from 'embla-carousel-autoplay'
 import api from '@/services/api'
-import './style.css'
+import styles from './styles.module.css';
 
 function Imovel() {  
 
@@ -28,7 +28,7 @@ function Imovel() {
   return (
     <div id="main">
       
-      <div className="page-title">
+      <div className={styles.pagetitle}>
         <h1>{imovelData?.titulo}</h1>
       </div>
       <div className="container">    
