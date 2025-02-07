@@ -24,6 +24,12 @@ app.use(tipoRoutes);
 app.use(finalidadeRoutes);
 app.use('/uploads', express.static('uploads'));
 
+/*
 app.listen(3000, () => {
     console.log('Servidor rodando na porta 3000');
+});*/
+
+const PORT = 3000;
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Servidor rodando na porta ${PORT}`);
 });
