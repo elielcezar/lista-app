@@ -25,9 +25,8 @@ export const TarefasArquivadas = () => {
             }
         }
         fetchImoveis()
-    }, [])
-   
-    //const baseUrl = 'http://localhost:3000/uploads/'
+    }, [])   
+    
     const baseUrl = import.meta.env.VITE_UPLOADS_URL + '/';
 
 

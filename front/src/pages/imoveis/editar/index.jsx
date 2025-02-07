@@ -141,11 +141,7 @@ function EditarImovel() {
                     <div className={styles.existingimages}>
                             {currentPhotos.map((image, index) => (
                                 <div key={index} className={styles.imageitem}>
-<<<<<<< HEAD
-                                    <img src={`${baseUrl}${image}`} alt={`Imagem ${index + 1}`} />
-=======
-                                    <img src={`http://localhost:3000/uploads/${image}`} alt={`Imagem ${index + 1}`} />
->>>>>>> b68b546bdb22fbd180a6b2b85f1dd5b53b5c13ef
+                                    <img src={`${import.meta.env.VITE_UPLOADS_URL}/${image}`} alt={`Imagem ${index + 1}`} />
                                     <button type="button" onClick={() => handleDeleteImage(image)} className={styles.excluir}>
                                         <FaRegTrashAlt />
                                     </button>

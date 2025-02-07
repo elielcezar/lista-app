@@ -9,8 +9,7 @@ function Imovel() {
 
   const params = useParams(); 
   const [emblaRef] = useEmblaCarousel({ loop: true }, [Autoplay()]);
-  const [imovelData, setImovelData] = useState({ fotos: [] });
-  //const baseUrl = 'http://localhost:3000/uploads/'; 
+  const [imovelData, setImovelData] = useState({ fotos: [] });  
   const baseUrl = import.meta.env.VITE_UPLOADS_URL + '/';
 
   async function getImovelData() { 
@@ -34,7 +33,7 @@ function Imovel() {
       </div>
       <div className="container">    
         <div className="row tabs">
-          <p><a href={`http://localhost:5173/imoveis/edit/${imovelData.id}`} className="tab">Editar</a></p>
+          <p><a href={`${import.meta.env.VITE_API_URL}/imoveis/edit/${imovelData.id}`} className="tab">Editar</a></p>
         </div>          
         <div className="row meta">
           <h1>{imovelData.titulo}</h1>
