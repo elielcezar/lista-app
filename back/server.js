@@ -16,19 +16,13 @@ app.use(express.json());
 app.use(cors());
 
 // Rotas especificas para cada caso
-//app.use(usuariosRoutes);
+app.use(usuariosRoutes);
 app.use(imoveisRoutes);
 app.use(loginRoutes);
 app.use(categoriasRoutes);
 app.use(tipoRoutes);
 app.use(finalidadeRoutes);
 app.use('/uploads', express.static('uploads'));
-app.use('/api/usuarios', usuariosRoutes);
-
-/*
-app.listen(3000, () => {
-    console.log('Servidor rodando na porta 3000');
-});*/
 
 const PORT = 4000;
 app.listen(PORT, '0.0.0.0', () => {
