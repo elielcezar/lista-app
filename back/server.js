@@ -16,13 +16,14 @@ app.use(express.json());
 app.use(cors());
 
 // Rotas especificas para cada caso
-app.use(usuariosRoutes);
+//app.use(usuariosRoutes);
 app.use(imoveisRoutes);
 app.use(loginRoutes);
 app.use(categoriasRoutes);
 app.use(tipoRoutes);
 app.use(finalidadeRoutes);
 app.use('/uploads', express.static('uploads'));
+app.use('/api/usuarios', usuariosRoutes);
 
 /*
 app.listen(3000, () => {

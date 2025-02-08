@@ -6,9 +6,8 @@ const prisma = new PrismaClient();
 const router = express.Router();
 
 // Criar usuario
-router.post('/usuarios', async (req, res) => {
-    
-    console.log('Recebendo requisição POST /usuarios');    
+router.post('/', async (req, res) => {
+    console.log('Recebendo requisição POST /api/usuarios');    
     const { name, email, password } = req.body;    
 
     try {
@@ -32,9 +31,8 @@ router.post('/usuarios', async (req, res) => {
 });
 
 // Listar usuarios
-router.get('/usuarios', async (req, res) => {
-
-    console.log('Recebendo requisição GET /usuarios');
+router.get('/', async (req, res) => {
+    console.log('Recebendo requisição GET /api/usuarios');
     let users = [];    
 
     if(req.query){
@@ -50,12 +48,10 @@ router.get('/usuarios', async (req, res) => {
     }
     console.log('Usuários encontrados:', users);
     res.status(200).json(users);
-
 });
 
-
 // Obter usuario pelo ID
-router.get('/usuarios/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
     try{
         const {id} = req.params;
         const user = await prisma.user.findUnique({
@@ -78,10 +74,9 @@ router.get('/usuarios/:id', async (req, res) => {
 });
 
 // Atualizar usuario
-router.put('/usuarios/:id', async (req, res) => {    
-
+router.put('/:id', async (req, res) => {    
     try{
-        console.log('Recebendo requisição PUT /usuarios');    
+        console.log('Recebendo requisição PUT /api/usuarios');    
 
         const { name, email, password } = req.body;   
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -104,8 +99,7 @@ router.put('/usuarios/:id', async (req, res) => {
 });
 
 // Excluir usuario
-router.delete('/usuarios/:id', async (req, res) => {  
-    
+router.delete('/:id', async (req, res) => {  
     const userId = req.params.id;
 
     await prisma.imovelUser.deleteMany({
