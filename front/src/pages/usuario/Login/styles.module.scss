@@ -1,0 +1,23 @@
+.container{
+    max-width: 400px;
+}
+h1{
+    text-align: center;
+    padding: 25px 0;
+    background: linear-gradient(90deg, rgba(129, 0, 255, 1) 0%, rgba(201, 0, 255, 1) 100%);
+    color: #fff;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    margin: 0 !important;
+}
+.mainlogin{
+    height: 100vh; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5% !important;
+}
+.loginForm{
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}

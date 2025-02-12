@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import CriarTarefaBtn from '@/components/CriarTarefaBtn';
-import PageTitle from '../../components/PageTitle';
+import PageTitle from '@/components/PageTitle';
 import api from '@/services/api';
 import styles from './styles.module.css';
 
@@ -41,10 +41,6 @@ export const TarefasArquivadas = () => {
         try {            
             const tarefa = tarefas.find(im => im.id === tarefaId);
 
-           /* setTimeout( () => {
-                setConfirmationMessage('');
-            }, 1000);*/
-
             const response = await api.patch(`/tarefas/${tarefaId}/status`, {
                 status: !tarefa.status
             }, {
@@ -77,35 +73,37 @@ export const TarefasArquivadas = () => {
   return (    
     <div id="tarefas" className={styles.tarefas}>
         
-        {confirmationMessage ? 
-            <div className={styles.overlay}>
-                <p className={styles.confirmationmessage}>{confirmationMessage}</p>
-            </div> 
-        : null}
+        <div className="container">
+            {confirmationMessage ? 
+                <div className={styles.overlay}>
+                    <p className={styles.confirmationmessage}>{confirmationMessage}</p>
+                </div> 
+            : null}
 
-        {tarefas.map((tarefa) => (
-            <div className={styles.item} key={tarefa.id}>
-                <div className={styles.card}>    
-                    <div className={`${styles.checkbox} ${tarefa.status ? styles.active : ''}`} onClick={(e) => handleStatusChange(e, tarefa.id)} >
-                        <input type="checkbox" />
-                    </div>
-                    <div className={styles.content} onClick={() => handleClick(tarefa.id)}>
-                        <h3>{tarefa.titulo}</h3>
-                        
-                        {tarefa.user && (
-                            <p className={styles.responsavel}>
-                                <strong>Responsável:</strong> {tarefa.user.name}
-                            </p>
-                        )}
-                                         
-                        <p className={styles.subtitulo}>{tarefa.descricao}</p>
-                    </div>
-                    {/*<div className={styles.capa} onClick={() => handleClick(tarefa.id)}>                        
-                        <img src={`${baseUrl}${tarefa.fotos[0]}`} alt="" />                                                              
-                    </div>*/}
-                </div>                
-            </div>
-        ))}
+            {tarefas.map((tarefa) => (
+                <div className={styles.item} key={tarefa.id}>
+                    <div className={styles.card}>    
+                        <div className={`${styles.checkbox} ${tarefa.status ? styles.active : ''}`} onClick={(e) => handleStatusChange(e, tarefa.id)} >
+                            <input type="checkbox" />
+                        </div>
+                        <div className={styles.content} onClick={() => handleClick(tarefa.id)}>
+                            <h3>{tarefa.titulo}</h3>
+                            
+                            {tarefa.user && (
+                                <p className={styles.responsavel}>
+                                    <strong>Responsável:</strong> {tarefa.user.name}
+                                </p>
+                            )}
+                                            
+                            <p className={styles.subtitulo}>{tarefa.descricao}</p>
+                        </div>   
+                        <div className={styles.capa} onClick={() => handleClick(tarefa.id)}>                        
+                            <img src={`${baseUrl}${tarefa.imagemDepois}`} alt="" />                                                              
+                        </div>                                   
+                    </div>                
+                </div>
+            ))}
+        </div>
 
         <CriarTarefaBtn/>  
     </div>  

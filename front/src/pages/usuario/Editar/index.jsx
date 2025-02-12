@@ -1,7 +1,9 @@
 import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
-import PageTitle from '../../components/PageTitle';
-import api from "../../services/api";
+import PageTitle from '@/components/PageTitle';
+import api from "@/services/api";
+import StatusMessage from '@/components/StatusMessage';
+import { useNavigate } from 'react-router-dom';
 import styles from './styles.module.css';
 
 export const Usuario = () => {
@@ -13,7 +15,10 @@ export const Usuario = () => {
     const inputPassword = useRef(); 
 
     const [userData, setUserData] = useState('');   
-    const [confirmationMessage, setConfirmationMessage] = useState(''); 
+    
+    const [confirmationMessage, setConfirmationMessage] = useState({ message: '', type: '' }); 
+
+    const navigate = useNavigate();
 
     async function getUser(){
         const userFromAPI = await api.get(`usuarios/${params.id}`);
@@ -36,9 +41,12 @@ export const Usuario = () => {
         const email = inputEmail.current.value;
         const password = inputPassword.current.value;
 
-        if (!name || !email || !password) {
-            setConfirmationMessage('Todos os campos são obrigatórios.');
-            setTimeout(() => setConfirmationMessage(''), 5000);
+        if (!name || !email) {
+            setConfirmationMessage({ 
+                message: 'Os campos Nome e Email são obrigatórios.', 
+                type: 'error' 
+            });
+            setTimeout(() => setConfirmationMessage({ message: '', type: '' }), 2000);
             return;
         }
 
@@ -58,8 +66,12 @@ export const Usuario = () => {
             });
 
             if (response.status === 200 || response.status === 201) { 
-                setConfirmationMessage('Usuário atualizado com sucesso!');
-                setTimeout(() => setConfirmationMessage(''), 5000);
+                setConfirmationMessage({
+                    message: 'Usuário atualizado com sucesso!',
+                    type: 'success'
+                });
+                setTimeout(() => setConfirmationMessage({ message: '', type: '' }), 2000);
+                setTimeout(() => navigate('/usuarios'), 2000);
             } else {
                 throw new Error('Erro ao atualizar usuário');
             }
@@ -76,8 +88,12 @@ export const Usuario = () => {
 
         <>
             <PageTitle title="Editar Usuário"/>
-            <div className="container">            
-            {confirmationMessage ? <p className="confirmation-message">{confirmationMessage}</p> : null}
+            <div className="container"> 
+
+            {confirmationMessage ? 
+                <StatusMessage message={confirmationMessage.message} type={confirmationMessage.type} /> 
+            : null}
+
             <form>
                 <div className="form-item">
                     <input type="text" name="name" className="name" placeholder='Nome' ref={inputName}  />

@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-import PageTitle from '../../components/PageTitle';
-import BtnCreate from '../../components/BtnCreate';
-import api from '../../services/api';
+import PageTitle from '@/components/PageTitle';
+import BtnCreate from '@/components/BtnCreate';
+import api from '@/services/api';
 import styles from './styles.module.css';
 
 export const Usuarios = () => {

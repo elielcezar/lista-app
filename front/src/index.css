@@ -4,6 +4,11 @@ body{
   font-family: "Roboto", serif;  
   background: #f9fafc;
   font-size: 18px;
+  transition: background-color 0.3s ease;
+}
+/* Estilo específico para páginas de autenticação */
+body.user-page {
+  background-color: #340f8b;
 }
 
 *{
@@ -14,7 +19,7 @@ body{
 
 .container{    
     width: 94%;
-    max-width: 1300px;
+    max-width: 700px;
     margin: 0 auto;      
     display: flex;
     flex-direction: column;    
@@ -23,9 +28,6 @@ body{
 img{
   max-width: 100%;
 }
-
-
-
 
 h1, h2, h3, h4, h5{
   font-family: 'Montserrat', sans-serif;  
@@ -91,8 +93,10 @@ form{
     margin-bottom: 7px;
     display: inline-block;
     font-size: 16px;
+    font-family: "Roboto", serif;  
   }
   & input,
+  select,
   & textarea{
     width: 100%;
     max-width: 100%;
@@ -100,7 +104,7 @@ form{
     border: 1px solid #ccc;
     border-radius: 7px; 
     margin-bottom: 20px; 
-    font-size: 18px;
+    font-size: 16px;
     font-family: "Montserrat", serif;
   } 
 
@@ -113,6 +117,9 @@ form{
   }
 }
 
+::placeholder{
+  font-size: 16px;
+}
 
 button{
   color: #fff;  
@@ -136,6 +143,20 @@ button{
 
   &:hover{    
     background-color: rgb(7, 7, 109);
+  }
+}
+
+form .extras{  
+  & p{
+    margin: 25px 0 10px 0;
+    font-size: 15px;
+    text-align: center;
+
+    & a{
+      font-weight: bold;
+      color: #340f8b;
+      text-decoration: underline;
+    }
   }
 }
 
@@ -180,3 +201,4 @@ button{
     margin: 40px 0;
   }
 }
+

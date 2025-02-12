@@ -56,50 +56,101 @@ router.get('/usuarios', async (req, res) => {
 
 // Obter usuario pelo ID
 router.get('/usuarios/:id', async (req, res) => {
-    try{
-        const {id} = req.params;
+    try {
+        const { id } = req.params;
+        
+        // Verificar se o ID foi fornecido
+        if (!id) {
+            return res.status(400).json({
+                error: 'ID do usuário não fornecido'
+            });
+        }
+
         const user = await prisma.user.findUnique({
             where: {
-                id: id
+                id: parseInt(id)
             }
         });
-        if(!user){
+
+        if (!user) {
             return res.status(404).json({
                 error: 'Usuário não encontrado'
-            })
+            });
         }
+
+        console.log('Usuário encontrado:', user);
         res.json(user);
-    }catch(error){
+    } catch (error) {
         console.error('Erro ao buscar usuário:', error);
         res.status(500).json({
-            error: 'Erro ao buscar usuário'
+            error: 'Erro ao buscar usuário pelo ID',
+            details: error.message
         });
     }
 });
 
 // Atualizar usuario
 router.put('/usuarios/:id', async (req, res) => {    
-
-    try{
-        console.log('Recebendo requisição PUT /usuarios');    
-
+    try {
+        const { id } = req.params;
         const { name, email, password } = req.body;   
-        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Validar se o ID foi fornecido
+        if (!id) {
+            return res.status(400).json({
+                error: 'ID do usuário não fornecido'
+            });
+        }
+
+        // Validar dados obrigatórios (agora sem password)
+        if (!name || !email) {
+            return res.status(400).json({
+                error: 'Dados incompletos. Nome e email são obrigatórios.'
+            });
+        }
+
+        // Preparar objeto de atualização
+        const updateData = {
+            email,
+            name,
+            updatedAt: new Date()
+        };
+
+        // Adicionar senha apenas se foi fornecida
+        if (password && password.trim() !== '') {
+            updateData.password = await bcrypt.hash(password, 10);
+        }
+        
         const response = await prisma.user.update({
             where: {
-                id: req.params.id
+                id: parseInt(id)
             },
-            data: {
-                email,
-                name,
-                password: hashedPassword,
-            }
+            data: updateData
         });
+
         console.log('Usuário atualizado:', response);
-        res.status(200).json(req.body);
-    }catch(error){
+        
+        // Retornar o usuário atualizado (sem a senha)
+        const { password: _, ...userWithoutPassword } = response;
+        res.status(200).json(userWithoutPassword);
+        
+    } catch (error) {
         console.error('Erro ao atualizar usuário:', error);
-        res.status(500).json({ error: 'Erro ao atualizar usuário' });
+        
+        if (error.code === 'P2025') {
+            return res.status(404).json({ 
+                error: 'Usuário não encontrado'
+            });
+        }        
+        if (error.code === 'P2002') {
+            return res.status(400).json({ 
+                error: 'Email já está em uso'
+            });
+        }
+        res.status(500).json({ 
+            error: 'Erro ao atualizar usuário',
+            details: error.message
+        });
     }
 });
 

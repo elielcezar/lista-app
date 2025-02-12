@@ -3,8 +3,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 
 import Header from './components/header';
-
-import Login from './pages/login';
 import Home from './pages/Home';
 import About from './pages/About';
 import NotFound from './pages/NotFound';
@@ -14,26 +12,27 @@ import ExibirTarefa from './pages/Tarefas/Exibir';
 import ListarTarefas from './pages/Tarefas/Listar';
 import CadastrarTarefa from './pages/Tarefas/Cadastrar';
 import EditarTarefa from './pages/Tarefas/Editar';
+import TarefasArquivadas from './pages/Tarefas/Arquivo';
 
-import TarefasArquivadas from './pages/arquivo';
+import Usuarios from './pages/usuario/Listar';
+import Usuario from './pages/usuario/Editar';
+import CadastroUsuario from './pages/usuario/Cadastrar';
+import Login from './pages/usuario/Login';
 
-import Usuarios from './pages/usuarios';
-import Usuario from './pages/usuario';
-import CadastroUsuario from './pages/cadastro-usuario';
 import Extras from './pages/extras';
 
-import Footer from './components/footer';
+import Footer from './components/Footer';
 
 import ProtectedRoute from './components/protected-route';
+import AddBodyClass from './components/AddBodyClass';
 
-function App() {     
-
+function App() {  
   
     return (
         <AuthProvider>
             <Router>
-                <Header />                
-                
+                <AddBodyClass />
+                <Header />      
                 <Routes>                    
                     <Route path="/" element={<ProtectedRoute element={Home} />} />
                     <Route path="login" element={<Login />} />                    

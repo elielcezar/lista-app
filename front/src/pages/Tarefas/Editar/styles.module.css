@@ -56,12 +56,22 @@ form .row .form-item {
   border: 1px solid #ccc;
 }
 
-.existingimages {
+.currentImages {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  gap: 20px;
 }
-.existingimages .imageitem {
+.currentImages .antes,
+.currentImages .depois {
+  width: 50%;
+  position: relative;
+}
+.currentImages .antes h3,
+.currentImages .depois h3 {
+  font-size: 16px;
+  margin-bottom: 10px;
+  font-family: "Roboto", serif;
+}
+.currentImages .imageContainer {
   border-bottom: 1px solid #ccc;
   margin-bottom: 15px;
   padding-bottom: 15px;
@@ -70,21 +80,23 @@ form .row .form-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: relative;
 }
-.existingimages .imageitem img {
-  max-width: 30%;
-}
-.existingimages .imageitem button.excluir {
-  background: #fff;
-  color: red;
-  width: auto;
-  padding: 2px 7px;
-  width: auto;
+.currentImages .imageContainer button.deleteButton {
+  background: rgba(255, 0, 0, 0.75);
+  color: #fff;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  padding: 0;
   margin: 0;
+  position: absolute;
+  top: 5px;
+  right: 5px;
 }
-.existingimages .imageitem button.excluir svg {
-  width: 21px;
-  height: 21px;
+.currentImages .imageContainer button.deleteButton svg {
+  width: 18px;
+  height: 18px;
 }
 
 .overlay {

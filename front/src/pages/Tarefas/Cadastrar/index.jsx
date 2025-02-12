@@ -1,114 +1,231 @@
-import { useState, useEffect, useRef } from 'react';
-import api from '../../../services/api';
-import FormCategorias from '../../../components/form-categorias';
+import { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import api from '@/services/api';
+import { FaTrash } from "react-icons/fa";
+import StatusMessage from '@/components/StatusMessage';
+import PageTitle from '@/components/PageTitle';
 import styles from './styles.module.css';
 
-function CadastroImovel() {     
+function CadastrarTarefa() {
+    const navigate = useNavigate();
+    const [statusMessage, setStatusMessage] = useState({ message: '', type: '' });
+    const [previewImages, setPreviewImages] = useState({
+        imagemAntes: null,
+        imagemDepois: null
+    });
     
-    const [confirmationMessage, setConfirmationMessage] = useState('');  
+    const inputTitulo = useRef(null);
+    const inputDescricao = useRef(null);
 
-    const [selectedUsers, setSelectedUsers] = useState([]);
-    
-    const inputTitulo = useRef();        
-    const inputDescricaoLonga = useRef();
-    //const inputUsuarios = useRef();
-    const inputFotos = useRef();    
+    const [usuarios, setUsuarios] = useState([]);       
+    const [selectedUser, setSelectedUser] = useState('');
 
-    async function handleSubmit(event) {
+    useEffect(() => {
+        async function loadUsuarios() {
+            try {
+                const response = await api.get('/usuarios');
+                setUsuarios(response.data);
+            } catch (error) {
+                console.error('Erro ao carregar usuários:', error);
+            }
+        }
+        loadUsuarios();
+    }, []);
 
-        event.preventDefault();
 
-        // Verificar se todos os campos obrigatórios estão preenchidos
-        /*if (!inputTitulo.current.value || 
-            !inputCodigo.current.value || 
-            !inputFotos.current.value ||             
-            !inputFinalidade.current.value || 
-            !inputValor.current.value || 
-            !inputEndereco.current.value || 
-            !inputCidade.current.value) {
-            setConfirmationMessage('Por favor, preencha todos os campos obrigatórios.');
-            setTimeout(() => setConfirmationMessage(''), 5000);
-            return;
-        }*/
+    async function handleImageUpload(e, imageType) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        // Criar preview da imagem
+        const imageUrl = URL.createObjectURL(file);
+        setPreviewImages(prev => ({
+            ...prev,
+            [imageType]: imageUrl
+        }));
+    }
+
+    function handleDeleteImage(imageType) {
+        setPreviewImages(prev => ({
+            ...prev,
+            [imageType]: null
+        }));
+    }
+
+    async function handleSubmit(e) {
+        e.preventDefault();
         
-        const formData = new FormData();
-            formData.append('titulo', inputTitulo.current.value);            
-            formData.append('descricaoLonga', inputDescricaoLonga.current.value);                   
-            formData.append('usuarios', selectedUsers);
+        try {
+            const formData = new FormData();
+            
+            // Verificar campos obrigatórios
+            if (!inputTitulo.current?.value) {
+                setStatusMessage({
+                    message: 'O campo título é obrigatório.',
+                    type: 'error'
+                });
+                return;
+            }
 
-        // Adiciona múltiplas fotos ao FormData e ao objeto userData para log
-        Array.from(inputFotos.current.files).forEach((file, index) => {
-            formData.append('fotos', file);            
-        });
+            // Adicionar campos ao FormData
+            formData.append('titulo', inputTitulo.current.value);
+            formData.append('descricao', inputDescricao.current.value);
+            formData.append('userId', '1'); // Ajuste conforme necessário
 
-        // Loga o conteúdo do FormData no console
-        for (let [key, value] of formData.entries()) {
-            console.log(`${key}:`, value);
-        }        
+            // Adicionar imagens se existirem
+            const imagemAntesInput = document.querySelector('input[name="imagemAntes"]');
+            const imagemDepoisInput = document.querySelector('input[name="imagemDepois"]');
 
-        try {            
+            if (imagemAntesInput?.files[0]) {
+                formData.append('imagemAntes', imagemAntesInput.files[0]);
+            }
+            if (imagemDepoisInput?.files[0]) {
+                formData.append('imagemDepois', imagemDepoisInput.files[0]);
+            }
+
             const response = await api.post('/tarefas', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             });
 
-            console.log('Response:', response);
-
-            if (response.status === 200 || response.status === 201) {                
-
-                inputTitulo.current.value = '';                
-                inputDescricaoLonga.current.value = '';
-                //inputUsuarios.current.value = '';
-                inputFotos.current.value = '';     
-                setSelectedUsers([]);                           
-
-                setConfirmationMessage('Tarefa cadastrada com sucesso!');
-                setTimeout(() => setConfirmationMessage(''), 5000);
-                
-            } else {
-                throw new Error('Erro ao cadastrar tarefa');
+            if (response.status === 201) {
+                setStatusMessage({
+                    message: 'Tarefa cadastrada com sucesso!',
+                    type: 'success'
+                });
+                setTimeout(() => navigate('/'), 2000);
             }
         } catch (error) {
             console.error('Erro ao cadastrar tarefa:', error);
-            console.error('Detalhes do erro:', error.response ? error.response.data : error.message);
-            setConfirmationMessage('Erro ao cadastrar tarefa.');
-            setTimeout(() => setConfirmationMessage(''), 5000);
+            setStatusMessage({
+                message: 'Erro ao cadastrar tarefa. Tente novamente.',
+                type: 'error'
+            });
         }
     }
-   
-  return (
-    <>
-        <h2 className={styles.pagetitle}>Nova tarefa</h2>
-        <div id="main">
-        <div className="container">        
-            {confirmationMessage ? <p className="confirmation-message">{confirmationMessage}</p> : null}
 
-            <form>                
-                <div className="form-item">                    
-                    <input type="text" name="titulo" className="titulo" ref={inputTitulo} placeholder="Título" />
-                </div>                                           
-                <div className="form-item">                       
-                    <textarea name="descricaoLonga" className="descricaoLonga" ref={inputDescricaoLonga} placeholder="Descrição"></textarea>
-                </div>
-                <div className="form-item">
-                    <label htmlFor="subtitulo">Colaborador: </label>
-                    <FormCategorias endpoint="usuarios" onChange={setSelectedUsers} />
-                </div>
-                <div className="form-item">
-                    <label htmlFor="subtitulo">Fotos</label>
-                    <input type="file" name="fotos" className="fotos" ref={inputFotos} multiple />
-                </div>    
+    return (
+        <>
+            <PageTitle title="Cadastrar Nova Tarefa" />
+            
+            <div id="main">
+                <div className="container">
+                    {statusMessage.message && (
+                        <StatusMessage 
+                            message={statusMessage.message} 
+                            type={statusMessage.type} 
+                        />
+                    )}
 
-                <div className="form-item">
-                    <button type='button' onClick={handleSubmit}>- Enviar -</button>
-                </div>
+                    <form onSubmit={handleSubmit}>
+                        <div className="form-item">
+                            <input 
+                                type="text" 
+                                placeholder="Título" 
+                                ref={inputTitulo}
+                                required 
+                            />
+                        </div>
+                        
+                        <div className="form-item">
+                            <textarea 
+                                placeholder="Descrição" 
+                                ref={inputDescricao}                                 
+                            />
+                        </div>
 
-            </form>       
-        </div>      
-    </div>
-    </>    
-  )
+                        <div className="form-item">
+                            <select 
+                                value={selectedUser} 
+                                onChange={(e) => setSelectedUser(e.target.value)}
+                                required
+                            >
+                                <option value="">- Selecione um usuário -</option>
+                                {usuarios.map(user => (
+                                    <option key={user.id} value={user.id}>
+                                        {user.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        
+                        <div className={styles.currentImages}>
+                            <div>              
+                                <h3>Imagem Antes</h3>                      
+                                {previewImages.imagemAntes ? (
+                                    <div className={styles.imageContainer}>
+                                        <img 
+                                            src={previewImages.imagemAntes}
+                                            alt="Preview Antes"
+                                            className={styles.previewImage}
+                                        />
+                                        <button 
+                                            type="button"
+                                            className={styles.deleteButton}
+                                            onClick={() => handleDeleteImage('imagemAntes')}
+                                        >
+                                            <FaTrash />
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <p className={styles.noImage}>Nenhuma imagem selecionada</p>
+                                )}
+
+                                <div className="form-item">
+                                    <label>Selecionar Imagem Antes:</label>
+                                    <input 
+                                        type="file" 
+                                        name="imagemAntes"
+                                        accept="image/*"
+                                        onChange={(e) => handleImageUpload(e, 'imagemAntes')}
+                                        className={styles.fileInput}
+                                    />
+                                </div>
+                            </div>
+
+                            <div>
+                                <h3>Imagem Depois</h3>
+                                {previewImages.imagemDepois ? (
+                                    <div className={styles.imageContainer}>
+                                        <img 
+                                            src={previewImages.imagemDepois}
+                                            alt="Preview Depois"
+                                            className={styles.previewImage}
+                                        />
+                                        <button 
+                                            type="button"
+                                            className={styles.deleteButton}
+                                            onClick={() => handleDeleteImage('imagemDepois')}
+                                        >
+                                            <FaTrash />
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <p className={styles.noImage}>Nenhuma imagem selecionada</p>
+                                )}
+
+                                <div className="form-item">
+                                    <label>Selecionar Imagem Depois:</label>
+                                    <input 
+                                        type="file" 
+                                        name="imagemDepois"
+                                        accept="image/*"
+                                        onChange={(e) => handleImageUpload(e, 'imagemDepois')}
+                                        className={styles.fileInput}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div className="form-item">
+                            <button type="submit">Cadastrar Tarefa</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </>
+    );
 }
 
-export default CadastroImovel
+export default CadastrarTarefa;

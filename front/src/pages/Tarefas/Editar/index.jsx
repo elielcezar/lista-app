@@ -1,105 +1,131 @@
 import { useState, useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom'
-import ListaUsuarios from '../../../components/form-usuarios';
-import api from '../../../services/api';
-import { FaRegTrashAlt } from "react-icons/fa";
+import { useNavigate, useParams } from 'react-router-dom';
+import api from '@/services/api';
+import { FaTrash } from "react-icons/fa";
 import styles from './styles.module.css';
+import StatusMessage from '@/components/StatusMessage';
+import PageTitle from '@/components/PageTitle';
 
-function EditarTarefa() {    
-
-    const [confirmationMessage, setConfirmationMessage] = useState('');          
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-
+function EditarTarefa() {
+    const { id } = useParams();
     const navigate = useNavigate();
+    const [statusMessage, setStatusMessage] = useState({ message: '', type: '' });
+    const [tarefa, setTarefa] = useState(null);
+    const [loading, setLoading] = useState(true);
     
-    const [imovelData, setImovel] = useState(null);
-    
-    const [usuario, setUsuario] = useState('');
-    
-    const [currentPhotos, setCurrentPhotos] = useState([]);
+    const inputTitulo = useRef(null);
+    const inputDescricao = useRef(null);
+    const inputImagemAntes = useRef(null);
+    const inputImagemDepois = useRef(null);   
     
     const [formData, setFormData] = useState({
         titulo: '',       
         descricao: '',       
         fotos: ''
-    });
+    });    
 
-    const inputFotos = useRef(null);    
-    const { id } = useParams();
+    const [usuarios, setUsuarios] = useState([]);
+    const [selectedUser, setSelectedUser] = useState('');
 
     useEffect(() => {
-        async function fetchImovel() {
+        async function loadUsuarios() {
+            try {
+                const response = await api.get('/usuarios');
+                setUsuarios(response.data);
+            } catch (error) {
+                console.error('Erro ao carregar usuários:', error);
+            }
+        }
+        loadUsuarios();
+    }, []);
+
+    useEffect(() => {
+        async function loadTarefa() {
             try {
                 const response = await api.get(`/tarefas/id/${id}`);
-                setImovel(response.data);
-                setFormData({
-                    titulo: response.data.titulo,                   
-                    descricao: response.data.descricao,
-                    fotos: response.data.fotos
-                });                
-                
-                setUsuario(response.data.user?.id || '');
-                
-                setCurrentPhotos(response.data.fotos || []);
+                setTarefa(response.data);
+                setSelectedUser(response.data.user?.id.toString() || '');
                 setLoading(false);
             } catch (error) {
-                console.error('Erro ao buscar tarefa:', error);
-                setError(error.message);
+                console.error('Erro ao carregar tarefa:', error);
+                setStatusMessage({
+                    message: 'Erro ao carregar dados da tarefa',
+                    type: 'error'
+                });
                 setLoading(false);
             }
-        }                
-        fetchImovel();
-    }, [id]);   
+        }
+        loadTarefa();
+    }, [id]);
 
-    async function handleSubmit(e) {    
+    useEffect(() => {
+        if (tarefa && inputTitulo.current && inputDescricao.current) {
+            inputTitulo.current.value = tarefa.titulo;
+            inputDescricao.current.value = tarefa.descricao || '';
+        }
+    }, [tarefa]);
+
+    async function handleSubmit(e) {
         e.preventDefault();
-
-        // Cria o objeto que será enviado sempre via FormData
-        // Adiciona todos os campos do formData, exceto 'fotos'
-        const formPayload = new FormData();
-        Object.keys(formData).forEach((key) => {                
-            if (key !== 'fotos') {
-            formPayload.append(key, formData[key]);
-            }
-        });
-
-        // Adiciona os selects
-        formPayload.append('usuarios', usuario);        
-
-        // Sempre envia as fotos antigas, mesmo que não haja novos arquivos
-        formPayload.append('oldPhotos', JSON.stringify(currentPhotos));
-
-        // Se houver novos arquivos, adiciona-os
-        if (inputFotos.current && inputFotos.current.files.length > 0) {
-            Array.from(inputFotos.current.files).forEach((file) => {
-            formPayload.append('fotos', file);
-            });
-        }  
-
+        
         try {
-            await api.put(`/tarefas/${id}`, formPayload, {
-              headers: { 'Content-Type': 'multipart/form-data' }
-            });            
+            const formData = new FormData();
             
-            setConfirmationMessage('Tarefa atualizada com sucesso!');
+            formData.append('titulo', inputTitulo.current.value);
+            formData.append('descricao', inputDescricao.current.value);
+            formData.append('userId', selectedUser);
+            
+            if (inputImagemAntes.current?.files[0]) {
+                formData.append('imagemAntes', inputImagemAntes.current.files[0]);
+            }
+            if (inputImagemDepois.current?.files[0]) {
+                formData.append('imagemDepois', inputImagemDepois.current.files[0]);
+            }
 
-            setTimeout(() => {
-                setConfirmationMessage('');
-                navigate('/');
-            }, 2000);
-            
+            const response = await api.put(`/tarefas/${id}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
+            if (response.status === 200) {
+                setStatusMessage({
+                    message: 'Tarefa atualizada com sucesso!',
+                    type: 'success'
+                });
+                setTimeout(() => navigate('/'), 2000);
+            }
         } catch (error) {
             console.error('Erro ao atualizar tarefa:', error);
-            setConfirmationMessage('Erro ao atualizar tarefa.');
-            setTimeout(() => setConfirmationMessage(''), 5000);
-        }           
+            setStatusMessage({
+                message: 'Erro ao atualizar tarefa. Tente novamente.',
+                type: 'error'
+            });
+        }
     }
 
-    function handleDeleteImage(image) {        
-        setCurrentPhotos(currentPhotos.filter(img => img !== image));
-        console.log('Fotos atualizadas', currentPhotos)
+    async function handleDeleteImage(imageType) {
+        try {
+            const response = await api.patch(`/tarefas/${id}/image`, {
+                imageType,
+                action: 'delete'
+            });
+
+            if (response.status === 200) {
+                setTarefa(response.data);
+                
+                setStatusMessage({
+                    message: 'Imagem removida com sucesso!',
+                    type: 'success'
+                });
+            }
+        } catch (error) {
+            console.error('Erro ao excluir imagem:', error);
+            setStatusMessage({
+                message: 'Erro ao excluir imagem. Tente novamente.',
+                type: 'error'
+            });
+        }
     }
 
     const updateFormData = (e) => {
@@ -107,64 +133,164 @@ function EditarTarefa() {
         setFormData({ ...formData, [name]: value });
     };
 
+    // Primeiro, vamos criar uma função auxiliar para verificar se a imagem existe
+    function hasValidImage(imageUrl) {
+        return imageUrl && imageUrl !== 'null' && imageUrl !== 'undefined' && imageUrl.trim() !== '';
+    }
+
+    // Função para fazer upload automático
+    async function handleImageChange(e, imageType) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        try {
+            const formData = new FormData();
+            formData.append(imageType, file);
+
+            setStatusMessage({
+                message: 'Enviando imagem...',
+                type: 'info'
+            });
+
+            const response = await api.put(`/tarefas/${id}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
+            if (response.status === 200) {
+                setTarefa(response.data);
+                setStatusMessage({
+                    message: 'Imagem atualizada com sucesso!',
+                    type: 'success'
+                });
+            }
+        } catch (error) {
+            console.error('Erro ao enviar imagem:', error);
+            setStatusMessage({
+                message: 'Erro ao enviar imagem. Tente novamente.',
+                type: 'error'
+            });
+        }
+    }
+
     if (loading) return <div>Carregando...</div>;
-    if (error) return <div>Erro ao carregar tarefa: {error}</div>;
-    if (!imovelData) return <div>Tarefa não encontrada</div>;
+    if (!tarefa) return <div>Tarefa não encontrada</div>;
 
     const baseUrl = import.meta.env.VITE_UPLOADS_URL + '/';
    
   return (
     <>
-        {confirmationMessage ? 
-            <div className={styles.overlay}>
-                <p className={styles.confirmationmessage}>{confirmationMessage}</p>
-            </div> 
-        : null}
-
-        <h2 className={styles.pagetitle}>Editar tarefa</h2>  
+        <PageTitle title="Editar Tarefa" />
+        
         <div id="main">
-        <div className="container">        
-            <form>                
-                <div className="form-item">                    
-                    <input type="text" name="titulo" className="titulo" value={formData.titulo} onChange={updateFormData} placeholder='Título' /> 
-                </div>                                            
-                <div className="form-item">                       
-                    <textarea 
-                        name="descricao" 
-                        className="descricao" 
-                        value={formData.descricao} 
-                        onChange={updateFormData} 
-                        placeholder='Descrição'
-                    ></textarea>
-                </div>  
+            <div className="container">
+                {statusMessage.message && (
+                    <StatusMessage 
+                        message={statusMessage.message} 
+                        type={statusMessage.type} 
+                    />
+                )}
 
-                <div className="form-item">     
-                    <label>Responsável: </label>               
-                    <ListaUsuarios selectedId={usuario} onChange={setUsuario} />
-                </div>
-                                       
-                <div className="form-item">
-                    <label htmlFor="subtitulo">Fotos</label>
-                    <div className={styles.existingimages}>
-                            {currentPhotos.map((image, index) => (
-                                <div key={index} className={styles.imageitem}>
-                                    <img src={`${import.meta.env.VITE_UPLOADS_URL}/${image}`} alt={`Imagem ${index + 1}`} />
-                                    <button type="button" onClick={() => handleDeleteImage(image)} className={styles.excluir}>
-                                        <FaRegTrashAlt />
-                                    </button>
-                                </div>
-                            ))}
+                {tarefa && (
+                    <form onSubmit={handleSubmit}>
+                        <div className="form-item">
+                            <input type="text" placeholder="Título" ref={inputTitulo} required />
                         </div>
-                    <input type="file" name="fotos" className="fotos" ref={inputFotos} multiple />
-                </div>
+                        
+                        <div className="form-item">
+                            <textarea placeholder="Descrição" ref={inputDescricao} />
+                        </div>
 
-                <div className="form-item">
-                    <button type='button' onClick={handleSubmit}>Salvar</button>
-                </div>
+                        <div className="form-item">
+                            <label>Colaborador Responsável: </label>
+                            <select 
+                                value={selectedUser} 
+                                onChange={(e) => setSelectedUser(e.target.value)}
+                                required
+                            >
+                                <option value="">Selecione um usuário</option>
+                                {usuarios.map(user => (
+                                    <option key={user.id} value={user.id}>
+                                        {user.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        
+                        {/* Exibir imagens atuais */}
+                        <div className={styles.currentImages}>
+                            <div className={styles.antes}>              
+                                <h3>Imagem Antes</h3>                      
+                                {hasValidImage(tarefa.imagemAntes) ? (
+                                    <div className={styles.imageContainer}>
+                                        <img 
+                                            src={`${import.meta.env.VITE_UPLOADS_URL}/${tarefa.imagemAntes}`}
+                                            alt="Imagem Antes"
+                                            className={styles.previewImage}
+                                        />
+                                        <button 
+                                            type="button"
+                                            className={styles.deleteButton}
+                                            onClick={() => handleDeleteImage('imagemAntes')}
+                                        >
+                                            <FaTrash />
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <p className={styles.noImage}>Nenhuma imagem cadastrada</p>
+                                )}
 
-            </form>       
-        </div>      
-    </div>
+                                <div className="form-item">
+                                    <label>Nova Imagem Antes:</label>
+                                    <input 
+                                        type="file" 
+                                        accept="image/*"
+                                        onChange={(e) => handleImageChange(e, 'imagemAntes')}
+                                        className={styles.fileInput}
+                                    />
+                                </div>
+                            </div>
+                            <div className={styles.depois}>              
+                                <h3>Imagem Depois</h3>
+                                {hasValidImage(tarefa.imagemDepois) ? (
+                                    <div className={styles.imageContainer}>
+                                        <img 
+                                            src={`${import.meta.env.VITE_UPLOADS_URL}/${tarefa.imagemDepois}`}
+                                            alt="Imagem Depois"
+                                            className={styles.previewImage}
+                                        />
+                                        <button 
+                                            type="button"
+                                            className={styles.deleteButton}
+                                            onClick={() => handleDeleteImage('imagemDepois')}
+                                        >
+                                            <FaTrash />
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <p className={styles.noImage}>Nenhuma imagem cadastrada</p>
+                                )}
+
+                                <div className="form-item">
+                                    <label>Nova Imagem Depois:</label>
+                                    <input 
+                                        type="file" 
+                                        accept="image/*"
+                                        onChange={(e) => handleImageChange(e, 'imagemDepois')}
+                                        className={styles.fileInput}
+                                    />
+                                </div>
+                            </div>
+                        </div>                        
+                        
+                        <div className="form-item">
+                            <button type="submit">Atualizar Tarefa</button>
+                        </div>
+                    </form>
+                )}
+            </div>
+        </div>
     </>    
   )
 }

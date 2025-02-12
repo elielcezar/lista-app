@@ -25,7 +25,7 @@ export const ListaTarefas = () => {
                     console.error("Erro: Dados recebidos não são um array", response.data);
                 }
             } catch (error) {
-                console.error('Erro ao carregar imóveis:', error);
+                console.error('Erro ao carregar tarefas:', error);
             }
         }
         fetchtarefas();
@@ -95,9 +95,9 @@ export const ListaTarefas = () => {
                                          
                         <p className={styles.subtitulo}>{tarefa.descricao}</p>
                     </div>
-                    {/*<div className={styles.capa} onClick={() => handleClick(tarefa.id)}>                        
-                        <img src={`${baseUrl}${tarefa.fotos[0]}`} alt="" />                                                              
-                    </div>*/}
+                    <div className={styles.capa} onClick={() => handleClick(tarefa.id)}>                        
+                        <img src={`${baseUrl}${tarefa.imagemAntes}`} alt="" />                                                              
+                    </div>
                 </div>                
             </div>
         ))}

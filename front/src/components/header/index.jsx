@@ -1,16 +1,12 @@
-import { useContext } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { AuthContext } from '@/context/AuthContext';
+import { NavLink, useLocation } from 'react-router-dom';
 import styles from './styles.module.css'
 
 function Header() {
-
-    
-    const navigate = useNavigate();  
-
+    const location = useLocation();
+    const isHomePage = location.pathname === '/login';
 
     return (
-        <header className={styles.header}>            
+        <header className={`${styles.header} ${isHomePage ? styles.headerHidden : ''}`}>            
             <div className={styles.logo}>
                 <NavLink to="/" end>Lista App</NavLink>
             </div>                            

@@ -1,15 +1,16 @@
+import { NavLink } from 'react-router-dom';
 import { useState, useRef } from 'react';
-import PageTitle from '../../components/PageTitle';
-import './style.css'
-import api from '../../services/api'
-
+import PageTitle from '@/components/PageTitle';
+import api from '@/services/api'
+import StatusMessage from '@/components/StatusMessage';
+import styles from './styles.module.css';
 function CadastroUsuario() { 
     
-    const [confirmationMessage, setConfirmationMessage] = useState('');  
+    const [confirmationMessage, setConfirmationMessage] = useState({ message: '', type: '' });  
  
     const inputName = useRef();    
     const inputEmail = useRef();
-    const inputPassword = useRef();    
+    const inputPassword = useRef();  
 
     async function createUser() {
 
@@ -33,27 +34,44 @@ function CadastroUsuario() {
                 inputEmail.current.value = '';
                 inputPassword.current.value = '';                
 
-                setConfirmationMessage('Usuário cadastrado com sucesso!');
-                setTimeout(() => setConfirmationMessage(''), 5000);
+                setConfirmationMessage({
+                    message: (
+                        <>
+                            Novo usuário cadastrado com sucesso! <NavLink to="/login">Você já pode fazer login.</NavLink>
+                        </>
+                    ),
+                    type: 'success'
+                });                
+                
             } else {
                 throw new Error('Erro ao cadastrar usuário');
             }
         } catch (error) {
             console.error('Erro ao cadastrar usuário:', error);
             console.error('Detalhes do erro:', error.response ? error.response.data : error.message);
-            setConfirmationMessage('Erro ao cadastrar usuário.');
-            setTimeout(() => setConfirmationMessage(''), 5000);
+            
+            setConfirmationMessage({
+                message: 'Erro ao cadastrar usuário.',
+                type: 'error'
+            });
+            setTimeout(() => setConfirmationMessage({ message: '', type: '' }), 2000);
         }
     }
    
   return (
     <>
-        <PageTitle title="Criar novo usuário"/>
+        <PageTitle title="Crie sua conta"/>
 
         <div id="main">    
-            <div className="container">         
-                {confirmationMessage ? <p className="confirmation-message">{confirmationMessage}</p> : null}
-
+            <div className={`container ${styles.container}`}>         
+                
+                {confirmationMessage.message && (
+                    <StatusMessage 
+                        message={confirmationMessage.message} 
+                        type={confirmationMessage.type} 
+                    />
+                )}
+                
                 <form>
                     <div className="form-item">
                         <input type="text" name="name" className="name" placeholder='Nome' ref={inputName} />
@@ -65,9 +83,13 @@ function CadastroUsuario() {
                         <input type="password" name="password" className="password" placeholder='Senha' ref={inputPassword} />
                     </div>            
                     <div className="form-item">
-                        <button type='button' onClick={createUser}>- Enviar -</button>
+                        <button type='button' onClick={createUser}>Cadastrar</button>
                     </div>
-                </form>       
+
+                    <div className="extras">
+                        <p>Já possui uma conta? <NavLink to="/login">Faça login aqui!</NavLink></p>
+                    </div>
+                </form>     
                 
             </div>      
             </div>

@@ -19,7 +19,7 @@ export default function Footer() {
 
     return (
         <footer className={styles.footer}>
-            
+            <div className="container">
                 {isAuthenticated ? (
                     <nav className={styles.nav}>
                         <ul>                               
@@ -52,7 +52,7 @@ export default function Footer() {
                     </nav>                            
 
                 ) : null }   
-            
+            </div>
         </footer>
     );
 }

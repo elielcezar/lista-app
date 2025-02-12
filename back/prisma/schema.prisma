@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id        Int     @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   email     String   @unique
   name      String  
   password  String
@@ -18,12 +18,12 @@ model User {
 }
 
 model Tarefa {
-  id              Int     @id @default(autoincrement())
+  id              Int       @id @default(autoincrement())
   titulo          String    
   descricao       String?
-  imagemAntes     String
-  imagemDepois    String
-  status          Boolean  @default(false)     
+  imagemAntes     String?
+  imagemDepois    String?
+  status          Boolean   @default(false)     
   createdAt       DateTime? @default(now())
   updatedAt       DateTime? @default(now())
   userId          Int

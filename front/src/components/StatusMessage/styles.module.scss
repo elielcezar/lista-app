@@ -1,0 +1,48 @@
+.confirmationMessage{
+    display: inline-block;
+    transition: all .3s;
+    padding: 15px;
+    border-radius: 5px;    
+    font-size: 16px;
+    font-weight: 500;
+    margin: 20px 0;
+    text-align: center;
+
+    a {        
+        text-decoration: underline;
+        margin-left: 5px;
+        display: inline-block;
+        font-weight: 700;
+        margin: 7px 0;
+    }
+
+    &.success{
+        border: 1px solid #23872c;
+        color: #23872c;
+        background-color: #c5f4ca; 
+        
+        a{
+            color: #126419;
+        }
+        
+        
+    }
+    &.error{
+        border: 1px solid #872323;
+        color: #872323;
+        background-color: #f4c5c5;
+
+        a{
+            color: #641212;
+        }
+    }
+    &.warning {
+        background-color: #ec8805;
+        color: white;
+        background-color: #f4e6c5;
+
+        a{
+            color: #641212;
+        }
+    }
+}

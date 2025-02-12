@@ -1,21 +1,89 @@
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
 import multer from 'multer';
+import path from 'path';
+import fs from 'fs';
 
 const prisma = new PrismaClient();
 const router = express.Router();
 
-// Configuração do multer para armazenar arquivos localmente
+// Configurar o multer para o upload de imagens
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'uploads/');
+    destination: function (req, file, cb) {
+        const uploadDir = './uploads';
+        // Criar diretório se não existir
+        if (!fs.existsSync(uploadDir)) {
+            fs.mkdirSync(uploadDir, { recursive: true });
+        }
+        cb(null, uploadDir);
     },
-    filename: (req, file, cb) => {
-        cb(null, `${Date.now()}-${file.originalname}`);
+    filename: function (req, file, cb) {
+        // Gerar nome único para o arquivo
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, uniqueSuffix + path.extname(file.originalname));
     }
 });
 
-const upload = multer({ storage });
+// Filtro para aceitar apenas imagens
+const fileFilter = (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+        cb(null, true);
+    } else {
+        cb(new Error('Apenas imagens são permitidas!'), false);
+    }
+};
+
+const upload = multer({ 
+    storage: storage,
+    fileFilter: fileFilter,
+    limits: {
+        fileSize: 5 * 1024 * 1024 // limite de 5MB
+    }
+});
+
+// Criar tarefa com upload de imagens
+router.post('/tarefas', upload.fields([
+    { name: 'imagemAntes', maxCount: 1 },
+    { name: 'imagemDepois', maxCount: 1 }
+]), async (req, res) => {
+    try {
+        const { titulo, descricao, userId } = req.body;       
+
+        // Preparar objeto de criação
+        const createData = {
+            titulo,
+            descricao,
+            userId: parseInt(userId),
+            createdAt: new Date()
+        };
+
+        // Adicionar imagens apenas se foram enviadas
+        if (req.files?.imagemAntes) {
+            createData.imagemAntes = req.files.imagemAntes[0].filename;
+        }
+        if (req.files?.imagemDepois) {
+            createData.imagemDepois = req.files.imagemDepois[0].filename;
+        }
+
+        const tarefa = await prisma.tarefa.create({
+            data: createData
+        });
+
+        res.status(201).json(tarefa);
+    } catch (error) {
+        console.error('Erro ao criar tarefa:', error);
+        res.status(500).json({ 
+            error: 'Erro ao criar tarefa',
+            details: error.message 
+        });
+    }
+});
+
+// Rota para servir as imagens
+router.get('/uploads/:filename', (req, res) => {
+    const { filename } = req.params;
+    res.sendFile(path.resolve(`./uploads/${filename}`));
+});
 
 // Criar Tarefa
 router.post('/tarefas', upload.array('fotos'), async (req, res) => {
@@ -167,31 +235,32 @@ router.get('/tarefas/id/:id', async (req, res) => {
 
 
 // Atualizar tarefa
-router.put('/tarefas/:id', upload.array('fotos'), async (req, res) => {    
+router.put('/tarefas/:id', upload.fields([
+    { name: 'imagemAntes', maxCount: 1 },
+    { name: 'imagemDepois', maxCount: 1 }
+]), async (req, res) => {    
     try {
-        console.log('Recebendo requisição /PUT');    
-
         const { id } = req.params;
-        const {
-            titulo,            
-            descricao,
-            usuarios  // será usado como userId
-        } = req.body;        
+        const { titulo, descricao, userId } = req.body;
 
-        // Prepare update data
+        // Preparar objeto de atualização
         const updateData = {
             titulo,
             descricao,
             updatedAt: new Date()
         };
 
-        // Atualiza o usuário responsável se fornecido
-        if (usuarios) {
-            updateData.user = {
-                connect: { 
-                    id: parseInt(usuarios) 
-                }
-            };            
+        // Adicionar userId se foi enviado
+        if (userId) {
+            updateData.userId = parseInt(userId);
+        }
+
+        // Adicionar novas imagens apenas se foram enviadas
+        if (req.files?.imagemAntes) {
+            updateData.imagemAntes = req.files.imagemAntes[0].filename;
+        }
+        if (req.files?.imagemDepois) {
+            updateData.imagemDepois = req.files.imagemDepois[0].filename;
         }
 
         const updatedTarefa = await prisma.tarefa.update({
@@ -210,12 +279,14 @@ router.put('/tarefas/:id', upload.array('fotos'), async (req, res) => {
             }
         });
         
-        console.log('Tarefa atualizada:', updatedTarefa);
         res.status(200).json(updatedTarefa);
         
     } catch (error) {
         console.error('Erro ao atualizar tarefa:', error);
-        res.status(500).json({ error: 'Erro ao atualizar tarefa' });
+        res.status(500).json({ 
+            error: 'Erro ao atualizar tarefa',
+            details: error.message 
+        });
     }
 });
 
@@ -250,6 +321,71 @@ router.patch('/tarefas/:id/status', async (req, res) => {
     } catch (error) {
         console.error('Erro:', error);
         return res.status(500).json({ error: error.message });
+    }
+});
+
+// Atualizar imagem da tarefa
+router.patch('/tarefas/:id/image', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { imageType, action } = req.body;
+
+        if (action !== 'delete' || !['imagemAntes', 'imagemDepois'].includes(imageType)) {
+            return res.status(400).json({ 
+                error: 'Ação ou tipo de imagem inválido' 
+            });
+        }
+
+        // Primeiro, buscar a tarefa para obter o nome do arquivo atual
+        const tarefa = await prisma.tarefa.findUnique({
+            where: { id: parseInt(id) }
+        });
+
+        if (!tarefa) {
+            return res.status(404).json({ error: 'Tarefa não encontrada' });
+        }
+
+        try {
+            // Tentar deletar o arquivo físico se existir
+            const oldFilePath = `./uploads/${tarefa[imageType]}`;
+            if (fs.existsSync(oldFilePath)) {
+                fs.unlinkSync(oldFilePath);
+            }
+        } catch (fsError) {
+            console.error('Erro ao deletar arquivo:', fsError);
+            // Continuar mesmo se falhar ao deletar o arquivo
+        }
+
+        // Criar objeto de atualização
+        const updateData = {
+            updatedAt: new Date()
+        };
+        updateData[imageType] = ''; // Usar string vazia em vez de null
+
+        // Atualizar o registro no banco
+        const updatedTarefa = await prisma.tarefa.update({
+            where: { 
+                id: parseInt(id) 
+            },
+            data: updateData,
+            include: {
+                user: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true
+                    }
+                }
+            }
+        });
+
+        res.json(updatedTarefa);
+    } catch (error) {
+        console.error('Erro ao deletar imagem:', error);
+        res.status(500).json({ 
+            error: 'Erro ao deletar imagem',
+            details: error.message 
+        });
     }
 });
 
