@@ -8,111 +8,137 @@ import styles from './styles.module.css';
 
 export const Usuario = () => {
 
-    const params = useParams();
-
-    const inputName = useRef();    
-    const inputEmail = useRef();
-    const inputPassword = useRef(); 
-
-    const [userData, setUserData] = useState('');   
-    
-    const [confirmationMessage, setConfirmationMessage] = useState({ message: '', type: '' }); 
-
+    const { id } = useParams();
     const navigate = useNavigate();
-
-    async function getUser(){
-        const userFromAPI = await api.get(`usuarios/${params.id}`);
-        setUserData(userFromAPI.data);        
-    }
+    const [statusMessage, setStatusMessage] = useState({ message: '', type: '' });
+    const [usuario, setUsuario] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [role, setRole] = useState('');
+    
+    const inputName = useRef(null);
+    const inputEmail = useRef(null);
+    const inputPassword = useRef(null);
 
     useEffect(() => {
-        getUser();               
-    }, []);
-
-    useEffect(() => {    
-        if (userData) {
-            inputName.current.value = userData.name;
-            inputEmail.current.value = userData.email;            
+        async function loadUsuario() {
+            try {
+                const response = await api.get(`/usuarios/${id}`);
+                setUsuario(response.data);
+                setRole(response.data.role);
+                setLoading(false);
+            } catch (error) {
+                console.error('Erro ao carregar usuário:', error);
+                setLoading(false);
+            }
         }
-    }, [userData]); 
+        
+        loadUsuario();
+    }, [id]);
 
-    async function updateUser(){        
-        const name = inputName.current.value;
-        const email = inputEmail.current.value;
-        const password = inputPassword.current.value;
-
-        if (!name || !email) {
-            setConfirmationMessage({ 
-                message: 'Os campos Nome e Email são obrigatórios.', 
-                type: 'error' 
-            });
-            setTimeout(() => setConfirmationMessage({ message: '', type: '' }), 2000);
-            return;
+    useEffect(() => {
+        if (usuario) {
+            inputName.current.value = usuario.name;
+            inputEmail.current.value = usuario.email;
         }
+    }, [usuario]);
 
-        const updatedUserData = {
-            name,
-            email,
-            password
-        };    
-
-        console.log(updatedUserData);    
-
+    async function handleSubmit(e) {
+        e.preventDefault();
+        
         try {
-            const response = await api.put(`/usuarios/${params.id}`, updatedUserData, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
+            const userData = {
+                name: inputName.current.value,
+                email: inputEmail.current.value,
+                role: role
+            };
 
-            if (response.status === 200 || response.status === 201) { 
-                setConfirmationMessage({
+            // Adicionar senha apenas se foi preenchida
+            if (inputPassword.current?.value) {
+                userData.password = inputPassword.current.value;
+            }
+
+            const response = await api.put(`/usuarios/${id}`, userData);
+
+            if (response.status === 200) {
+                setStatusMessage({
                     message: 'Usuário atualizado com sucesso!',
                     type: 'success'
                 });
-                setTimeout(() => setConfirmationMessage({ message: '', type: '' }), 2000);
                 setTimeout(() => navigate('/usuarios'), 2000);
-            } else {
-                throw new Error('Erro ao atualizar usuário');
             }
         } catch (error) {
             console.error('Erro ao atualizar usuário:', error);
-            console.error('Detalhes do erro:', error.response ? error.response.data : error.message);
-            setConfirmationMessage('Erro ao atualizar usuário.');
-            setTimeout(() => setConfirmationMessage(''), 5000);
+            setStatusMessage({
+                message: 'Erro ao atualizar usuário. Tente novamente.',
+                type: 'error'
+            });
         }
-    }   
-      
+    }
+
+    if (loading) return <div>Carregando...</div>;
+    if (!usuario) return <div>Usuário não encontrado</div>;
 
     return (
-
         <>
-            <PageTitle title="Editar Usuário"/>
-            <div className="container"> 
+            <PageTitle title="Editar Usuário" />
+            
+            <div id="main">
+                <div className="container">
+                    {statusMessage.message && (
+                        <StatusMessage 
+                            message={statusMessage.message} 
+                            type={statusMessage.type} 
+                        />
+                    )}
 
-            {confirmationMessage ? 
-                <StatusMessage message={confirmationMessage.message} type={confirmationMessage.type} /> 
-            : null}
+                    <form onSubmit={handleSubmit}>
+                        <div className="form-item">
+                            <input 
+                                type="text" 
+                                placeholder="Nome" 
+                                ref={inputName}
+                                required 
+                            />
+                        </div>
+                        
+                        <div className="form-item">
+                            <input 
+                                type="email" 
+                                placeholder="E-mail" 
+                                ref={inputEmail}
+                                required 
+                            />
+                        </div>
+                        
+                        <div className="form-item">
+                            <input 
+                                type="password" 
+                                placeholder="Nova Senha (opcional)" 
+                                ref={inputPassword}
+                            />
+                        </div>
 
-            <form>
-                <div className="form-item">
-                    <input type="text" name="name" className="name" placeholder='Nome' ref={inputName}  />
-                </div>           
-                <div className="form-item">
-                    <input type="email" name="email" className="email" placeholder='Email' ref={inputEmail} />
+                        <div className="form-item">
+                            <label>Tipo de Usuário:</label>
+                            <select 
+                                value={role} 
+                                onChange={(e) => setRole(e.target.value)}
+                                required
+                            >
+                                <option value="colaborador">Colaborador</option>
+                                <option value="gerente">Gerente</option>
+                                <option value="admin">Administrador</option>
+                            </select>
+                        </div>
+                        
+                        <div className="form-item">
+                            <button type="submit">Atualizar Usuário</button>
+                        </div>
+                    </form>
                 </div>
-                <div className="form-item">
-                    <input type="password" name="password" className="password" placeholder='Senha' ref={inputPassword} />
-                </div>                 
-                <div className="form-item">
-                    <button type='button' onClick={updateUser}>- Enviar -</button>
-                </div>
-            </form>   
-        </div>
+            </div>
         </>
-
-        
-    )
+    );
 }
 
 export default Usuario

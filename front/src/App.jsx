@@ -3,7 +3,7 @@ import { AuthProvider } from '@/context/AuthContext';
 
 // Components
 import Header from '@/components/header';
-import Footer from '@/components/Footer';
+import Footer from '@/components/footer';
 import ProtectedRoute from '@/components/protected-route';
 import AddBodyClass from '@/components/AddBodyClass';
 
