@@ -93,7 +93,7 @@ router.get('/usuarios/:id', async (req, res) => {
 router.put('/usuarios/:id', async (req, res) => {    
     try {
         const { id } = req.params;
-        const { name, email, password } = req.body;   
+        const { name, email, password, role } = req.body;   
 
         // Validar se o ID foi fornecido
         if (!id) {
@@ -113,12 +113,14 @@ router.put('/usuarios/:id', async (req, res) => {
         const updateData = {
             email,
             name,
+            role,
             updatedAt: new Date()
         };
 
         // Adicionar senha apenas se foi fornecida
         if (password && password.trim() !== '') {
-            updateData.password = await bcrypt.hash(password, 10);
+            const hashedPassword = await bcrypt.hash(password, 10);
+            updateData.password = hashedPassword;
         }
         
         const response = await prisma.user.update({

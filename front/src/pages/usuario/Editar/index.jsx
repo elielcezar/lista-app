@@ -24,7 +24,7 @@ export const Usuario = () => {
             try {
                 const response = await api.get(`/usuarios/${id}`);
                 setUsuario(response.data);
-                setRole(response.data.role);
+                setRole(response.data.role || 'colaborador');
                 setLoading(false);
             } catch (error) {
                 console.error('Erro ao carregar usuário:', error);
@@ -56,6 +56,8 @@ export const Usuario = () => {
             if (inputPassword.current?.value) {
                 userData.password = inputPassword.current.value;
             }
+
+            console.log('Enviando dados:', userData);
 
             const response = await api.put(`/usuarios/${id}`, userData);
 
@@ -124,7 +126,7 @@ export const Usuario = () => {
                                 value={role} 
                                 onChange={(e) => setRole(e.target.value)}
                                 required
-                            >
+                            >                                
                                 <option value="colaborador">Colaborador</option>
                                 <option value="gerente">Gerente</option>
                                 <option value="admin">Administrador</option>
