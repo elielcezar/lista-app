@@ -14,7 +14,7 @@ function Imovel() {
 
   async function getImovelData() { 
     try{
-      const imovelFromApi = await api.get(`/imoveis/${params.codigo}`);
+      const imovelFromApi = await api.get(`/tarefas/${params.codigo}`);
       setImovelData(imovelFromApi.data[0]);           
     }catch{
       console.error('Erro ao buscar imóvel:', error);
@@ -33,7 +33,7 @@ function Imovel() {
       </div>
       <div className="container">    
         <div className="row tabs">
-          <p><a href={`${import.meta.env.VITE_API_URL}/imoveis/edit/${imovelData.id}`} className="tab">Editar</a></p>
+          <p><a href={`${import.meta.env.VITE_API_URL}/tarefas/edit/${imovelData.id}`} className="tab">Editar</a></p>
         </div>          
         <div className="row meta">
           <h1>{imovelData.titulo}</h1>

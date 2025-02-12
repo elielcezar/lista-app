@@ -47,7 +47,7 @@ function CadastroImovel() {
         }        
 
         try {            
-            const response = await api.post('/imoveis', formData, {
+            const response = await api.post('/tarefas', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }

@@ -1,11 +1,11 @@
-.imoveis {
+.tarefas {
   display: flex;
   flex-direction: column;
 }
-.imoveis .item {
+.tarefas .item {
   padding: 1.5%;
 }
-.imoveis .item .card {
+.tarefas .item .card {
   background: #fff;
   padding: 10px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
@@ -17,7 +17,7 @@
   gap: 15px;
   align-items: center;
 }
-.imoveis .item .card .checkbox {
+.tarefas .item .card .checkbox {
   width: 10%;
   display: flex;
   align-items: center;
@@ -28,34 +28,34 @@
   width: 20px;
   height: 20px;
 }
-.imoveis .item .card .checkbox.active {
+.tarefas .item .card .checkbox.active {
   background: #7cda7e;
   border: 2px solid #7cda7e;
 }
-.imoveis .item .card .checkbox input[type=checkbox] {
+.tarefas .item .card .checkbox input[type=checkbox] {
   opacity: 0;
 }
-.imoveis .item .card .content {
+.tarefas .item .card .content {
   width: 55%;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
-.imoveis .item .card .content h3 {
+.tarefas .item .card .content h3 {
   font-weight: 600;
   font-size: 20px;
 }
-.imoveis .item .card .content p {
+.tarefas .item .card .content p {
   font-size: 13px;
   margin: 0;
 }
-.imoveis .item .card .content p.subtitulo {
+.tarefas .item .card .content p.subtitulo {
   display: none;
 }
-.imoveis .item .card .content p.responsavel {
+.tarefas .item .card .content p.responsavel {
   font-size: 13px;
 }
-.imoveis .item .card .capa {
+.tarefas .item .card .capa {
   max-width: 30%;
   display: flex;
   align-items: center;

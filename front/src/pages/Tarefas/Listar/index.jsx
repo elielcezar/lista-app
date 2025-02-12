@@ -1,4 +1,4 @@
-import ListaImoveis from '@/components/lista-imoveis';
+import ListaTarefas from '@/components/ListaTarefas';
 import styles from './style.module.css'
 
 export const Imoveis = () => {    
@@ -7,7 +7,7 @@ export const Imoveis = () => {
     <div id="main" className={styles.main}>
         <div className="container">
             <h1>Nossos Imóveis</h1>
-            <ListaImoveis />
+            <ListaTarefas />
         </div>
     </div>
   )

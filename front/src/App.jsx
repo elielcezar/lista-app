@@ -5,15 +5,15 @@ import { AuthProvider } from './context/AuthContext';
 import Header from './components/header';
 
 import Login from './pages/login';
-import Home from './pages/home';
-import About from './pages/about';
-import NotFound from './pages/notfound';
-import Contact from './pages/contact';
+import Home from './pages/Home';
+import About from './pages/About';
+import NotFound from './pages/NotFound';
+import Contact from './pages/Contact';
 
-import ExibirImovel from './pages/imoveis/exibir';
-import ListarImoveis from './pages/imoveis/listar';
-import CadastrarImovel from './pages/imoveis/cadastrar';
-import EditarImovel from './pages/imoveis/editar';
+import ExibirTarefa from './pages/Tarefas/Exibir';
+import ListarTarefas from './pages/Tarefas/Listar';
+import CadastrarTarefa from './pages/Tarefas/Cadastrar';
+import EditarTarefa from './pages/Tarefas/Editar';
 
 import TarefasArquivadas from './pages/arquivo';
 
@@ -38,10 +38,10 @@ function App() {
                     <Route path="/" element={<ProtectedRoute element={Home} />} />
                     <Route path="login" element={<Login />} />                    
                     
-                    <Route path="imoveis" element={<ListarImoveis />} />                    
-                    <Route path="tarefa/:id" element={<ExibirImovel />} />
-                    <Route path="tarefa/edit/:id" element={<ProtectedRoute element={EditarImovel} />} />
-                    <Route path="cadastro-tarefa" element={<ProtectedRoute element={CadastrarImovel} />} />
+                    <Route path="Tarefas" element={<ListarTarefas />} />                    
+                    <Route path="tarefa/:id" element={<ExibirTarefa />} />
+                    <Route path="tarefa/edit/:id" element={<ProtectedRoute element={EditarTarefa} />} />
+                    <Route path="cadastro-tarefa" element={<ProtectedRoute element={CadastrarTarefa} />} />
                     
                     <Route path="tarefas-arquivadas" element={<ProtectedRoute element={TarefasArquivadas} />} />
                     

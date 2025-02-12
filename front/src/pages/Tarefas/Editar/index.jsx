@@ -6,7 +6,7 @@ import api from '../../../services/api';
 import { FaRegTrashAlt } from "react-icons/fa";
 import styles from './styles.module.css';
 
-function EditarImovel() {    
+function EditarTarefa() {    
 
     const [confirmationMessage, setConfirmationMessage] = useState('');          
     const [loading, setLoading] = useState(true);
@@ -22,7 +22,7 @@ function EditarImovel() {
     
     const [formData, setFormData] = useState({
         titulo: '',       
-        descricaoLonga: '',       
+        descricao: '',       
         fotos: ''
     });
 
@@ -32,20 +32,21 @@ function EditarImovel() {
     useEffect(() => {
         async function fetchImovel() {
             try {
-                const response = await api.get(`/imoveis/id/${id}`);
+                const response = await api.get(`/tarefas/id/${id}`);
                 setImovel(response.data);
                 setFormData({
                     titulo: response.data.titulo,                   
-                    descricaoLonga: response.data.descricaoLonga,                    
+                    descricao: response.data.descricao,
                     fotos: response.data.fotos
                 });                
                 
-                setUsuario(response.data.usuarios[0]?.user.id);
+                setUsuario(response.data.user?.id || '');
                 
                 setCurrentPhotos(response.data.fotos || []);
                 setLoading(false);
             } catch (error) {
-                setError('Erro ao buscar tarefa:', error);
+                console.error('Erro ao buscar tarefa:', error);
+                setError(error.message);
                 setLoading(false);
             }
         }                
@@ -78,7 +79,7 @@ function EditarImovel() {
         }  
 
         try {
-            await api.put(`/imoveis/${id}`, formPayload, {
+            await api.put(`/tarefas/${id}`, formPayload, {
               headers: { 'Content-Type': 'multipart/form-data' }
             });            
             
@@ -107,7 +108,7 @@ function EditarImovel() {
     };
 
     if (loading) return <div>Carregando...</div>;
-    if (error) return <div>Erro ao carregar tarefa: {error.message}</div>;
+    if (error) return <div>Erro ao carregar tarefa: {error}</div>;
     if (!imovelData) return <div>Tarefa não encontrada</div>;
 
     const baseUrl = import.meta.env.VITE_UPLOADS_URL + '/';
@@ -128,7 +129,13 @@ function EditarImovel() {
                     <input type="text" name="titulo" className="titulo" value={formData.titulo} onChange={updateFormData} placeholder='Título' /> 
                 </div>                                            
                 <div className="form-item">                       
-                    <textarea name="descricaoLonga" className="descricaoLonga" value={formData.descricaoLonga} onChange={updateFormData} placeholder='Descrição'></textarea>
+                    <textarea 
+                        name="descricao" 
+                        className="descricao" 
+                        value={formData.descricao} 
+                        onChange={updateFormData} 
+                        placeholder='Descrição'
+                    ></textarea>
                 </div>  
 
                 <div className="form-item">     
@@ -162,4 +169,4 @@ function EditarImovel() {
   )
 }
 
-export default EditarImovel
+export default EditarTarefa

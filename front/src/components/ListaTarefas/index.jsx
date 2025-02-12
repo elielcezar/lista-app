@@ -1,14 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-import CriarTarefaBtn from '@/components/CriarTarefaBtn';
-import PageTitle from '../../components/PageTitle';
 import api from '@/services/api';
 import styles from './styles.module.css';
 
-export const TarefasArquivadas = () => {
+export const ListaTarefas = () => {
 
     const [confirmationMessage, setConfirmationMessage] = useState(''); 
-
+    
     const [loading, setLoading] = useState(true);
   
     const [tarefas, setTarefas] = useState([]);
@@ -16,20 +14,24 @@ export const TarefasArquivadas = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchTarefas = async () => {
+        const fetchtarefas = async () => {
             try {
                 const response = await api.get('/tarefas');
-                const filteredTarefas = response.data.filter(item => item.status === true);
-                setTarefas(filteredTarefas)                
+                if (Array.isArray(response.data)) {
+                    const filteredTarefas = response.data.filter(item => item.status === false);
+                    setTarefas(filteredTarefas);
+                    console.log(filteredTarefas);
+                } else {
+                    console.error("Erro: Dados recebidos não são um array", response.data);
+                }
             } catch (error) {
-                console.error('Erro ao carregar tarefas:', error)
+                console.error('Erro ao carregar imóveis:', error);
             }
         }
-        fetchTarefas()
-    }, [])   
+        fetchtarefas();
+    }, []);   
     
     const baseUrl = import.meta.env.VITE_UPLOADS_URL + '/';
-
 
     const handleClick = (id) => {        
         navigate(`/tarefa/edit/${id}`)
@@ -41,17 +43,9 @@ export const TarefasArquivadas = () => {
         try {            
             const tarefa = tarefas.find(im => im.id === tarefaId);
 
-           /* setTimeout( () => {
-                setConfirmationMessage('');
-            }, 1000);*/
-
             const response = await api.patch(`/tarefas/${tarefaId}/status`, {
                 status: !tarefa.status
-            }, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
+            });           
 
             if (response.status === 200) {
                 const updatedtarefas = tarefas.map(tarefa => {
@@ -60,11 +54,12 @@ export const TarefasArquivadas = () => {
                     }
                     return tarefa;
                 });
-                const filteredTarefas = updatedtarefas.filter(item => item.status === true);                
+                const filteredTarefas = updatedtarefas.filter(item => item.status === false);                
 
                 setTarefas(filteredTarefas);                
 
-                setConfirmationMessage('Tarefa reativada com sucesso!');
+                setConfirmationMessage('Tarefa concluída com sucesso!');
+
                 setTimeout( () => {
                     setConfirmationMessage('');
                 }, 2000);
@@ -106,10 +101,8 @@ export const TarefasArquivadas = () => {
                 </div>                
             </div>
         ))}
-
-        <CriarTarefaBtn/>  
-    </div>  
+    </div>       
   )
 }
 
-export default TarefasArquivadas
+export default ListaTarefas
