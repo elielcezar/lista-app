@@ -10,7 +10,7 @@ import AddBodyClass from '@/components/AddBodyClass';
 // Pages
 import Home from '@/pages/home';
 import About from '@/pages/about';
-import NotFound from '@/pages/not-found';
+import NotFound from '@/pages/notfound';
 import Contact from '@/pages/contact';
 import Extras from '@/pages/extras';
 
