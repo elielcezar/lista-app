@@ -1,0 +1,26 @@
+.headerHidden {
+    display: none !important;    
+} 
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;    
+    background-color:lightslategray;
+    color: #fff;  
+    margin-bottom: 0;
+    padding: 10px 0;
+    background: linear-gradient(90deg, rgba(129,0,255,1) 0%, rgba(201,0,255,1) 100%);
+
+    .logo{
+        a{
+            color: #fff;
+            text-decoration: none;
+            font-size: 24px;
+            font-weight: 500;  
+            //background-color: #ff1f3a;            
+            display: inline-block;
+            //padding: 6px 12px;
+        }
+    }    
+}
+

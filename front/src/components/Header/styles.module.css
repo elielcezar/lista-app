@@ -1,0 +1,21 @@
+.headerHidden {
+  display: none !important;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: lightslategray;
+  color: #fff;
+  margin-bottom: 0;
+  padding: 10px 0;
+  background: linear-gradient(90deg, rgb(129, 0, 255) 0%, rgb(201, 0, 255) 100%);
+}
+.header .logo a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 24px;
+  font-weight: 500;
+  display: inline-block;
+}/*# sourceMappingURL=styles.module.css.map */
