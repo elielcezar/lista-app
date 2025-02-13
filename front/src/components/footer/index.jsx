@@ -1,6 +1,5 @@
-import { useContext } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { AuthContext } from '@/context/AuthContext';
+import { useAuth } from '@/context/AuthContext';
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { FaRegCheckCircle } from "react-icons/fa";
 import { FaRegUser } from "react-icons/fa6";
@@ -8,8 +7,8 @@ import { HiDotsHorizontal } from "react-icons/hi";
 import styles from './styles.module.css';
 
 export default function Footer() {
-
-    const { isAuthenticated, logout } = useContext(AuthContext);
+    const { isAuthenticated, logout } = useAuth();
+    console.log('Footer - Estado de autenticação:', isAuthenticated);
     const navigate = useNavigate();  
 
     const handleLogout = () => {
@@ -48,9 +47,7 @@ export default function Footer() {
                                 </NavLink>
                             </li>                            
                         </ul>
-
                     </nav>                            
-
                 ) : null }   
             </div>
         </footer>
