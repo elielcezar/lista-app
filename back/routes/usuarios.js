@@ -9,10 +9,10 @@ const router = express.Router();
 router.post('/usuarios', async (req, res) => {
     
     console.log('Recebendo requisição POST /usuarios');    
-    const { name, email, role, createdBy, password } = req.body;    
+    const { name, email, role, createdBy, password } = req.body;
 
     try {
-        console.log('Dados recebidos:', { name, email, createdBy, password });
+        console.log('Dados recebidos:', { name, email, role, createdBy, password });
         
         const hashedPassword = await bcrypt.hash(password, 10);
         const response = await prisma.user.create({
@@ -37,16 +37,19 @@ router.post('/usuarios', async (req, res) => {
 router.get('/usuarios', async (req, res) => {
 
     console.log('Recebendo requisição GET /usuarios');
-    let whereClause = {};
+    let users = [];    
 
-    // Construir where clause baseado nos parâmetros da query
-    if (req.query.name) whereClause.name = req.query.name;
-    if (req.query.email) whereClause.email = req.query.email;
-    if (req.query.createdBy) whereClause.createdBy = parseInt(req.query.createdBy);
-    const users = await prisma.user.findMany({
-        where: whereClause
-    });
-
+    if(req.query){
+        users = await prisma.user.findMany({
+            where:{
+                name: req.query.name,
+                email: req.query.email,
+                password: req.query.password
+            }
+        })
+    }else{
+        users = await prisma.user.findMany();
+    }
     console.log('Usuários encontrados:', users);
     res.status(200).json(users);
 
@@ -157,36 +160,21 @@ router.put('/usuarios/:id', async (req, res) => {
 
 // Excluir usuario
 router.delete('/usuarios/:id', async (req, res) => {  
-    try {
-        const userId = parseInt(req.params.id);
+    
+    const userId = req.params.id;
 
-        // Primeiro, deletar todas as tarefas relacionadas ao usuário
-        await prisma.tarefa.deleteMany({
-            where: { 
-                OR: [
-                    { userId: userId },
-                    { authorId: userId }
-                ]
-            }
-        });
+    await prisma.imovelUser.deleteMany({
+        where: { userId }
+    });
 
-        // Depois, deletar o usuário
-        await prisma.user.delete({
-            where: {
-                id: userId
-            }
-        });
-
-        res.status(200).json({
-            message: 'Usuário deletado com sucesso'
-        });
-    } catch (error) {
-        console.error('Erro ao deletar usuário:', error);
-        res.status(500).json({
-            error: 'Erro ao deletar usuário',
-            details: error.message
-        });
-    }
+    await prisma.user.delete({
+        where: {
+            id: userId
+        }
+    });
+    res.status(200).json({
+        message: 'Usuario deletado com sucesso'
+    });
 });
 
 export default router;

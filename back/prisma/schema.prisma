@@ -12,7 +12,7 @@ model User {
   email     String    @unique
   name      String  
   password  String
-  role      String    @default("colaborador") // Pode ser: "admin", "gerente" ou "colaborador"
+  role      String
   createdAt DateTime? @default(now())  
   updatedAt DateTime? @default(now())
   tarefas   Tarefa[]

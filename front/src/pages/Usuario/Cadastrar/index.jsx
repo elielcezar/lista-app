@@ -40,6 +40,8 @@ function CadastroUsuario() {
                 createdBy: isAuthenticated ? user.id : null
             };
 
+            console.log(userData);
+
             const response = await api.post('/usuarios', userData);
 
             if (response.status === 201) {
