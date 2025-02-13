@@ -1,21 +1,20 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, NavLink } from 'react-router-dom';
+import { useAuth } from '@/context/AuthContext';
+import StatusMessage from '@/components/StatusMessage';
 import CriarTarefaBtn from '@/components/CriarTarefaBtn';
 import PageTitle from '@/components/PageTitle';
 import api from '@/services/api';
-import { useAuth } from '@/context/AuthContext';
 import styles from './styles.module.css';
 
 export const TarefasArquivadas = () => {
 
     const [confirmationMessage, setConfirmationMessage] = useState(''); 
-
+    const [statusMessage, setStatusMessage] = useState({ message: '', type: '' });    
     const [loading, setLoading] = useState(true);
   
     const [tarefas, setTarefas] = useState([]);
-
     const navigate = useNavigate();
-
     const { user } = useAuth();
 
     useEffect(() => {
@@ -27,9 +26,28 @@ export const TarefasArquivadas = () => {
                         status: true
                     }
                 });
-                setTarefas(response.data);                
+
+                if (!response.data || response.data.length === 0) {
+                    setStatusMessage({ 
+                        message: (
+                            <>
+                                Você não possui tarefas arquivadas no momento.                                
+                            </>
+                        ),
+                        type: 'message' 
+                    });
+                    setTarefas([]);
+                } else {
+                    setTarefas(response.data);   
+                    setStatusMessage({ message: '', type: '' });             
+                }
             } catch (error) {
-                console.error('Erro ao carregar tarefas:', error)
+                console.error('Erro ao carregar tarefas:', error);
+                 setStatusMessage({ 
+                    message: 'Erro ao carregar tarefas. Tente novamente.',
+                    type: 'error' 
+                });
+                setTarefas([]);
             }
         }
         if (user?.id) {
@@ -83,7 +101,7 @@ export const TarefasArquivadas = () => {
   return (    
     <>      
       <PageTitle title="Tarefas Arquivadas"/>
-    <div id="tarefas" className={styles.tarefas}>
+        <div id="tarefas" className={styles.tarefas}>
         
         <div className="container">
             {confirmationMessage ? 
@@ -91,6 +109,10 @@ export const TarefasArquivadas = () => {
                     <p className={styles.confirmationmessage}>{confirmationMessage}</p>
                 </div> 
             : null}
+
+            {statusMessage.message && (
+                <StatusMessage message={statusMessage.message} type={statusMessage.type} />
+            )}
 
             {tarefas.map((tarefa) => (
                 <div className={styles.item} key={tarefa.id}>

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, NavLink } from 'react-router-dom';
+import StatusMessage from '@/components/StatusMessage';
 import api from '@/services/api';
 import styles from './styles.module.css';
 import { useAuth } from '@/context/AuthContext';
@@ -7,11 +8,10 @@ import { useAuth } from '@/context/AuthContext';
 export const ListaTarefas = () => {
 
     const [confirmationMessage, setConfirmationMessage] = useState(''); 
-    
+    const [statusMessage, setStatusMessage] = useState({ message: '', type: '' });    
     const [loading, setLoading] = useState(true);
   
     const [tarefas, setTarefas] = useState([]);
-
     const navigate = useNavigate();
     const { user } = useAuth();
 
@@ -23,10 +23,33 @@ export const ListaTarefas = () => {
                         authorId: user.id,
                         status: false
                     }
-                });
-                setTarefas(response.data);
+                });                
+                
+                if (!response.data || response.data.length === 0) {
+                    setStatusMessage({ 
+                        message: (
+                            <>
+                                Você não possui tarefas cadastradas no momento.
+                                <NavLink to="/cadastro-tarefa">Aproveite para criar uma.</NavLink>
+                            </>
+                        ),
+                        type: 'message' 
+                    });
+                    setTarefas([]);
+                } else {
+                    setTarefas(response.data);
+                    setStatusMessage({ message: '', type: '' });
+                }
+                
             } catch (error) {
                 console.error('Erro ao carregar tarefas:', error);
+                setStatusMessage({ 
+                    message: 'Erro ao carregar tarefas. Tente novamente.',
+                    type: 'error' 
+                });
+                setTarefas([]);
+            } finally {
+                setLoading(false);
             }
         }        
         if (user?.id) {
@@ -80,6 +103,14 @@ export const ListaTarefas = () => {
                 <p className={styles.confirmationmessage}>{confirmationMessage}</p>
             </div> 
         : null}
+
+        {statusMessage.message && (
+            <StatusMessage message={statusMessage.message} type={statusMessage.type} />
+        )}
+
+        {loading && (
+            <div className={styles.loading}>Carregando...</div>
+        )}
 
         {tarefas.map((tarefa) => (
             <div className={styles.item} key={tarefa.id}>

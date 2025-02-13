@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import PageTitle from '@/components/PageTitle';
 import api from '@/services/api'
@@ -8,16 +8,26 @@ import { useAuth } from '@/context/AuthContext';
 import styles from './styles.module.css';
 
 function CadastroUsuario() {
+
     const navigate = useNavigate();
-    const { isAuthenticated } = useAuth();
-    console.log('Estado de autenticação:', isAuthenticated);
+
+    const { isAuthenticated, user } = useAuth();
+    
     const [statusMessage, setStatusMessage] = useState({ message: '', type: '' });
     
     const inputName = useRef(null);
     const inputEmail = useRef(null);
     const inputPassword = useRef(null);
-    const [role, setRole] = useState(isAuthenticated ? 'colaborador' : 'gerente');
+    const [role, setRole] = useState(null);    
 
+    useEffect(() => {
+        if (isAuthenticated) {
+            setRole('colaborador');
+        } else {
+            setRole('gerente');
+        }
+    }, [isAuthenticated]);
+    
     async function handleSubmit(e) {
         e.preventDefault();
         
@@ -26,7 +36,8 @@ function CadastroUsuario() {
                 name: inputName.current.value,
                 email: inputEmail.current.value,
                 password: inputPassword.current.value,
-                role: role
+                role: role,
+                createdBy: isAuthenticated ? user.id : null
             };
 
             const response = await api.post('/usuarios', userData);
@@ -50,16 +61,13 @@ function CadastroUsuario() {
     return (
         <>
             {isAuthenticated ? (
-                <PageTitle title="Cadastrar Novo Usuário" />
+                <PageTitle title="Cadastrar Colaborador" />
             ) : null}            
             
             <div id="main">
                 <div className="container">
                     {statusMessage.message && (
-                        <StatusMessage 
-                            message={statusMessage.message} 
-                            type={statusMessage.type} 
-                        />
+                        <StatusMessage message={statusMessage.message} type={statusMessage.type} />
                     )}
 
                     <form onSubmit={handleSubmit}>
@@ -68,39 +76,20 @@ function CadastroUsuario() {
                         )}
 
                         <div className="form-item">
-                            <input 
-                                type="text" 
-                                placeholder="Nome" 
-                                ref={inputName}
-                                required 
-                            />
+                            <input type="text" placeholder="Nome" ref={inputName} required />
                         </div>
                         
                         <div className="form-item">
-                            <input 
-                                type="email" 
-                                placeholder="E-mail" 
-                                ref={inputEmail}
-                                required 
-                            />
+                            <input type="email" placeholder="E-mail" ref={inputEmail} required />
                         </div>
                         
                         <div className="form-item">
-                            <input 
-                                type="password" 
-                                placeholder="Senha" 
-                                ref={inputPassword}
-                                required 
-                            />
+                            <input type="password" placeholder="Senha" ref={inputPassword} required />
                         </div>
 
-                        <div className="form-item">
+                        <div className={`form-item ${styles.tipoUsuario}`}>
                             <label>Tipo de Usuário:</label>
-                            <select 
-                                value={role} 
-                                onChange={(e) => setRole(e.target.value)}
-                                required
-                            >
+                            <select value={role} onChange={(e) => setRole(e.target.value)} required>
                                 <option value="colaborador">Colaborador</option>
                                 <option value="gerente">Gerente</option>
                                 <option value="admin">Administrador</option>

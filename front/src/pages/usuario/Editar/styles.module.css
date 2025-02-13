@@ -9,4 +9,8 @@ h2.pagetitle {
   text-align: center;
   text-transform: uppercase;
   letter-spacing: 1px;
+}
+
+.tipoUsuario {
+  display: none;
 }/*# sourceMappingURL=styles.module.css.map */

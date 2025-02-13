@@ -32,10 +32,18 @@
   color: #641212;
 }
 .confirmationMessage.warning {
-  background-color: #ec8805;
-  color: white;
+  border: 1px solid #ec8805;
+  color: #ec8805;
   background-color: #f4e6c5;
 }
 .confirmationMessage.warning a {
-  color: #641212;
+  color: #a74503;
+}
+.confirmationMessage.message {
+  border: 1px solid #4b3f61;
+  color: #4b3f61;
+  background-color: #fff;
+}
+.confirmationMessage.message a {
+  color: #2c2141;
 }/*# sourceMappingURL=styles.module.css.map */

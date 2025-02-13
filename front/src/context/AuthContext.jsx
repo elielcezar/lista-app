@@ -6,6 +6,7 @@ export const AuthContext = createContext({});
 export function AuthProvider({ children }) {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     // Verificar o token ao iniciar
     useEffect(() => {
@@ -18,6 +19,7 @@ export function AuthProvider({ children }) {
                 setUser(JSON.parse(savedUser));
             }
         }
+        setLoading(false);
     }, []);
 
     const login = (userData, token) => {
@@ -35,7 +37,7 @@ export function AuthProvider({ children }) {
     };
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
+        <AuthContext.Provider value={{ isAuthenticated, user, login, logout, loading }}>
             {children}
         </AuthContext.Provider>
     );

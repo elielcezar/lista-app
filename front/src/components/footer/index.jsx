@@ -7,14 +7,13 @@ import { HiDotsHorizontal } from "react-icons/hi";
 import styles from './styles.module.css';
 
 export default function Footer() {
-    const { isAuthenticated, logout } = useAuth();
-    console.log('Footer - Estado de autenticação:', isAuthenticated);
+    const { isAuthenticated, logout } = useAuth();    
     const navigate = useNavigate();  
 
-    const handleLogout = () => {
+    /*const handleLogout = () => {
         logout();
         navigate('/login');
-    };
+    };*/
 
     return (
         <footer className={styles.footer}>
@@ -37,7 +36,7 @@ export default function Footer() {
                             <li className={styles.usuarios}>
                                 <NavLink to="usuarios">
                                     <FaRegUser />
-                                    Usuários
+                                    Colaboradores
                                 </NavLink>
                             </li>                            
                             <li className={styles.mais}>

@@ -16,6 +16,7 @@ model User {
   createdAt DateTime? @default(now())  
   updatedAt DateTime? @default(now())
   tarefas   Tarefa[]
+  createdBy Int?
   tarefasAuthor Tarefa[] @relation("author") // Nova relação para tarefas criadas pelo usuário
 }
 
@@ -29,7 +30,7 @@ model Tarefa {
   createdAt       DateTime? @default(now())
   updatedAt       DateTime? @default(now())
   userId          Int
-  authorId         Int       // ID do usuário que criou a tarefa
+  authorId        Int       // ID do usuário que criou a tarefa
   user            User      @relation(fields: [userId], references: [id])
-  author           User      @relation("author", fields: [authorId], references: [id])
+  author          User      @relation("author", fields: [authorId], references: [id])
 }

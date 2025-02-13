@@ -120,7 +120,7 @@ export const Usuario = () => {
                             />
                         </div>
 
-                        <div className="form-item">
+                        <div className={`form-item ${styles.tipoUsuario}`}>
                             <label>Tipo de Usuário:</label>
                             <select 
                                 value={role} 
