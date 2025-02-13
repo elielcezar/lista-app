@@ -1,18 +1,22 @@
-import { NavLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useState, useRef } from 'react';
+import { NavLink } from 'react-router-dom';
 import PageTitle from '@/components/PageTitle';
 import api from '@/services/api'
 import StatusMessage from '@/components/StatusMessage';
+import { useAuth } from '@/context/AuthContext';
 import styles from './styles.module.css';
 
 function CadastroUsuario() {
     const navigate = useNavigate();
+    const { isAuthenticated } = useAuth();
+    console.log('Estado de autenticação:', isAuthenticated);
     const [statusMessage, setStatusMessage] = useState({ message: '', type: '' });
     
     const inputName = useRef(null);
     const inputEmail = useRef(null);
     const inputPassword = useRef(null);
-    const [role, setRole] = useState('colaborador');
+    const [role, setRole] = useState(isAuthenticated ? 'colaborador' : 'gerente');
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -45,7 +49,9 @@ function CadastroUsuario() {
 
     return (
         <>
-            <PageTitle title="Cadastrar Novo Usuário" />
+            {isAuthenticated ? (
+                <PageTitle title="Cadastrar Novo Usuário" />
+            ) : null}            
             
             <div id="main">
                 <div className="container">
@@ -57,6 +63,10 @@ function CadastroUsuario() {
                     )}
 
                     <form onSubmit={handleSubmit}>
+                        {!isAuthenticated && (
+                            <h2 className={styles.formTitle}>Cadastre-se</h2>
+                        )}
+
                         <div className="form-item">
                             <input 
                                 type="text" 
@@ -100,6 +110,12 @@ function CadastroUsuario() {
                         <div className="form-item">
                             <button type="submit">Cadastrar Usuário</button>
                         </div>
+
+                        {!isAuthenticated && (
+                            <div className="extras">
+                                <p>Já possui uma conta? <NavLink to="/login">Faça login</NavLink></p>
+                            </div>
+                        )}
                     </form>
                 </div>
             </div>

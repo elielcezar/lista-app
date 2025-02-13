@@ -13,16 +13,18 @@ export default function Extras() {
   };
 
   return (
-    <div className={styles.container}>
-      <ul>
-        {isAuthenticated ? (
-            <ul>
-                <li>
-                    <a onClick={handleLogout}>Sair</a>
-                </li>
-            </ul>
-        ) : null}
-      </ul>
+    <div id="main" className={styles.mainlogin}>
+      <div className={styles.container}>
+        <ul>
+          {isAuthenticated ? (
+              <ul>
+                  <li>
+                      <a onClick={handleLogout}>Sair</a>
+                  </li>
+              </ul>
+          ) : null}
+        </ul>
+      </div>
     </div>
   )
 }

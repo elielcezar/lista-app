@@ -1,28 +1,37 @@
-import React, { createContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState } from 'react';
+import PropTypes from 'prop-types';
 
-export const AuthContext = createContext();
+export const AuthContext = createContext({});
 
-export const AuthProvider = ({ children }) => {
+export function AuthProvider({ children }) {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [user, setUser] = useState(null);
 
-    useEffect(() => {
-        const token = localStorage.getItem('authToken');
-        setIsAuthenticated(!!token);
-    }, []);
-
-    const login = (token) => {
-        localStorage.setItem('authToken', token);
+    const login = (userData) => {
+        setUser(userData);
         setIsAuthenticated(true);
     };
 
     const logout = () => {
-        localStorage.removeItem('authToken');
+        setUser(null);
         setIsAuthenticated(false);
     };
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+        <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
             {children}
         </AuthContext.Provider>
     );
+}
+
+AuthProvider.propTypes = {
+    children: PropTypes.node.isRequired
 };
+
+export function useAuth() {
+    const context = useContext(AuthContext);
+    if (!context) {
+        throw new Error('useAuth deve ser usado dentro de um AuthProvider');
+    }
+    return context;
+}
