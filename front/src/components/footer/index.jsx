@@ -1,4 +1,4 @@
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { FaRegCheckCircle } from "react-icons/fa";
@@ -6,14 +6,11 @@ import { FaRegUser } from "react-icons/fa6";
 import { HiDotsHorizontal } from "react-icons/hi";
 import styles from './styles.module.css';
 
-export default function Footer() {
-    const { isAuthenticated, logout } = useAuth();    
-    const navigate = useNavigate();  
+export default function Footer() {    
+    
+    const { hasRole } = useAuth();
 
-    /*const handleLogout = () => {
-        logout();
-        navigate('/login');
-    };*/
+    const { isAuthenticated } = useAuth();   
 
     return (
         <footer className={styles.footer}>
@@ -33,12 +30,14 @@ export default function Footer() {
                                     Arquivo
                                 </NavLink>
                             </li>
-                            <li className={styles.usuarios}>
-                                <NavLink to="usuarios">
-                                    <FaRegUser />
-                                    Colaboradores
-                                </NavLink>
-                            </li>                            
+                            {hasRole('admin' || 'gerente') && (
+                                <li className={styles.usuarios}>
+                                    <NavLink to="usuarios">
+                                        <FaRegUser />
+                                        Colaboradores
+                                    </NavLink>
+                                </li>   
+                            )}                                                     
                             <li className={styles.mais}>
                                 <NavLink to="/extras">
                                     <HiDotsHorizontal />

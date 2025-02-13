@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { useNavigate, NavLink } from 'react-router-dom';
+import { useAuth } from '@/context/AuthContext';
 import StatusMessage from '@/components/StatusMessage';
 import api from '@/services/api';
 import styles from './styles.module.css';
-import { useAuth } from '@/context/AuthContext';
 
-export const ListaTarefas = () => {
+export default function ListaTarefasColaborador() {
 
     const [confirmationMessage, setConfirmationMessage] = useState(''); 
     const [statusMessage, setStatusMessage] = useState({ message: '', type: '' });    
@@ -20,7 +20,7 @@ export const ListaTarefas = () => {
             try {
                 const response = await api.get('/tarefas', {
                     params: {
-                        authorId: user.id,
+                        userId: user.id,
                         status: false
                     }
                 });                
@@ -29,8 +29,7 @@ export const ListaTarefas = () => {
                     setStatusMessage({ 
                         message: (
                             <>
-                                Você não possui tarefas cadastradas no momento.
-                                <NavLink to="/cadastro-tarefa">Aproveite para criar uma.</NavLink>
+                                Tudo feito, não existem novas tarefas<br/>para você no momento!
                             </>
                         ),
                         type: 'message' 
@@ -138,5 +137,3 @@ export const ListaTarefas = () => {
     </div>       
   )
 }
-
-export default ListaTarefas

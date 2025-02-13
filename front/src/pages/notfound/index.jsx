@@ -1,13 +1,8 @@
-import React, { useState, useRef, useContext } from 'react';
-import './style.css'
-
-function About() {  
+export default function NotFound() {  
      
   return (
     <div id="main">
-      <h1>Página nao encontrada</h1> 
+      <h3>Página nao encontrada</h3> 
     </div>
   )
 }
-
-export default About

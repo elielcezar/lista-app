@@ -5,13 +5,12 @@ export default function AddBodyClass() {
     const location = useLocation();
     
     useEffect(() => {
-        // Lista de rotas que devem ter o fundo roxo
-        const authRoutes = ['/login', '/cadastro-usuario'];
-        const isUserPage = authRoutes.includes(location.pathname);
+        // Lista de rotas de formulario de usuario que devem ter o fundo roxo        
+        const isUserPage = ['/login', '/cadastro-usuario'].includes(location.pathname);
         
         // Adiciona ou remove a classe com base na rota atual
         if (isUserPage) {
-            document.body.classList.add('user-page');
+            document.body.classList.add('user-page');            
         } else {
             document.body.classList.remove('user-page');
         }
@@ -19,7 +18,8 @@ export default function AddBodyClass() {
         // Cleanup ao desmontar o componente
         return () => {
             document.body.classList.remove('auth-page');
-        };
+        };        
+        
     }, [location]);
 
     return null;

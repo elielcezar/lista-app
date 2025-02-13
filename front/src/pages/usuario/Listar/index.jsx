@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, NavLink } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import PageTitle from '@/components/PageTitle';
-import BtnCreate from '@/components/BtnCreate';
+import ButtonCreate from '@/components/ButtonCreate';
 import StatusMessage from '@/components/StatusMessage';
 import api from '@/services/api';
 import styles from './styles.module.css';
@@ -93,7 +93,7 @@ export const Usuarios = () => {
           )}
         </div>     
       </div> 
-      <BtnCreate path="/cadastro-usuario"/>
+      <ButtonCreate path="/cadastro-usuario"/>
     </>
   )
 }

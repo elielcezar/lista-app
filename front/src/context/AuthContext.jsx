@@ -23,9 +23,15 @@ export function AuthProvider({ children }) {
     }, []);
 
     const login = (userData, token) => {
+        // Garantir que o role está incluído nos dados do usuário
+        const userWithRole = {
+            ...userData,
+            role: userData.role || 'colaborador' // valor padrão caso não venha
+        };
+        
         localStorage.setItem('authToken', token);
-        localStorage.setItem('user', JSON.stringify(userData));
-        setUser(userData);
+        localStorage.setItem('user', JSON.stringify(userWithRole));
+        setUser(userWithRole);
         setIsAuthenticated(true);
     };
 
@@ -36,8 +42,22 @@ export function AuthProvider({ children }) {
         setIsAuthenticated(false);
     };
 
+    // Função auxiliar para verificar permissões
+    const hasRole = (roles) => {
+        if (!user) return false;
+        if (typeof roles === 'string') return user.role === roles;
+        return roles.includes(user.role);
+    };
+
     return (
-        <AuthContext.Provider value={{ isAuthenticated, user, login, logout, loading }}>
+        <AuthContext.Provider value={{ 
+            isAuthenticated, 
+            user, 
+            login, 
+            logout, 
+            loading,
+            hasRole // Exportando a função auxiliar
+        }}>
             {children}
         </AuthContext.Provider>
     );

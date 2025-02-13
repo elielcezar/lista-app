@@ -86,67 +86,26 @@ router.get('/uploads/:filename', (req, res) => {
     res.sendFile(path.resolve(`./uploads/${filename}`));
 });
 
-// Criar Tarefa
-router.post('/tarefas', upload.array('fotos'), async (req, res) => {
-    console.log('Recebendo requisição POST /tarefas');
-    
-    const { 
-        titulo,        
-        descricao,
-        usuarios  // Vamos usar isso como userId
-    } = req.body;
-
-    try {
-        console.log('Dados recebidos:', {titulo, descricao, usuarios});   
-        
-        const createData = {
-            titulo,                
-            descricao,  
-            imagemAntes: '',  // Valor padrão vazio
-            imagemDepois: '', // Valor padrão vazio
-            user: {
-                connect: {
-                    id: parseInt(usuarios)  // Conecta ao usuário existente
-                }
-            },
-            createdAt: new Date(),
-            updatedAt: new Date()
-        };
-        
-        const response = await prisma.tarefa.create({
-            data: createData,
-            include: {
-                user: {
-                    select: {
-                        id: true,
-                        name: true,
-                        email: true
-                    }
-                }
-            }
-        });
-        
-        console.log('Tarefa criada:', response);
-        res.status(201).json(response);
-    } catch (error) {
-        console.error('Erro ao criar Tarefa:', error);
-        res.status(500).json({ error: 'Erro ao criar Tarefa' });
-    }
-});
-
 // Listar tarefas
 router.get('/tarefas', async (req, res) => {
     try {
         console.log('Recebendo requisição GET /tarefas');        
 
-        // Pegar authorId e status dos query params
-        const { authorId, status } = req.query;
+        // Pegar authorId, userId e status dos query params
+        const { authorId, userId, status } = req.query;
 
         const where = {
-            AND: [
-                { authorId: parseInt(authorId) }  // Sempre filtra por autor
-            ]
+            AND: []
         };
+
+        // Adiciona filtros apenas se foram informados
+        if (authorId) {
+            where.AND.push({ authorId: parseInt(authorId) });
+        }
+
+        if (userId) {
+            where.AND.push({ userId: parseInt(userId) });
+        }
 
         // Adiciona filtro de status apenas se foi informado
         if (status !== undefined) {
