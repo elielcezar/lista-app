@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import api from '@/services/api';
 import styles from './styles.module.css';
+import { useAuth } from '@/context/AuthContext';
 
 export const ListaTarefas = () => {
 
@@ -12,24 +13,26 @@ export const ListaTarefas = () => {
     const [tarefas, setTarefas] = useState([]);
 
     const navigate = useNavigate();
+    const { user } = useAuth();
 
     useEffect(() => {
-        const fetchtarefas = async () => {
+        async function loadTarefas() {
             try {
-                const response = await api.get('/tarefas');
-                if (Array.isArray(response.data)) {
-                    const filteredTarefas = response.data.filter(item => item.status === false);
-                    setTarefas(filteredTarefas);
-                    console.log(filteredTarefas);
-                } else {
-                    console.error("Erro: Dados recebidos não são um array", response.data);
-                }
+                const response = await api.get('/tarefas', {
+                    params: {
+                        authorId: user.id,
+                        status: false
+                    }
+                });
+                setTarefas(response.data);
             } catch (error) {
                 console.error('Erro ao carregar tarefas:', error);
             }
+        }        
+        if (user?.id) {
+            loadTarefas();
         }
-        fetchtarefas();
-    }, []);   
+    }, [user]);
     
     const baseUrl = import.meta.env.VITE_UPLOADS_URL + '/';
 

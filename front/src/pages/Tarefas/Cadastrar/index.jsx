@@ -5,9 +5,11 @@ import { FaTrash } from "react-icons/fa";
 import StatusMessage from '@/components/StatusMessage';
 import PageTitle from '@/components/PageTitle';
 import styles from './styles.module.css';
+import { useAuth } from '@/context/AuthContext';
 
 function CadastrarTarefa() {
     const navigate = useNavigate();
+    const { user } = useAuth();
     const [statusMessage, setStatusMessage] = useState({ message: '', type: '' });
     const [previewImages, setPreviewImages] = useState({
         imagemAntes: null,
@@ -57,6 +59,8 @@ function CadastrarTarefa() {
         
         try {
             const formData = new FormData();
+
+            console.log('entrou no try');
             
             // Verificar campos obrigatórios
             if (!inputTitulo.current?.value) {
@@ -70,7 +74,10 @@ function CadastrarTarefa() {
             // Adicionar campos ao FormData
             formData.append('titulo', inputTitulo.current.value);
             formData.append('descricao', inputDescricao.current.value);
-            formData.append('userId', '1'); // Ajuste conforme necessário
+            formData.append('userId', selectedUser);
+            formData.append('authorId', user.id);
+
+            console.log('form data: ', formData);
 
             // Adicionar imagens se existirem
             const imagemAntesInput = document.querySelector('input[name="imagemAntes"]');
@@ -82,6 +89,8 @@ function CadastrarTarefa() {
             if (imagemDepoisInput?.files[0]) {
                 formData.append('imagemDepois', imagemDepoisInput.files[0]);
             }
+
+            console.log('Datos enviados: ', formData);
 
             const response = await api.post('/tarefas', formData, {
                 headers: {

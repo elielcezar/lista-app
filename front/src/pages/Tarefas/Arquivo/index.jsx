@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import CriarTarefaBtn from '@/components/CriarTarefaBtn';
 import PageTitle from '@/components/PageTitle';
 import api from '@/services/api';
+import { useAuth } from '@/context/AuthContext';
 import styles from './styles.module.css';
 
 export const TarefasArquivadas = () => {
@@ -15,18 +16,27 @@ export const TarefasArquivadas = () => {
 
     const navigate = useNavigate();
 
+    const { user } = useAuth();
+
     useEffect(() => {
         const fetchTarefas = async () => {
             try {
-                const response = await api.get('/tarefas');
-                const filteredTarefas = response.data.filter(item => item.status === true);
-                setTarefas(filteredTarefas)                
+                const response = await api.get('/tarefas', {
+                    params: {
+                        authorId: user.id,
+                        status: true
+                    }
+                });
+                setTarefas(response.data);                
             } catch (error) {
                 console.error('Erro ao carregar tarefas:', error)
             }
         }
-        fetchTarefas()
-    }, [])   
+        if (user?.id) {
+            fetchTarefas();
+        }
+        //fetchTarefas()
+    }, [user])   
     
     const baseUrl = import.meta.env.VITE_UPLOADS_URL + '/';
 
@@ -71,6 +81,8 @@ export const TarefasArquivadas = () => {
     }
 
   return (    
+    <>      
+      <PageTitle title="Tarefas Arquivadas"/>
     <div id="tarefas" className={styles.tarefas}>
         
         <div className="container">
@@ -107,6 +119,7 @@ export const TarefasArquivadas = () => {
 
         <CriarTarefaBtn/>  
     </div>  
+    </>
   )
 }
 

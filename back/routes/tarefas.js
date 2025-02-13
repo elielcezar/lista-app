@@ -47,13 +47,14 @@ router.post('/tarefas', upload.fields([
     { name: 'imagemDepois', maxCount: 1 }
 ]), async (req, res) => {
     try {
-        const { titulo, descricao, userId } = req.body;       
+        const { titulo, descricao, userId, authorId } = req.body;       
 
         // Preparar objeto de criação
         const createData = {
             titulo,
             descricao,
             userId: parseInt(userId),
+            authorId: parseInt(authorId),
             createdAt: new Date()
         };
 
@@ -135,34 +136,25 @@ router.post('/tarefas', upload.array('fotos'), async (req, res) => {
 
 // Listar tarefas
 router.get('/tarefas', async (req, res) => {
-
     try {
         console.log('Recebendo requisição GET /tarefas');        
 
-        // Criar objeto de filtro apenas com parâmetros definidos
-        const filtro = {};
+        // Pegar authorId e status dos query params
+        const { authorId, status } = req.query;
 
-        if (req.query.id) filtro.id = req.query.id;  
+        const where = {
+            AND: [
+                { authorId: parseInt(authorId) }  // Sempre filtra por autor
+            ]
+        };
 
-        if (req.query.userId || req.query.userName) {
-            filtro.userId = {
-                some: {
-                    user: {
-                        AND: [                            
-                            req.query.userId ? { 
-                                id: req.query.userId 
-                            } : {},                            
-                            req.query.userName ? { 
-                                name: { contains: req.query.userName, mode: 'insensitive' } 
-                            } : {}
-                        ]
-                    }
-                }
-            };
-        }               
+        // Adiciona filtro de status apenas se foi informado
+        if (status !== undefined) {
+            where.AND.push({ status: status === 'true' });
+        }
 
         const tarefas = await prisma.tarefa.findMany({
-            where: filtro,
+            where,
             select: {
                 id: true,
                 titulo: true,
@@ -178,6 +170,13 @@ router.get('/tarefas', async (req, res) => {
                         name: true,
                         email: true
                     }
+                },
+                author: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true
+                    }
                 }
             }       
         });
@@ -188,7 +187,6 @@ router.get('/tarefas', async (req, res) => {
         console.error('Erro ao buscar tarefas:', error);
         res.status(500).json({ error: 'Erro ao buscar tarefas' });
     }
-
 });
 
 // Obter tarefa pelo ID
