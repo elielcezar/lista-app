@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
 import { useNavigate, NavLink } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
+import Loading from '@/components/Loading';
 import StatusMessage from '@/components/StatusMessage';
-import CriarTarefaBtn from '@/components/CriarTarefaBtn';
+import ButtonCreate from '@/components/ButtonCreate';
 import PageTitle from '@/components/PageTitle';
 import api from '@/services/api';
 import styles from './styles.module.css';
 
 export const TarefasArquivadas = () => {
+
+    const { user, hasRole } = useAuth();  
 
     const [confirmationMessage, setConfirmationMessage] = useState(''); 
     const [statusMessage, setStatusMessage] = useState({ message: '', type: '' });    
@@ -15,7 +18,7 @@ export const TarefasArquivadas = () => {
   
     const [tarefas, setTarefas] = useState([]);
     const navigate = useNavigate();
-    const { user } = useAuth();
+    //const { user } = useAuth();
 
     useEffect(() => {
         const fetchTarefas = async () => {
@@ -48,12 +51,13 @@ export const TarefasArquivadas = () => {
                     type: 'error' 
                 });
                 setTarefas([]);
+            } finally {
+                setLoading(false);
             }
         }
         if (user?.id) {
             fetchTarefas();
-        }
-        //fetchTarefas()
+        }        
     }, [user])   
     
     const baseUrl = import.meta.env.VITE_UPLOADS_URL + '/';
@@ -88,10 +92,18 @@ export const TarefasArquivadas = () => {
 
                 setTarefas(filteredTarefas);                
 
-                setConfirmationMessage('Tarefa reativada com sucesso!');
+                setStatusMessage({ 
+                    message: (
+                        <>
+                            Tarefa reativada com sucesso!
+                        </>
+                    ),
+                    type: 'message' 
+                });
+
                 setTimeout( () => {
-                    setConfirmationMessage('');
-                }, 2000);
+                    setStatusMessage('');
+                }, 1000);
             }
         } catch (error) {
             console.error('Erro detalhado:', error.response?.data || error.message)
@@ -103,15 +115,14 @@ export const TarefasArquivadas = () => {
       <PageTitle title="Tarefas Arquivadas"/>
         <div id="tarefas" className={styles.tarefas}>
         
-        <div className="container">
-            {confirmationMessage ? 
-                <div className={styles.overlay}>
-                    <p className={styles.confirmationmessage}>{confirmationMessage}</p>
-                </div> 
-            : null}
+        <div className="container">           
 
             {statusMessage.message && (
                 <StatusMessage message={statusMessage.message} type={statusMessage.type} />
+            )}
+
+            {loading && (
+                <Loading />
             )}
 
             {tarefas.map((tarefa) => (
@@ -127,9 +138,8 @@ export const TarefasArquivadas = () => {
                                 <p className={styles.responsavel}>
                                     <strong>Responsável:</strong> {tarefa.user.name}
                                 </p>
-                            )}
-                                            
-                            <p className={styles.subtitulo}>{tarefa.descricao}</p>
+                            )}            
+                            
                         </div>   
                         <div className={styles.capa} onClick={() => handleClick(tarefa.id)}>                        
                             <img src={`${baseUrl}${tarefa.imagemDepois}`} alt="" />                                                              
@@ -139,7 +149,9 @@ export const TarefasArquivadas = () => {
             ))}
         </div>
 
-        <CriarTarefaBtn/>  
+        {hasRole(['gerente', 'admin']) && (            
+            <ButtonCreate path="/cadastro-tarefa"/>
+        )}    
     </div>  
     </>
   )

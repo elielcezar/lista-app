@@ -1,12 +1,27 @@
+.overlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(16, 8, 33, 0.8);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .confirmationMessage{
     display: inline-block;
     transition: all .3s;
-    padding: 15px;
+    padding: 25px 20px;
     border-radius: 5px;    
     font-size: 16px;
     font-weight: 500;
     margin: 20px 0;
     text-align: center;
+    background-color: #fff;
+    max-width: 80%;
 
     a {        
         text-decoration: underline;
@@ -19,7 +34,7 @@
     &.success{
         border: 1px solid #23872c;
         color: #23872c;
-        background-color: #c5f4ca; 
+        //background-color: #c5f4ca; 
         
         a{
             color: #126419;
@@ -30,7 +45,7 @@
     &.error{
         border: 1px solid #872323;
         color: #872323;
-        background-color: #f4c5c5;
+        //background-color: #f4c5c5;
 
         a{
             color: #641212;
@@ -39,7 +54,7 @@
     &.warning {
         border: 1px solid #ec8805;
         color: #ec8805;
-        background-color: #f4e6c5;
+        //background-color: #f4e6c5;
 
         a{
             color: #a74503;
@@ -48,7 +63,7 @@
     &.message{
         border: 1px solid #4b3f61;
         color: #4b3f61;
-        background-color: #fff;
+        
 
         a{
             color: #2c2141;

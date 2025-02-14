@@ -58,45 +58,53 @@ form .row .form-item {
 
 .currentImages {
   display: flex;
-  gap: 20px;
-}
-.currentImages .antes,
-.currentImages .depois {
-  width: 50%;
-  position: relative;
+  flex-direction: column;
 }
 .currentImages .antes h3,
 .currentImages .depois h3 {
   font-size: 16px;
-  margin-bottom: 10px;
-  font-family: "Roboto", serif;
+  margin: 0 0 15px 0;
+  padding: 0 0 7px 0;
+  border-bottom: 2px solid #333;
+  color: #333;
 }
-.currentImages .imageContainer {
-  border-bottom: 1px solid #ccc;
-  margin-bottom: 15px;
-  padding-bottom: 15px;
+.currentImages .antes p,
+.currentImages .depois p {
+  display: none;
+}
+.currentImages .antes .imageContainer,
+.currentImages .depois .imageContainer {
   position: relative;
+}
+.currentImages .antes .imageContainer img,
+.currentImages .depois .imageContainer img {
   width: 100%;
+  max-width: 100%;
+}
+.currentImages .antes .imageContainer button.deleteButton,
+.currentImages .depois .imageContainer button.deleteButton {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  position: relative;
-}
-.currentImages .imageContainer button.deleteButton {
+  justify-content: center;
   background: rgba(255, 0, 0, 0.75);
   color: #fff;
   border-radius: 50%;
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   padding: 0;
   margin: 0;
   position: absolute;
   top: 5px;
   right: 5px;
 }
-.currentImages .imageContainer button.deleteButton svg {
+.currentImages .antes .imageContainer button.deleteButton svg,
+.currentImages .depois .imageContainer button.deleteButton svg {
   width: 18px;
   height: 18px;
+}
+.currentImages .antes label,
+.currentImages .depois label {
+  display: none !important;
 }
 
 .overlay {

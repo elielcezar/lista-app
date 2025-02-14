@@ -35,24 +35,35 @@ router.post('/usuarios', async (req, res) => {
 
 // Listar usuarios
 router.get('/usuarios', async (req, res) => {
-
     console.log('Recebendo requisição GET /usuarios');
-    let users = [];    
+    try {
+        const { name, email, createdBy } = req.query;
+        
+        // Construir objeto where com filtros opcionais
+        const where = {};
+        
+        if (name) where.name = name;
+        if (email) where.email = email;
+        if (createdBy) where.createdBy = parseInt(createdBy);
 
-    if(req.query){
-        users = await prisma.user.findMany({
-            where:{
-                name: req.query.name,
-                email: req.query.email,
-                password: req.query.password
+        const users = await prisma.user.findMany({
+            where,
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                role: true,
+                createdAt: true,
+                createdBy: true
             }
-        })
-    }else{
-        users = await prisma.user.findMany();
-    }
-    console.log('Usuários encontrados:', users);
-    res.status(200).json(users);
+        });
 
+        console.log('Usuários encontrados:', users);
+        res.status(200).json(users);
+    } catch (error) {
+        console.error('Erro ao buscar usuários:', error);
+        res.status(500).json({ error: 'Erro ao buscar usuários' });
+    }
 });
 
 

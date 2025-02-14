@@ -4,6 +4,7 @@ import PageTitle from '@/components/PageTitle';
 import api from "@/services/api";
 import StatusMessage from '@/components/StatusMessage';
 import { useNavigate } from 'react-router-dom';
+import Loading from '@/components/Loading';
 import styles from './styles.module.css';
 
 export const Usuario = () => {
@@ -77,7 +78,7 @@ export const Usuario = () => {
         }
     }
 
-    if (loading) return <div>Carregando...</div>;
+    if (loading) return <Loading />;
     if (!usuario) return <div>Usuário não encontrado</div>;
 
     return (

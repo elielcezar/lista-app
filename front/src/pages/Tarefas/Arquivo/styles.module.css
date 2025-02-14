@@ -29,8 +29,8 @@
   height: 20px;
 }
 .tarefas .item .card .checkbox.active {
-  background: #7cda7e;
-  border: 2px solid #7cda7e;
+  background: #7ca4da;
+  border: 2px solid #7ca4da;
 }
 .tarefas .item .card .checkbox input[type=checkbox] {
   opacity: 0;
@@ -43,12 +43,21 @@
   cursor: pointer;
 }
 .tarefas .item .card .content h3 {
+  font-size: 16px;
   font-weight: 600;
-  font-size: 20px;
+  margin-bottom: 5px;
+  text-decoration: line-through;
+  font-style: italic;
 }
 .tarefas .item .card .content p {
-  font-size: 13px;
-  margin: 0;
+  font-size: 14px;
+  color: #7E7E7E;
+  font-weight: 400;
+  text-decoration: line-through;
+  font-style: italic;
+}
+.tarefas .item .card .content p strong {
+  color: #666;
 }
 .tarefas .item .card .capa {
   max-width: 25%;

@@ -4,6 +4,7 @@ import { useAuth } from '@/context/AuthContext';
 import PageTitle from '@/components/PageTitle';
 import ButtonCreate from '@/components/ButtonCreate';
 import StatusMessage from '@/components/StatusMessage';
+import Loading from '@/components/Loading';
 import api from '@/services/api';
 import styles from './styles.module.css';
 
@@ -72,7 +73,7 @@ export const Usuarios = () => {
       <div id="main">
         <div className="container">  
           {(isLoading) && (
-            <div className={styles.loading}>Carregando...</div>
+            <Loading />
           )}
 
           {!isLoading && statusMessage.message && (

@@ -87,8 +87,7 @@ export const Login = () => {
                         </button>
                     </div>
                     <div className="extras">
-                        <p>Ainda não tem uma conta?<br/><NavLink to="/cadastro-usuario">Cadastre-se aqui!</NavLink></p>
-                        <p><NavLink to="/recuperar-senha">Esqueceu sua senha?</NavLink></p>
+                        <p>Ainda não tem uma conta?<br/><NavLink to="/cadastro-usuario">Cadastre-se aqui!</NavLink></p>                        
                     </div>  
                 </form> 
             </div>      

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, NavLink } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import StatusMessage from '@/components/StatusMessage';
+import Loading from '@/components/Loading';
 import api from '@/services/api';
 import styles from './styles.module.css';
 
@@ -108,7 +109,7 @@ export default function ListaTarefasColaborador() {
         )}
 
         {loading && (
-            <div className={styles.loading}>Carregando...</div>
+            <Loading />
         )}
 
         {tarefas.map((tarefa) => (

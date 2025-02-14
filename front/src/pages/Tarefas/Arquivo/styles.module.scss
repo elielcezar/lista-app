@@ -22,15 +22,15 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                border: 2px solid #7ca4da;
+                border: 2px solid #7ca4da;                
                 background: #fff;
                 border-radius: 50%;
                 width: 20px;
                 height: 20px;
                 
                 &.active {
-                    background: #7cda7e;
-                    border: 2px solid #7cda7e;
+                    background: #7ca4da;
+                    border: 2px solid #7ca4da;
                 }
 
                 input[type="checkbox"]{
@@ -44,14 +44,23 @@
                 flex-direction: column;
                 justify-content: center;
                 cursor: pointer;
-                h3{
-                    font-weight: 600;
-                    font-size: 20px;
-                    
-                }
+                h3{                    
+                    font-size: 16px;
+                    font-weight: 600;  
+                    margin-bottom: 5px;    
+                    text-decoration: line-through;    
+                    font-style: italic;
+                }                
                 p{
-                    font-size: 13px;
-                    margin: 0;
+                    font-size: 14px;
+                    color: #7E7E7E;
+                    font-weight: 400;
+                    text-decoration: line-through;              
+                    font-style: italic;
+
+                    strong{
+                        color: #666;
+                    }
                 }
             }
             .capa{

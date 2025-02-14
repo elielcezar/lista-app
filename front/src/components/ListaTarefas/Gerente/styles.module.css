@@ -10,7 +10,7 @@
   padding: 10px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
-  border-left: 5px solid #7ca4da;
+  border-left: 5px solid #7cda7e;
   margin-bottom: 5px;
   display: flex;
   justify-content: flex-start;
@@ -22,15 +22,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid #7ca4da;
+  border: 2px solid #7cda7e;
   background: #fff;
   border-radius: 50%;
   width: 20px;
   height: 20px;
 }
 .tarefas .item .card .checkbox.active {
-  background: #7cda7e;
-  border: 2px solid #7cda7e;
+  background: #7ca4da;
+  border: 2px solid #7ca4da;
 }
 .tarefas .item .card .checkbox input[type=checkbox] {
   opacity: 0;
@@ -43,18 +43,20 @@
   cursor: pointer;
 }
 .tarefas .item .card .content h3 {
+  font-size: 16px;
   font-weight: 600;
-  font-size: 20px;
+  margin-bottom: 5px;
 }
 .tarefas .item .card .content p {
-  font-size: 13px;
-  margin: 0;
+  font-size: 14px;
+  color: #7E7E7E;
+  font-weight: 400;
+}
+.tarefas .item .card .content p strong {
+  color: #666;
 }
 .tarefas .item .card .content p.subtitulo {
   display: none;
-}
-.tarefas .item .card .content p.responsavel {
-  font-size: 13px;
 }
 .tarefas .item .card .capa {
   max-width: 30%;

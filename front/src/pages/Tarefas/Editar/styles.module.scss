@@ -67,49 +67,63 @@ form{
 }
 
 .currentImages{    
-    display: flex;    
-    gap: 20px;      
+    
+    display: flex;
+    flex-direction: column;
 
-    .antes, 
-    .depois{        
-        width: 50%;
-        position: relative;
+    .antes,
+    .depois{           
+        
         h3{
             font-size: 16px;
-            margin-bottom: 10px;
-            font-family: "Roboto", serif;  
+            margin: 0 0 15px 0;
+            padding: 0 0 7px 0;                        
+            border-bottom: 2px solid #333;
+            color: #333;            
+
         }
-    }
 
-    .imageContainer{
-        border-bottom: 1px solid #ccc;
-        margin-bottom: 15px;
-        padding-bottom: 15px;
-        position: relative;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;     
-        position: relative;  
+        p{
+            display: none;
+        }
 
-        button.deleteButton{
-            background: rgba(255, 0, 0, 0.75);                        
-            color: #fff;     
-            border-radius: 50%;       
-            width: 30px;          
-            height: 30px; 
-            padding: 0;                       
-            margin: 0;
-            position: absolute;
-            top: 5px;
-            right: 5px;
+        .imageContainer{
+            position: relative;
 
-            svg{
-                width: 18px;
-                height: 18px;
+            img{
+                width: 100%;
+                max-width: 100%;
             }
+
+            button.deleteButton{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: rgba(255, 0, 0, 0.75);                        
+                color: #fff;     
+                border-radius: 50%;       
+                width: 40px;          
+                height: 40px; 
+                padding: 0;                       
+                margin: 0;
+                position: absolute;
+                top: 5px;
+                right: 5px;
+    
+                svg{
+                    width: 18px;
+                    height: 18px;
+                }
+            }
+
+            
         }
-    }   
+
+        label{
+            display: none !important;
+        }
+
+    }
     
 }
 

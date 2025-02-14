@@ -4,13 +4,15 @@ import api from '@/services/api';
 import { FaTrash } from "react-icons/fa";
 import StatusMessage from '@/components/StatusMessage';
 import PageTitle from '@/components/PageTitle';
-import styles from './styles.module.css';
 import { useAuth } from '@/context/AuthContext';
+import styles from './styles.module.css';
 
 function CadastrarTarefa() {
-    const navigate = useNavigate();
+
     const { user } = useAuth();
+    const navigate = useNavigate();    
     const [statusMessage, setStatusMessage] = useState({ message: '', type: '' });
+    
     const [previewImages, setPreviewImages] = useState({
         imagemAntes: null,
         imagemDepois: null
@@ -18,21 +20,20 @@ function CadastrarTarefa() {
     
     const inputTitulo = useRef(null);
     const inputDescricao = useRef(null);
-
     const [usuarios, setUsuarios] = useState([]);       
     const [selectedUser, setSelectedUser] = useState('');
 
     useEffect(() => {
         async function loadUsuarios() {
             try {
-                const response = await api.get('/usuarios');
+                const response = await api.get(`/usuarios?createdBy=${user.id}`);
                 setUsuarios(response.data);
             } catch (error) {
                 console.error('Erro ao carregar usuários:', error);
             }
         }
         loadUsuarios();
-    }, []);
+    }, [user]);
 
 
     async function handleImageUpload(e, imageType) {
@@ -150,7 +151,7 @@ function CadastrarTarefa() {
                                 onChange={(e) => setSelectedUser(e.target.value)}
                                 required
                             >
-                                <option value="">- Selecione um usuário -</option>
+                                <option value="">- Selecione um colaborador -</option>
                                 {usuarios.map(user => (
                                     <option key={user.id} value={user.id}>
                                         {user.name}
@@ -160,7 +161,7 @@ function CadastrarTarefa() {
                         </div>
                         
                         <div className={styles.currentImages}>
-                            <div>              
+                            <div className={styles.antes}>              
                                 <h3>Imagem Antes</h3>                      
                                 {previewImages.imagemAntes ? (
                                     <div className={styles.imageContainer}>
@@ -182,7 +183,7 @@ function CadastrarTarefa() {
                                 )}
 
                                 <div className="form-item">
-                                    <label>Selecionar Imagem Antes:</label>
+                                    <label>Selecionar:</label>
                                     <input 
                                         type="file" 
                                         name="imagemAntes"
@@ -193,7 +194,7 @@ function CadastrarTarefa() {
                                 </div>
                             </div>
 
-                            <div>
+                            <div className={styles.depois}>
                                 <h3>Imagem Depois</h3>
                                 {previewImages.imagemDepois ? (
                                     <div className={styles.imageContainer}>
@@ -215,7 +216,7 @@ function CadastrarTarefa() {
                                 )}
 
                                 <div className="form-item">
-                                    <label>Selecionar Imagem Depois:</label>
+                                    <label>Selecionar:</label>
                                     <input 
                                         type="file" 
                                         name="imagemDepois"

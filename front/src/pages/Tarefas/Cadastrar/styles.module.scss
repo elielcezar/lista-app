@@ -32,4 +32,58 @@ form{
             border: 1px solid #ccc;            
         }
     }
+
+    .antes,
+    .depois{           
+        
+        h3{
+            font-size: 16px;
+            margin: 0 0 15px 0;
+            padding: 0 0 7px 0;                        
+            border-bottom: 2px solid #333;
+            color: #333;            
+
+        }
+
+        p{
+            display: none;
+        }
+
+        .imageContainer{
+            position: relative;
+
+            img{
+                width: 100%;
+                max-width: 100%;
+            }
+
+            button.deleteButton{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: rgba(255, 0, 0, 0.75);                        
+                color: #fff;     
+                border-radius: 50%;       
+                width: 40px;          
+                height: 40px; 
+                padding: 0;                       
+                margin: 0;
+                position: absolute;
+                top: 5px;
+                right: 5px;
+    
+                svg{
+                    width: 18px;
+                    height: 18px;
+                }
+            }
+
+            
+        }
+
+        label{
+            display: none !important;
+        }
+
+    }
 }

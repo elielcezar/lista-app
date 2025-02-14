@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, NavLink } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
+import Loading from '@/components/Loading';
 import StatusMessage from '@/components/StatusMessage';
 import api from '@/services/api';
 import styles from './styles.module.css';
@@ -82,13 +83,20 @@ export default function ListaTarefasGerente() {
                 });
                 const filteredTarefas = updatedtarefas.filter(item => item.status === false);                
 
-                setTarefas(filteredTarefas);                
-
-                setConfirmationMessage('Tarefa concluída com sucesso!');
+                setTarefas(filteredTarefas); 
+                
+                setStatusMessage({ 
+                    message: (
+                        <>
+                            Tarefa concluída com sucesso!
+                        </>
+                    ),
+                    type: 'message' 
+                });
 
                 setTimeout( () => {
-                    setConfirmationMessage('');
-                }, 2000);
+                    setStatusMessage('');
+                }, 1000);
             }
         } catch (error) {
             console.error('Erro detalhado:', error.response?.data || error.message)
@@ -109,7 +117,7 @@ export default function ListaTarefasGerente() {
         )}
 
         {loading && (
-            <div className={styles.loading}>Carregando...</div>
+            <Loading />
         )}
 
         {tarefas.map((tarefa) => (
