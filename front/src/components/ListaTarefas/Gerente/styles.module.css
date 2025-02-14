@@ -26,7 +26,7 @@
   background: #fff;
   border-radius: 50%;
   width: 20px;
-  height: 20px;
+  height: 18px;
 }
 .tarefas .item .card .checkbox input[type=checkbox] {
   opacity: 0;
@@ -45,7 +45,7 @@
 }
 .tarefas .item .card .content p {
   font-size: 14px;
-  color: #7E7E7E;
+  color: #333;
   font-weight: 400;
 }
 .tarefas .item .card .content p strong {

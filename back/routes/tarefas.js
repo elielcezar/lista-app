@@ -47,12 +47,13 @@ router.post('/tarefas', upload.fields([
     { name: 'imagemDepois', maxCount: 1 }
 ]), async (req, res) => {
     try {
-        const { titulo, descricao, userId, authorId } = req.body;       
+        const { titulo, descricao, userId, authorId, observacoes } = req.body;       
 
         // Preparar objeto de criação
         const createData = {
             titulo,
             descricao,
+            observacoes,
             userId: parseInt(userId),
             authorId: parseInt(authorId),
             createdAt: new Date()
@@ -121,6 +122,7 @@ router.get('/tarefas', async (req, res) => {
                 imagemAntes: true,
                 imagemDepois: true,
                 status: true,
+                observacoes: true,
                 createdAt: true,
                 updatedAt: true,
                 user: {
@@ -164,6 +166,7 @@ router.get('/tarefas/id/:id', async (req, res) => {
                 imagemAntes: true,
                 imagemDepois: true,
                 status: true,
+                observacoes: true,
                 createdAt: true,
                 updatedAt: true,
                 user: {
@@ -198,12 +201,14 @@ router.put('/tarefas/:id', upload.fields([
 ]), async (req, res) => {    
     try {
         const { id } = req.params;
-        const { titulo, descricao, userId, manterImagemAntes, manterImagemDepois } = req.body;
+        const { titulo, status, descricao, userId, manterImagemAntes, manterImagemDepois, observacoes } = req.body;
 
         // Preparar objeto de atualização
         const updateData = {
             titulo,
+            status: status === 'true',
             descricao,
+            observacoes,
             updatedAt: new Date()
         };
 

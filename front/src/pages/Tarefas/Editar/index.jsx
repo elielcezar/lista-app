@@ -26,8 +26,10 @@ function EditarTarefa() {
     
     const inputTitulo = useRef(null);
     const inputDescricao = useRef(null);
+    const inputObservacoes = useRef(null);
     const [usuarios, setUsuarios] = useState([]);
     const [selectedUser, setSelectedUser] = useState('');
+    const [status, setStatus] = useState(false);
 
     useEffect(() => {
         async function loadUsuarios() {
@@ -47,6 +49,7 @@ function EditarTarefa() {
                 const response = await api.get(`/tarefas/id/${id}`);
                 setTarefa(response.data);
                 setSelectedUser(response.data.user?.id.toString() || '');
+                setStatus(response.data.status);
                 
                 // Carregar imagens existentes no preview
                 const baseUrl = import.meta.env.VITE_UPLOADS_URL + '/';
@@ -69,9 +72,10 @@ function EditarTarefa() {
     }, [id]);   
 
     useEffect(() => {
-        if (tarefa && inputTitulo.current && inputDescricao.current) {
+        if (tarefa && inputTitulo.current && inputDescricao.current && inputObservacoes.current) {
             inputTitulo.current.value = tarefa.titulo;
             inputDescricao.current.value = tarefa.descricao || '';
+            inputObservacoes.current.value = tarefa.observacoes || '';
         }
     }, [tarefa]);
 
@@ -102,7 +106,9 @@ function EditarTarefa() {
             
             formData.append('titulo', inputTitulo.current.value);
             formData.append('descricao', inputDescricao.current.value);
+            formData.append('observacoes', inputObservacoes.current.value);
             formData.append('userId', selectedUser);
+            formData.append('status', status);
 
             // Adicionar estado das imagens
             formData.append('manterImagemAntes', previewImages.imagemAntes ? 'true' : 'false');
@@ -138,18 +144,14 @@ function EditarTarefa() {
                 message: 'Erro ao atualizar tarefa. Tente novamente.',
                 type: 'error'
             });
+            setTimeout(() => setStatusMessage({ message: '', type: '' }), 2000);
         }
     }
 
-    const updateFormData = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+    const handleStatusChange = (e) => {
+        e.preventDefault();
+        setStatus(!status);
     };
-
-    // Primeiro, vamos criar uma função auxiliar para verificar se a imagem existe
-    function hasValidImage(imageUrl) {
-        return imageUrl && imageUrl !== 'null' && imageUrl !== 'undefined' && imageUrl.trim() !== '';
-    }
 
     if (loading) return <Loading />;
     if (!tarefa) return <div>Tarefa não encontrada</div>;
@@ -171,13 +173,25 @@ function EditarTarefa() {
 
                 {tarefa && (
                     <form onSubmit={handleSubmit}>
+
+                        <div className="form-item">
+                            <div className={`${styles.checkbox} ${status ? styles.active : ''}`}>
+                                <input 
+                                    type="checkbox" 
+                                    checked={status} 
+                                    onChange={(e) => setStatus(e.target.checked)} 
+                                />
+                                <label onClick={handleStatusChange}>{ status ? 'Tarefa Concluída' : 'Tarefa Pendente' }</label>
+                            </div>
+                        </div>
+
                         <div className="form-item">
                             <input type="text" placeholder="Título" ref={inputTitulo} required />
                         </div>
                         
                         <div className="form-item">
                             <textarea placeholder="Descrição" ref={inputDescricao} />
-                        </div>
+                        </div>                        
 
                         <div className="form-item">
                             <label>Colaborador Responsável: </label>
@@ -262,7 +276,15 @@ function EditarTarefa() {
                                     />
                                 </div>
                             </div>
-                        </div>                    
+                        </div>  
+
+                        <div className="form-item">
+                            <label>Observações:</label>
+                            <textarea 
+                                placeholder="Observações" 
+                                ref={inputObservacoes}
+                            />
+                        </div>                  
                         
                         <div className="form-item">
                             <button type="submit">Atualizar Tarefa</button>

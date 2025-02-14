@@ -26,7 +26,8 @@ model Tarefa {
   descricao       String?
   imagemAntes     String?
   imagemDepois    String?
-  status          Boolean   @default(false)     
+  status          Boolean   @default(false) 
+  observacoes     String?
   createdAt       DateTime? @default(now())
   updatedAt       DateTime? @default(now())
   userId          Int

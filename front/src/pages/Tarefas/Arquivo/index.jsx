@@ -3,6 +3,7 @@ import { useNavigate, NavLink } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import Loading from '@/components/Loading';
 import StatusMessage from '@/components/StatusMessage';
+import InlineMessage from '@/components/InlineMessage';
 import ButtonCreate from '@/components/ButtonCreate';
 import PageTitle from '@/components/PageTitle';
 import api from '@/services/api';
@@ -12,8 +13,9 @@ export const TarefasArquivadas = () => {
 
     const { user, hasRole } = useAuth();  
 
-    const [confirmationMessage, setConfirmationMessage] = useState(''); 
+    //const [confirmationMessage, setConfirmationMessage] = useState(''); 
     const [statusMessage, setStatusMessage] = useState({ message: '', type: '' });    
+    const [inlineMessage, setInlineMessage] = useState({ message: '', type: '' });    
     const [loading, setLoading] = useState(true);
   
     const [tarefas, setTarefas] = useState([]);
@@ -31,7 +33,7 @@ export const TarefasArquivadas = () => {
                 });
 
                 if (!response.data || response.data.length === 0) {
-                    setStatusMessage({ 
+                    setInlineMessage({ 
                         message: (
                             <>
                                 Você não possui tarefas arquivadas no momento.                                
@@ -39,10 +41,11 @@ export const TarefasArquivadas = () => {
                         ),
                         type: 'message' 
                     });
+                    console.log('Você não possui tarefas arquivadas no momento.');
                     setTarefas([]);
                 } else {
                     setTarefas(response.data);   
-                    setStatusMessage({ message: '', type: '' });             
+                    setInlineMessage({ message: '', type: '' });             
                 }
             } catch (error) {
                 console.error('Erro ao carregar tarefas:', error);
@@ -51,6 +54,7 @@ export const TarefasArquivadas = () => {
                     type: 'error' 
                 });
                 setTarefas([]);
+                setTimeout(() => setStatusMessage({ message: '', type: '' }), 2000);
             } finally {
                 setLoading(false);
             }
@@ -119,6 +123,9 @@ export const TarefasArquivadas = () => {
 
             {statusMessage.message && (
                 <StatusMessage message={statusMessage.message} type={statusMessage.type} />
+            )}
+            {inlineMessage.message && (
+                <InlineMessage message={inlineMessage.message} type={inlineMessage.type} />
             )}
 
             {loading && (

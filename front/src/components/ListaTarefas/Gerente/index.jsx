@@ -8,8 +8,7 @@ import api from '@/services/api';
 import styles from './styles.module.css';
 
 export default function ListaTarefasGerente() {
-
-    const [confirmationMessage, setConfirmationMessage] = useState(''); 
+    
     const [statusMessage, setStatusMessage] = useState({ message: '', type: '' });    
     const [inlineMessage, setInlineMessage] = useState({ message: '', type: '' });    
     const [loading, setLoading] = useState(true);
@@ -100,12 +99,6 @@ export default function ListaTarefasGerente() {
 
   return (    
     <div id="tarefas" className={styles.tarefas}>
-        
-        {confirmationMessage ? 
-            <div className={styles.overlay}>
-                <p className={styles.confirmationmessage}>{confirmationMessage}</p>
-            </div> 
-        : null}
 
         {statusMessage.message && (
             <StatusMessage message={statusMessage.message} type={statusMessage.type} />
@@ -130,7 +123,7 @@ export default function ListaTarefasGerente() {
                         
                         {tarefa.user && (
                             <p className={styles.responsavel}>
-                                <strong>Responsável:</strong> {tarefa.user.name}
+                                Responsável: {tarefa.user.name}
                             </p>
                         )}
                                          
