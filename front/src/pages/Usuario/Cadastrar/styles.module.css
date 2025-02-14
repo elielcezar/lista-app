@@ -2,8 +2,21 @@
   max-width: 400px;
 }
 
+.mainlogin {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5% !important;
+}
+
 form {
   border-radius: 10px;
+}
+
+.loginForm {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 
 .formTitle {

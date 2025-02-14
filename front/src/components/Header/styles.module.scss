@@ -2,24 +2,37 @@
     display: none !important;    
 } 
 .header {
-    display: flex;
-    flex-direction: column;
+    display: flex;    
     align-items: center;    
+    justify-content: space-between;
     background-color:lightslategray;
     color: #fff;  
     margin-bottom: 0;
-    padding: 10px 0;
+    padding: 15px 20px;
     background: linear-gradient(90deg, rgba(129,0,255,1) 0%, rgba(201,0,255,1) 100%);
 
-    .logo{
+    .hello{
+        font-size: 18px;
+        font-weight: 600;
+        letter-spacing: -1px;
+
         a{
             color: #fff;
             text-decoration: none;
-            font-size: 24px;
-            font-weight: 500;  
-            //background-color: #ff1f3a;            
-            display: inline-block;
-            //padding: 6px 12px;
+        }
+    }    
+    .exit{
+        font-size: 15px;
+        font-weight: 600;
+        color: #fff;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+
+        svg{
+            width: 23px;
+            height: 23px;
         }
     }    
 }

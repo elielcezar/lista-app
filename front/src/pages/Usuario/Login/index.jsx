@@ -35,9 +35,19 @@ export const Login = () => {
         } catch (error) {
             console.error('Erro ao fazer login:', error);
             setConfirmationMessage({
-                message: 'Erro ao fazer login. Verifique suas credenciais.',
+                message: (
+                    <>
+                    Erro ao fazer login.<br/> Verifique suas credenciais.
+                    </>
+                ),
                 type: 'error'
             });
+            setTimeout(() => {
+                setConfirmationMessage({
+                    message: '',
+                    type: ''
+                });
+            }, 2000);
         }
     }
 

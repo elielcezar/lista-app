@@ -61,18 +61,21 @@ function CadastroUsuario() {
     }
 
     return (
-        <>
+        <>        
             {isAuthenticated ? (
                 <PageTitle title="Cadastrar Colaborador" />
             ) : null}            
             
-            <div id="main">
+            <div id="main" className={styles.mainlogin}>
                 <div className="container">
                     {statusMessage.message && (
                         <StatusMessage message={statusMessage.message} type={statusMessage.type} />
                     )}
 
-                    <form onSubmit={handleSubmit}>
+                    {!isAuthenticated ? (
+                        <h1>Lista App</h1>
+                    ) : null}                     
+                    <form onSubmit={handleSubmit} className={styles.loginForm}>
                         {!isAuthenticated && (
                             <h2 className={styles.formTitle}>Cadastre-se</h2>
                         )}
@@ -109,7 +112,7 @@ function CadastroUsuario() {
                         )}
                     </form>
                 </div>
-            </div>
+            </div>        
         </>
     );
 }
