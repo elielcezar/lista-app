@@ -171,21 +171,36 @@ router.put('/usuarios/:id', async (req, res) => {
 
 // Excluir usuario
 router.delete('/usuarios/:id', async (req, res) => {  
-    
-    const userId = req.params.id;
+    try {
+        const userId = parseInt(req.params.id);
 
-    await prisma.imovelUser.deleteMany({
-        where: { userId }
-    });
+        // Primeiro, deletar todas as tarefas relacionadas ao usuário
+        await prisma.tarefa.deleteMany({
+            where: { 
+                OR: [
+                    { userId: userId },
+                    { authorId: userId }
+                ]
+            }
+        });
 
-    await prisma.user.delete({
-        where: {
-            id: userId
-        }
-    });
-    res.status(200).json({
-        message: 'Usuario deletado com sucesso'
-    });
+        // Depois, deletar o usuário
+        await prisma.user.delete({
+            where: {
+                id: userId
+            }
+        });
+
+        res.status(200).json({
+            message: 'Usuário deletado com sucesso'
+        });
+    } catch (error) {
+        console.error('Erro ao deletar usuário:', error);
+        res.status(500).json({
+            error: 'Erro ao deletar usuário',
+            details: error.message
+        });
+    }
 });
 
 export default router;

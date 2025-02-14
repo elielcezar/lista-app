@@ -198,7 +198,7 @@ router.put('/tarefas/:id', upload.fields([
 ]), async (req, res) => {    
     try {
         const { id } = req.params;
-        const { titulo, descricao, userId } = req.body;
+        const { titulo, descricao, userId, manterImagemAntes, manterImagemDepois } = req.body;
 
         // Preparar objeto de atualização
         const updateData = {
@@ -212,7 +212,15 @@ router.put('/tarefas/:id', upload.fields([
             updateData.userId = parseInt(userId);
         }
 
-        // Adicionar novas imagens apenas se foram enviadas
+        // Limpar imagens se foram removidas
+        if (manterImagemAntes === 'false') {
+            updateData.imagemAntes = null;
+        }
+        if (manterImagemDepois === 'false') {
+            updateData.imagemDepois = null;
+        }
+
+        // Adicionar novas imagens se foram enviadas
         if (req.files?.imagemAntes) {
             updateData.imagemAntes = req.files.imagemAntes[0].filename;
         }
@@ -282,7 +290,7 @@ router.patch('/tarefas/:id/status', async (req, res) => {
 });
 
 // Atualizar imagem da tarefa
-router.patch('/tarefas/:id/image', async (req, res) => {
+/*router.patch('/tarefas/:id/image', async (req, res) => {
     try {
         const { id } = req.params;
         const { imageType, action } = req.body;
@@ -344,6 +352,6 @@ router.patch('/tarefas/:id/image', async (req, res) => {
             details: error.message 
         });
     }
-});
+});*/
 
 export default router;

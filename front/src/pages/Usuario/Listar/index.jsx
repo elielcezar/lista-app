@@ -4,6 +4,7 @@ import { useAuth } from '@/context/AuthContext';
 import PageTitle from '@/components/PageTitle';
 import ButtonCreate from '@/components/ButtonCreate';
 import StatusMessage from '@/components/StatusMessage';
+import InlineMessage from '@/components/InlineMessage';
 import Loading from '@/components/Loading';
 import api from '@/services/api';
 import styles from './styles.module.css';
@@ -11,6 +12,7 @@ import styles from './styles.module.css';
 export const Usuarios = () => {
 
   const [statusMessage, setStatusMessage] = useState({ message: '', type: '' });
+  const [inlineMessage, setInlineMessage] = useState({ message: '', type: '' });
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useAuth();
@@ -25,7 +27,7 @@ export const Usuarios = () => {
           const response = await api.get(`/usuarios?createdBy=${user.id}`);
           
           if (!response.data || response.data.length === 0) {
-              setStatusMessage({ 
+              setInlineMessage({ 
                   message: (
                       <>
                           Você não possui colaboradores no momento.{' '}
@@ -37,9 +39,7 @@ export const Usuarios = () => {
               setUsers([]);
               return;
           }
-          setUsers(response.data.reverse());
-          setStatusMessage({ message: '', type: '' });
-          
+          setUsers(response.data.reverse());          
       } catch (error) {
           console.error('Erro ao buscar usuários:', error);
           setStatusMessage({ 
@@ -56,9 +56,41 @@ export const Usuarios = () => {
       getUsers();     
   }, [user]);
 
-  async function deleteUser(id) {         
-      await api.delete(`/usuarios/${id}`);  
-      getUsers();      
+  async function deleteUser(e, id) {         
+    try {
+        const response = await api.delete(`/usuarios/${id}`);  
+        if (response.status === 200) {
+            const card = e.target.closest(`.${styles.item}`);
+            if (card) {
+                card.classList.add(styles.finished);
+            }                    
+            setTimeout(() => { 
+                getUsers(); 
+            }, 250);           
+            setTimeout(() => {                
+                setStatusMessage({ 
+                    message: (
+                        <>
+                            Usuário excluído com sucesso.
+                        </>
+                    ),
+                    type: 'success' 
+                });      
+            }, 500);           
+            setTimeout(() => {                
+                setStatusMessage({ message: '', type: '' });                
+            }, 2500);           
+        } 
+    } catch (error) {
+        console.error('Erro ao excluir usuário:', error);
+        setStatusMessage({ 
+            message: 'Erro ao excluir usuário. Tente novamente.',
+            type: 'error' 
+        });
+        setTimeout(() => {                
+            setStatusMessage({ message: '', type: '' });                
+        }, 2000);   
+    }
   }
 
   async function editUser(id) {         
@@ -80,13 +112,22 @@ export const Usuarios = () => {
               <StatusMessage message={statusMessage.message} type={statusMessage.type} />
           )}
 
+          {!isLoading && inlineMessage.message && (
+            <InlineMessage message={inlineMessage.message} type={inlineMessage.type} />
+          )}
+
           {!isLoading && users.length > 0 && (
             <div className={styles.listaUsuarios}>
                 {users.map((usuario) => (                
                     <div className={styles.item} key={usuario.id}>
                         <h3><a href={`${baseUrl}${usuario.id}`}>{usuario.name}</a></h3>
                         <p>{usuario.email}</p>
-                        <button onClick={() => deleteUser(usuario.id)} className={styles.excluir}>Excluir</button>
+                        <button 
+                            onClick={(e) => deleteUser(e, usuario.id)} 
+                            className={styles.excluir}
+                        >
+                            Excluir
+                        </button>
                         <button onClick={() => editUser(usuario.id)} className={styles.editar}>Editar</button>
                     </div>                
                 ))}

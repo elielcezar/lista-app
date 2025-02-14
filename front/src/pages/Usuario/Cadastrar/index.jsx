@@ -49,7 +49,7 @@ function CadastroUsuario() {
                     message: 'Usuário cadastrado com sucesso!',
                     type: 'success'
                 });
-                setTimeout(() => navigate('/usuarios'), 2000);
+                setTimeout(() => navigate('/usuarios'), 1000);
             }
         } catch (error) {
             console.error('Erro ao cadastrar usuário:', error);

@@ -3,6 +3,7 @@ import { useNavigate, NavLink } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import Loading from '@/components/Loading';
 import StatusMessage from '@/components/StatusMessage';
+import InlineMessage from '@/components/InlineMessage';
 import api from '@/services/api';
 import styles from './styles.module.css';
 
@@ -10,49 +11,53 @@ export default function ListaTarefasGerente() {
 
     const [confirmationMessage, setConfirmationMessage] = useState(''); 
     const [statusMessage, setStatusMessage] = useState({ message: '', type: '' });    
+    const [inlineMessage, setInlineMessage] = useState({ message: '', type: '' });    
     const [loading, setLoading] = useState(true);
   
     const [tarefas, setTarefas] = useState([]);
     const navigate = useNavigate();
     const { user } = useAuth();
 
-    useEffect(() => {
-        async function loadTarefas() {
-            try {
-                const response = await api.get('/tarefas', {
-                    params: {
-                        authorId: user.id,
-                        status: false
-                    }
-                });                
-                
-                if (!response.data || response.data.length === 0) {
-                    setStatusMessage({ 
-                        message: (
-                            <>
-                                Tudo feito! Não existem tarefas pendentes para a sua equipe no momento.
-                                <NavLink to="/cadastro-tarefa">Aproveite para criar uma.</NavLink>
-                            </>
-                        ),
-                        type: 'message' 
-                    });
-                    setTarefas([]);
-                } else {
-                    setTarefas(response.data);
-                    setStatusMessage({ message: '', type: '' });
+    async function loadTarefas() {
+        try {
+            const response = await api.get('/tarefas', {
+                params: {
+                    authorId: user.id,
+                    status: false
                 }
-                
-            } catch (error) {
-                console.error('Erro ao carregar tarefas:', error);
-                setStatusMessage({ 
-                    message: 'Erro ao carregar tarefas. Tente novamente.',
-                    type: 'error' 
+            });                
+            
+            if (!response.data || response.data.length === 0) {
+                console.log('Tudo feito! Não existem tarefas pendentes para a sua equipe no momento.');
+                setInlineMessage({ 
+                    message: (
+                        <>
+                            Tudo feito! Não existem tarefas pendentes para a sua equipe no momento.
+                            <NavLink to="/cadastro-tarefa">Aproveite para criar uma.</NavLink>
+                        </>
+                    ),
+                    type: 'message' 
                 });
                 setTarefas([]);
-            } finally {
-                setLoading(false);
+            } else {
+                const filteredTarefas = response.data.reverse();
+                setTarefas(filteredTarefas);
+                setInlineMessage({ message: '', type: '' });
             }
-        }        
+            
+        } catch (error) {
+            console.error('Erro ao carregar tarefas:', error);
+            setStatusMessage({ 
+                message: 'Erro ao carregar tarefas. Tente novamente.',
+                type: 'error' 
+            });
+            setTarefas([]);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    useEffect(() => {
         if (user?.id) {
             loadTarefas();
         }
@@ -70,36 +75,26 @@ export default function ListaTarefasGerente() {
         try {            
             const tarefa = tarefas.find(im => im.id === tarefaId);
 
+            const card = e.target.closest(`.${styles.card}`);
+            if (card) {
+                card.classList.add(styles.finished);
+            }
+
             const response = await api.patch(`/tarefas/${tarefaId}/status`, {
                 status: !tarefa.status
             });           
 
             if (response.status === 200) {
-                const updatedtarefas = tarefas.map(tarefa => {
-                    if (tarefa.id === tarefaId) {
-                        return { ...tarefa, status: !tarefa.status };
-                    }
-                    return tarefa;
-                });
-                const filteredTarefas = updatedtarefas.filter(item => item.status === false);                
-
-                setTarefas(filteredTarefas); 
-                
-                setStatusMessage({ 
-                    message: (
-                        <>
-                            Tarefa concluída com sucesso!
-                        </>
-                    ),
-                    type: 'message' 
-                });
-
-                setTimeout( () => {
-                    setStatusMessage('');
-                }, 1000);
+                setTimeout(() => {
+                    loadTarefas();
+                }, 250);
             }
         } catch (error) {
-            console.error('Erro detalhado:', error.response?.data || error.message)
+            console.error('Erro detalhado:', error.response?.data || error.message);
+            setStatusMessage({ 
+                message: 'Erro ao atualizar status da tarefa.',
+                type: 'error' 
+            });
         }
     }
 
@@ -114,6 +109,10 @@ export default function ListaTarefasGerente() {
 
         {statusMessage.message && (
             <StatusMessage message={statusMessage.message} type={statusMessage.type} />
+        )}
+
+        {inlineMessage.message && (
+            <InlineMessage message={inlineMessage.message} type={inlineMessage.type} />
         )}
 
         {loading && (

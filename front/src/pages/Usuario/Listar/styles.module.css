@@ -45,21 +45,9 @@ h2.pagetitle {
   right: 95px;
 }
 
-.confirmation-message {
-  display: inline-block;
-  transition: all 0.3s;
-  padding: 15px;
-  border-radius: 5px;
-  background-color: #c5f4ca;
-  border: 1px solid #23872c;
-  color: #23872c;
-  font-size: 16px;
-  font-weight: 500;
-  margin: 20px 0;
-}
-
-.loading {
-  text-align: center;
-  padding: 20px;
-  color: #666;
+.item.finished {
+  opacity: 0.1;
+  transform: translateX(100%);
+  transition: all 0.5s ease;
+  border: 2px solid rgb(189, 3, 3);
 }/*# sourceMappingURL=styles.module.css.map */

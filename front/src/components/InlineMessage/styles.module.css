@@ -1,0 +1,48 @@
+.inlineMessage {
+  display: inline-block;
+  transition: all 0.3s;
+  padding: 25px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 500;
+  margin: 20px 0;
+  text-align: center;
+  background-color: #fff;
+  max-width: 80%;
+  margin: 20px auto;
+}
+.inlineMessage a {
+  text-decoration: underline;
+  margin-left: 5px;
+  display: inline-block;
+  font-weight: 700;
+  margin: 7px 0;
+}
+.inlineMessage.success {
+  border: 1px solid #23872c;
+  color: #23872c;
+}
+.inlineMessage.success a {
+  color: #126419;
+}
+.inlineMessage.error {
+  border: 1px solid #872323;
+  color: #872323;
+}
+.inlineMessage.error a {
+  color: #641212;
+}
+.inlineMessage.warning {
+  border: 1px solid #ec8805;
+  color: #ec8805;
+}
+.inlineMessage.warning a {
+  color: #a74503;
+}
+.inlineMessage.message {
+  border: 1px solid #4b3f61;
+  color: #4b3f61;
+}
+.inlineMessage.message a {
+  color: #2c2141;
+}/*# sourceMappingURL=styles.module.css.map */

@@ -104,7 +104,11 @@ function EditarTarefa() {
             formData.append('descricao', inputDescricao.current.value);
             formData.append('userId', selectedUser);
 
-            // Adicionar imagens se existirem
+            // Adicionar estado das imagens
+            formData.append('manterImagemAntes', previewImages.imagemAntes ? 'true' : 'false');
+            formData.append('manterImagemDepois', previewImages.imagemDepois ? 'true' : 'false');
+
+            // Adicionar novas imagens se existirem
             const imagemAntesInput = document.querySelector('input[name="imagemAntes"]');
             const imagemDepoisInput = document.querySelector('input[name="imagemDepois"]');
 
