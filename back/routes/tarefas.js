@@ -294,69 +294,27 @@ router.patch('/tarefas/:id/status', async (req, res) => {
     }
 });
 
-// Atualizar imagem da tarefa
-/*router.patch('/tarefas/:id/image', async (req, res) => {
+// Excluir tarefa
+router.delete('/tarefas/:id', async (req, res) => {  
     try {
-        const { id } = req.params;
-        const { imageType, action } = req.body;
-
-        if (action !== 'delete' || !['imagemAntes', 'imagemDepois'].includes(imageType)) {
-            return res.status(400).json({ 
-                error: 'Ação ou tipo de imagem inválido' 
-            });
-        }
-
-        // Primeiro, buscar a tarefa para obter o nome do arquivo atual
-        const tarefa = await prisma.tarefa.findUnique({
-            where: { id: parseInt(id) }
-        });
-
-        if (!tarefa) {
-            return res.status(404).json({ error: 'Tarefa não encontrada' });
-        }
-
-        try {
-            // Tentar deletar o arquivo físico se existir
-            const oldFilePath = `./uploads/${tarefa[imageType]}`;
-            if (fs.existsSync(oldFilePath)) {
-                fs.unlinkSync(oldFilePath);
-            }
-        } catch (fsError) {
-            console.error('Erro ao deletar arquivo:', fsError);
-            // Continuar mesmo se falhar ao deletar o arquivo
-        }
-
-        // Criar objeto de atualização
-        const updateData = {
-            updatedAt: new Date()
-        };
-        updateData[imageType] = ''; // Usar string vazia em vez de null
-
-        // Atualizar o registro no banco
-        const updatedTarefa = await prisma.tarefa.update({
-            where: { 
-                id: parseInt(id) 
-            },
-            data: updateData,
-            include: {
-                user: {
-                    select: {
-                        id: true,
-                        name: true,
-                        email: true
-                    }
-                }
+        const taskId = parseInt(req.params.id);  
+       
+        await prisma.tarefa.delete({
+            where: {
+                id: taskId
             }
         });
 
-        res.json(updatedTarefa);
+        res.status(200).json({
+            message: 'Tarefa deletada com sucesso'
+        });
     } catch (error) {
-        console.error('Erro ao deletar imagem:', error);
-        res.status(500).json({ 
-            error: 'Erro ao deletar imagem',
-            details: error.message 
+        console.error('Erro ao deletar tarefa:', error);
+        res.status(500).json({
+            error: 'Erro ao deletar tarefa',
+            details: error.message
         });
     }
-});*/
+});
 
 export default router;

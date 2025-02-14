@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { FaTrash } from "react-icons/fa";
+import { FaRegTrashAlt } from "react-icons/fa";
 import api from '@/services/api';
 import StatusMessage from '@/components/StatusMessage';
 import PageTitle from '@/components/PageTitle';
@@ -98,6 +99,53 @@ function EditarTarefa() {
         }));
     }
 
+    function askDelete(){
+        setStatusMessage({
+            message: (
+                <>
+                    Tem certeza que deseja excluir essa tarefa? Essa ação não poderá ser desfeita.
+                    <button onClick={() => handleDeleteTask(tarefa.id)} className={styles.deleteButton}>Sim, pode excluir</button>
+                    <button onClick={() => setStatusMessage({ message: '', type: '' })} className={styles.cancelButton}>Cancelar</button>
+                </>
+            ),
+            type: 'error' 
+        });
+    }
+   
+    async function handleDeleteTask(id) {      
+        console.log('deletar tarefa', id);   
+        try {
+            const response = await api.delete(`/tarefas/${id}`);  
+            
+            if (response.status === 200) {                
+                navigate('/');     
+                setTimeout(() => {                
+                    setStatusMessage({ 
+                        message: (
+                            <>
+                                Tarrefa excluída com sucesso.
+                            </>
+                        ),
+                        type: 'success' 
+                    });      
+                }, 250);           
+                setTimeout(() => {                
+                    setStatusMessage({ message: '', type: '' });                
+                }, 2500);           
+            } 
+        } catch (error) {
+            console.error('Erro ao excluir tarefa:', error);
+            setStatusMessage({ 
+                message: 'Erro ao excluir tarefa. Tente novamente.',
+                type: 'error' 
+            });
+            setTimeout(() => {                
+                setStatusMessage({ message: '', type: '' });                
+            }, 2000);   
+        }
+      }
+    
+
     async function handleSubmit(e) {
         e.preventDefault();
         
@@ -172,6 +220,7 @@ function EditarTarefa() {
                 )}
 
                 {tarefa && (
+                    <>
                     <form onSubmit={handleSubmit}>
 
                         <div className="form-item">
@@ -181,7 +230,7 @@ function EditarTarefa() {
                                     checked={status} 
                                     onChange={(e) => setStatus(e.target.checked)} 
                                 />
-                                <label onClick={handleStatusChange}>{ status ? 'Tarefa Concluída' : 'Tarefa Pendente' }</label>
+                                <label onClick={handleStatusChange}>{ status ? 'Tarefa Concluída!' : 'Concluir Tarefa?' }</label>
                             </div>
                         </div>
 
@@ -288,8 +337,13 @@ function EditarTarefa() {
                         
                         <div className="form-item">
                             <button type="submit">Atualizar Tarefa</button>
-                        </div>
-                    </form>
+                        </div>       
+
+                         <div className="form-item">
+                            <a className='delete-button' onClick={() => askDelete()}><FaRegTrashAlt /> Excluir Tarefa</a>
+                        </div>                 
+                    </form>                   
+                </>
                 )}
             </div>
         </div>

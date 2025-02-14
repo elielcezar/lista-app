@@ -31,7 +31,7 @@ export default function ListaTarefasGerente() {
                 setInlineMessage({ 
                     message: (
                         <>
-                            Tudo feito! Não existem tarefas pendentes para a sua equipe no momento.
+                            Não existem tarefas pendentes para a sua equipe no momento.
                             <NavLink to="/cadastro-tarefa">Aproveite para criar uma.</NavLink>
                         </>
                     ),

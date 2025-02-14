@@ -38,8 +38,8 @@
   color: #126419;
 }
 .confirmationMessage.error {
-  border: 1px solid #872323;
-  color: #872323;
+  border: 1px solid #ff0000;
+  color: #ff0000;
 }
 .confirmationMessage.error a {
   color: #641212;

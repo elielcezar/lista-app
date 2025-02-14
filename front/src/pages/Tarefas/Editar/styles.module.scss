@@ -167,7 +167,7 @@ form{
         font-size: 16px;
         color: #333;
         cursor: pointer;
-        font-weight: 700;
+        font-weight: 500;
         margin: 0;
         color: #494ec1;
         width: 100%;
@@ -186,3 +186,37 @@ form{
         color: #23872c;
     }
 }
+
+.deleteButton,
+.cancelButton{
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0;    
+    text-transform: none;
+    margin: 20px 0 0 0;    
+}
+
+.deleteButton{
+    background: #fff;
+    border: 2px solid #ff0000;
+    color: #ff0000;
+
+    &:active,
+    &:hover{        
+        color: #fff;
+        background: #ff0000;
+    }
+}
+
+.cancelButton{
+    background-color: #fff;
+    color: #1b0855;
+    border: 2px solid #1b0855;
+
+    &:active,
+    &:hover{        
+        color: #fff;
+        background: #1b0855;
+    }
+}
+
