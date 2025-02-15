@@ -1,16 +1,36 @@
-import { useState, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, NavLink } from 'react-router-dom';
 import StatusMessage from '@/components/StatusMessage';
+import InlineMessage from '@/components/InlineMessage';
 import api from '@/services/api'
-import styles from './styles.module.css';
 import { useAuth } from '@/context/AuthContext';
+import logo from '@/assets/logo.webp';
+import styles from './styles.module.css';
 
 export const Login = () => { 
     const [confirmationMessage, setConfirmationMessage] = useState({ message: '', type: '' });  
+    const [inlineMessage, setInlineMessage] = useState({ message: '', type: '' });
+    //const [isFirstLogin, setIsFirstLogin] = useState(false);
     const inputEmail = useRef(null);
     const inputPassword = useRef(null);
     const navigate = useNavigate();
     const { login } = useAuth();
+
+    useEffect(() => {
+        const isFirstLogin = sessionStorage.getItem('isFirstLogin');
+        if (isFirstLogin) {
+            setInlineMessage({
+                message: (
+                    <>
+                       Obrigado por se cadastrar!<br/>Agora você já pode fazer login e começar a gerenciar sua lista de tarefas.
+                    </>
+                ),
+                type: 'success'
+            });
+            sessionStorage.removeItem('isFirstLogin');
+        }
+        sessionStorage.removeItem('isFirstLogin');
+    }, []);
 
     async function handleLogin(e) {
         e.preventDefault();
@@ -67,9 +87,15 @@ export const Login = () => {
                     />
                 )}
                 
-                <h1>Lista App</h1>
+                <h1><img src={logo} alt="Task App" /></h1>
                 <form onSubmit={handleLogin} className={styles.loginForm}>           
                     <div className="form-item">
+                        {inlineMessage.message && (
+                            <InlineMessage 
+                                message={inlineMessage.message} 
+                                type={inlineMessage.type} 
+                            />
+                        )}
                         <input 
                             type="email" 
                             name="email" 

@@ -9,7 +9,7 @@ function Header() {
     
     const { user, logout } = useAuth();
     const location = useLocation();
-    const isLoginPage = [location.pathname === '/login', location.pathname === '/cadastro-usuario'];
+    //const isLoginPage = location.pathname === '/login' || location.pathname === '/cadastro-usuario';
     const navigate = useNavigate();
     const [userName, setUserName] = useState('');
 
@@ -25,7 +25,7 @@ function Header() {
       };
 
     return (
-        <header className={`${styles.header} ${isLoginPage ? styles.headerHidden : ''}`}>            
+        <header className={styles.header}>            
             <p className={styles.hello}>
                 <NavLink to="/">
                     Olá {userName}!

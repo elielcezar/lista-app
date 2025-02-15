@@ -77,7 +77,8 @@ form{
   width: 100%;
 
   & .form-item{
-    width: 100%;    
+    width: 100%;   
+    text-align: center; 
   }
   .col-1{
     width: 70%;
@@ -91,6 +92,8 @@ form{
     display: inline-block;
     font-size: 16px;
     font-family: "Roboto", serif;  
+    text-align: left;
+    width: 100%;
   }
   & input,
   select,

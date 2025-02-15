@@ -1,10 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import { useState, useRef, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
+import { useAuth } from '@/context/AuthContext';
 import PageTitle from '@/components/PageTitle';
 import api from '@/services/api'
 import StatusMessage from '@/components/StatusMessage';
-import { useAuth } from '@/context/AuthContext';
+import logo from '@/assets/logo.webp';
 import styles from './styles.module.css';
 
 function CadastroUsuario() {
@@ -40,15 +41,10 @@ function CadastroUsuario() {
                 createdBy: isAuthenticated ? user.id : null
             };
 
-            console.log(userData);
-
             const response = await api.post('/usuarios', userData);
 
-            if (response.status === 201) {
-                setStatusMessage({
-                    message: 'Usuário cadastrado com sucesso!',
-                    type: 'success'
-                });
+            if (response.status === 201) {                
+                sessionStorage.setItem('isFirstLogin', 'true');
                 setTimeout(() => navigate('/usuarios'), 1000);
             }
         } catch (error) {
@@ -67,13 +63,16 @@ function CadastroUsuario() {
             ) : null}            
             
             <div id="main" className={styles.mainlogin}>
-                <div className="container">
+                <div className={`container ${styles.container}`}>    
                     {statusMessage.message && (
                         <StatusMessage message={statusMessage.message} type={statusMessage.type} />
                     )}
 
                     {!isAuthenticated ? (
-                        <h1>Lista App</h1>
+                        <h1><img src={logo} alt="Task App" /></h1>
+                    ) : null}                     
+                    {isAuthenticated ? (
+                        <h1>Novo Colaborador</h1>
                     ) : null}                     
                     <form onSubmit={handleSubmit} className={styles.loginForm}>
                         {!isAuthenticated && (

@@ -117,6 +117,7 @@ export const TarefasArquivadas = () => {
   return (    
     <>      
       <PageTitle title="Tarefas Arquivadas"/>
+      <div id="main">
         <div id="tarefas" className={styles.tarefas}>
         
         <div className="container">           
@@ -160,6 +161,7 @@ export const TarefasArquivadas = () => {
             <ButtonCreate path="/cadastro-tarefa"/>
         )}    
     </div>  
+    </div>
     </>
   )
 }

@@ -3,11 +3,28 @@
 }
 
 .mainlogin {
-  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 5% !important;
+}
+
+h1 {
+  text-align: center;
+  padding: 40px 0 30px 0;
+  background: linear-gradient(90deg, rgb(129, 0, 255) 0%, rgb(201, 0, 255) 100%);
+  color: #fff;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  margin: 0 !important;
+  font-size: 24px;
+}
+h1 img {
+  max-width: 200px;
+}
+
+h2.formTitle {
+  margin: 15px 0 30px 0;
 }
 
 form {

@@ -5,11 +5,11 @@
   border-radius: 5px;
   font-size: 16px;
   font-weight: 500;
-  margin: 20px 0;
   text-align: center;
   background-color: #fff;
-  max-width: 90%;
-  margin: 20px auto;
+  max-width: 100%;
+  margin: 0 auto 20px auto;
+  font-weight: 400;
 }
 .inlineMessage a {
   text-decoration: underline;

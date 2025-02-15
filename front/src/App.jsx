@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from '@/context/AuthContext';
+import { useAuth } from '@/context/AuthContext';
 
 // Components
 import Header from '@/components/Header';
@@ -26,29 +27,38 @@ import Login from '@/pages/Usuario/Login';
 function App() {  
     return (
         <AuthProvider>
-            <Router>
-                <AddBodyClass />
-                <Header />      
-                <Routes>                    
-                    <Route path="/" element={<ProtectedRoute element={Home} />} />
-                    <Route path="login" element={<Login />} />                    
-                    
-                    <Route path="tarefa/edit/:id" element={<ProtectedRoute element={EditarTarefa} />} />
-                    <Route path="cadastro-tarefa" element={<ProtectedRoute element={CadastrarTarefa} />} />
-                    
-                    <Route path="tarefas-arquivadas" element={<ProtectedRoute element={TarefasArquivadas} />} />
-                    
-                    <Route path="usuarios" element={<ProtectedRoute element={Usuarios} />} />
-                    <Route path="usuarios/*" element={<ProtectedRoute element={Usuarios} />} />
-                    <Route path="usuarios/:id" element={<ProtectedRoute element={Usuario} />} />
-                    <Route path="cadastro-usuario" element={<CadastroUsuario />} />     
-                                     
-                    <Route path="*" element={<NotFound />} />  
-                    <Route path="extras" element={<Extras />} />
-                </Routes>
-                <Footer />
-            </Router>
+            <AppContent />
         </AuthProvider>
+    );
+}
+
+// Novo componente para conteúdo interno
+function AppContent() {
+    const { isAuthenticated } = useAuth();
+
+    return (
+        <Router>
+            <AddBodyClass />
+            {isAuthenticated && <Header />}
+            <Routes>                    
+                <Route path="/" element={<ProtectedRoute element={Home} />} />
+                <Route path="login" element={<Login />} />                    
+                
+                <Route path="tarefa/edit/:id" element={<ProtectedRoute element={EditarTarefa} />} />
+                <Route path="cadastro-tarefa" element={<ProtectedRoute element={CadastrarTarefa} />} />
+                
+                <Route path="tarefas-arquivadas" element={<ProtectedRoute element={TarefasArquivadas} />} />
+                
+                <Route path="usuarios" element={<ProtectedRoute element={Usuarios} />} />
+                <Route path="usuarios/*" element={<ProtectedRoute element={Usuarios} />} />
+                <Route path="usuarios/:id" element={<ProtectedRoute element={Usuario} />} />
+                <Route path="cadastro-usuario" element={<CadastroUsuario />} />     
+                                     
+                <Route path="*" element={<NotFound />} />  
+                <Route path="extras" element={<Extras />} />
+            </Routes>
+            <Footer />
+        </Router>
     );
 }
 
