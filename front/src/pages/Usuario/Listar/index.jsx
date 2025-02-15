@@ -20,11 +20,21 @@ export const Usuarios = () => {
   
   async function getUsers() { 
       try {          
-          if (!user) return;
+          if (!user?.id) {
+              console.error('ID do usuário não disponível');
+              return;
+          }
           
           setIsLoading(true);
+          console.log('Buscando usuários criados por:', user.id);
 
-          const response = await api.get(`/usuarios?createdBy=${user.id}`);
+          const response = await api.get('/usuarios', {
+              params: {
+                  createdBy: user.id
+              }
+          });
+          
+          console.log('Resposta da API:', response.data);
           
           if (!response.data || response.data.length === 0) {
               setInlineMessage({ 
@@ -42,6 +52,9 @@ export const Usuarios = () => {
           setUsers(response.data.reverse());          
       } catch (error) {
           console.error('Erro ao buscar usuários:', error);
+          if (error.response) {
+              console.error('Detalhes do erro:', error.response.data);
+          }
           setStatusMessage({ 
               message: 'Erro ao carregar colaboradores. Tente novamente.',
               type: 'error' 
