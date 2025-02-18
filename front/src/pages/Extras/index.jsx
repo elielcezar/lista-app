@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import { useAuth } from '@/context/AuthContext';
 import { useNavigate, NavLink } from 'react-router-dom';
 import { AuthContext } from '@/context/AuthContext';
 import { RiTeamLine } from "react-icons/ri";
@@ -9,6 +10,9 @@ import Logo from '@/assets/logo-color.webp';
 import styles from './styles.module.css';
 
 export default function Extras() {
+
+  const { hasRole } = useAuth();  
+
   const { isAuthenticated, logout } = useContext(AuthContext);    
   const navigate = useNavigate();
 
@@ -30,9 +34,11 @@ export default function Extras() {
                   <li className={styles.tarefas}>
                       <NavLink to="/"><MdOutlineTaskAlt className={styles.icon} /> Tarefas</NavLink>
                   </li>
-                  <li className={styles.colaboradores}>
-                      <NavLink to="/usuarios"><RiTeamLine className={styles.icon} /> Colaboradores</NavLink>
-                  </li>                  
+                  {hasRole(['admin', 'gerente']) && (
+                    <li className={styles.colaboradores}>
+                        <NavLink to="/usuarios"><RiTeamLine className={styles.icon} /> Colaboradores</NavLink>
+                    </li>                  
+                  )}
                   <li className={styles.sair}>
                       <a onClick={handleLogout}><IoMdExit className={styles.icon} /> Sair</a>
                   </li>
