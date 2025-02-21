@@ -15,50 +15,67 @@ export default function ListaTarefasGerente() {
   
     const [tarefas, setTarefas] = useState([]);
     const navigate = useNavigate();
-    const { user } = useAuth();
-
-    async function loadTarefas() {
-        try {
-            const response = await api.get('/tarefas', {
-                params: {
-                    authorId: user.id,
-                    status: false
-                }
-            });                
-            
-            if (!response.data || response.data.length === 0) {
-                console.log('Tudo feito! Não existem tarefas pendentes para a sua equipe no momento.');
-                setInlineMessage({ 
-                    message: (
-                        <>
-                            Não existem tarefas pendentes para a sua equipe no momento.
-                            <NavLink to="/cadastro-tarefa">Aproveite para criar uma.</NavLink>
-                        </>
-                    ),
-                    type: 'message' 
-                });
-                setTarefas([]);
-            } else {
-                const filteredTarefas = response.data.reverse();
-                setTarefas(filteredTarefas);
-                setInlineMessage({ message: '', type: '' });
-            }
-            
-        } catch (error) {
-            console.error('Erro ao carregar tarefas:', error);
-            setStatusMessage({ 
-                message: 'Erro ao carregar tarefas. Tente novamente.',
-                type: 'error' 
-            });
-            setTarefas([]);
-        } finally {
-            setLoading(false);
-        }
-    }
+    const { user } = useAuth();    
 
     useEffect(() => {
+        async function loadTarefas() {
+            try {
+                console.log('Iniciando carregamento de tarefas');
+                console.log('User ID:', user?.id);
+                
+                const response = await api.get('/tarefas', {
+                    params: {
+                        authorId: user.id,
+                        status: false
+                    }
+                });                
+                
+                console.log('Resposta da API:', response);
+                console.log('Status da resposta:', response.status);
+                console.log('Dados recebidos:', response.data);
+                
+                if (!response.data || response.data.length === 0) {
+                    console.log('Tudo feito! Não existem tarefas pendentes para a sua equipe no momento.');
+                    setInlineMessage({ 
+                        message: (
+                            <>
+                                Não existem tarefas pendentes para a sua equipe no momento.
+                                <NavLink to="/cadastro-tarefa">Aproveite para criar uma.</NavLink>
+                            </>
+                        ),
+                        type: 'message' 
+                    });
+                    setTarefas([]);
+                } else {
+                    const filteredTarefas = response.data.reverse();
+                    console.log('Tarefas filtradas:', filteredTarefas);
+                    setTarefas(filteredTarefas);
+                    setInlineMessage({ message: '', type: '' });
+                }
+                
+            } catch (error) {
+                console.error('Erro completo:', error);
+                console.error('Resposta de erro:', error.response);
+                console.error('Detalhes do erro:', {
+                    status: error.response?.status,
+                    data: error.response?.data,
+                    message: error.message
+                });
+                
+                setStatusMessage({ 
+                    message: 'Erro ao carregar tarefas. Tente novamente.',
+                    type: 'error' 
+                });
+                setTarefas([]);
+            } finally {
+                setLoading(false);
+            }
+        }
+
         if (user?.id) {
             loadTarefas();
+        } else {
+            console.log('Usuário não definido ainda');
         }
     }, [user]);
     
