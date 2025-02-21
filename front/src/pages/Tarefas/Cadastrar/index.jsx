@@ -25,28 +25,39 @@ function CadastrarTarefa() {
 
     useEffect(() => {
         async function loadUsuarios() {
-            try {                
+            try {
+                console.log('Carregando usuários para:', user);
+                console.log('ID do gerente:', user?.id);
+                
                 const response = await api.get('/usuarios', {
                     params: {
                         createdBy: user.id
                     }
                 });
-                setUsuarios(response.data);                
-            } catch (error) {                
+                
+                console.log('Resposta da API:', response);
+                console.log('Usuários retornados:', response.data);
+                console.log('Total de usuários:', response.data.length);
+                
+                setUsuarios(response.data);
+            } catch (error) {
+                console.error('Erro completo:', error);
+                console.error('Resposta da API em caso de erro:', error.response);
                 setStatusMessage({ 
                     message: 'Erro ao carregar usuários. Por favor, tente novamente.',
                     type: 'error'
                 });
                 setTimeout(() => {
                     setStatusMessage({ message: '', type: '' });
-                }, 1000);
+                }, 2000);
             }
         }
         
         if (user?.id) {
             loadUsuarios();
+        } else {
+            console.log('Usuário não está definido ainda');
         }
-
     }, [user]);
 
 
@@ -165,7 +176,7 @@ function CadastrarTarefa() {
                                 onChange={(e) => setSelectedUser(e.target.value)}
                                 required
                             >
-                                <option value="">- Selecione um colaborador -</option>
+                                <option value="">-- Selecione um colaborador --</option>
                                 {usuarios.map(user => (
                                     <option key={user.id} value={user.id}>
                                         {user.name}

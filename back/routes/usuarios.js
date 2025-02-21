@@ -35,17 +35,31 @@ router.post('/usuarios', async (req, res) => {
 
 // Listar usuarios
 router.get('/usuarios', async (req, res) => {
-    console.log('Recebendo requisição GET /usuarios');
+    console.log('GET /usuarios - Início da requisição');
+    console.log('Query params recebidos:', req.query);
+    
     try {
         const { name, email, createdBy } = req.query;
         
+        // Forçar o createdBy a ser obrigatório
+        if (!createdBy) {
+            return res.status(400).json({ 
+                error: 'Parâmetro createdBy é obrigatório' 
+            });
+        }
+
+        // Log para debug
+        console.log('Filtro createdBy:', createdBy);
+                
         const where = {
-            createdBy: createdBy ? parseInt(createdBy) : undefined
+            createdBy: parseInt(createdBy) // createdBy é obrigatório
         };
         
-        // Manter os filtros opcionais
+        // Adicionar filtros opcionais
         if (name) where.name = name;
         if (email) where.email = email;
+
+        console.log('Query where:', where);
 
         const users = await prisma.user.findMany({
             where,
@@ -59,6 +73,7 @@ router.get('/usuarios', async (req, res) => {
             }
         });
         
+        console.log('Usuários encontrados:', users.length);
         res.status(200).json(users);
     } catch (error) {
         console.error('Erro ao buscar usuários:', error);
