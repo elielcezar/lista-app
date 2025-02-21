@@ -25,14 +25,28 @@ function CadastrarTarefa() {
 
     useEffect(() => {
         async function loadUsuarios() {
-            try {
-                const response = await api.get(`/usuarios?createdBy=${user.id}`);
-                setUsuarios(response.data);
-            } catch (error) {
-                console.error('Erro ao carregar usuários:', error);
+            try {                
+                const response = await api.get('/usuarios', {
+                    params: {
+                        createdBy: user.id
+                    }
+                });
+                setUsuarios(response.data);                
+            } catch (error) {                
+                setStatusMessage({ 
+                    message: 'Erro ao carregar usuários. Por favor, tente novamente.',
+                    type: 'error'
+                });
+                setTimeout(() => {
+                    setStatusMessage({ message: '', type: '' });
+                }, 1000);
             }
         }
-        loadUsuarios();
+        
+        if (user?.id) {
+            loadUsuarios();
+        }
+
     }, [user]);
 
 
