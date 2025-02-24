@@ -4,8 +4,10 @@ import dotenv from 'dotenv';
 import usuariosRoutes from './routes/usuarios.js';
 import imoveisRoutes from './routes/tarefas.js';
 import loginRoutes from './routes/login.js';
+import testRoutes from './routes/test.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
+
 
 // Configurar __dirname para ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -22,6 +24,7 @@ app.use(cors());
 app.use(usuariosRoutes);
 app.use(imoveisRoutes);
 app.use(loginRoutes);
+app.use(testRoutes);
 
 // Servir arquivos estáticos da pasta uploads
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));

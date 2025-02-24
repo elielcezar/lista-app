@@ -1,8 +1,7 @@
 import express from 'express';
-import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+import { prisma } from '../prisma/index.js'; // Importar a instância que já tem o middleware
 
-const prisma = new PrismaClient();
 const router = express.Router();
 
 // Criar usuario

@@ -1,10 +1,12 @@
 import express from 'express';
-import { PrismaClient } from '@prisma/client';
+//import { PrismaClient } from '@prisma/client';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
+//import bcrypt from 'bcryptjs';
+import { prisma } from '../prisma/index.js'; // Importar a instância que já tem o middleware
 
-const prisma = new PrismaClient();
+//const prisma = new PrismaClient();
 const router = express.Router();
 
 // Configurar o multer para o upload de imagens

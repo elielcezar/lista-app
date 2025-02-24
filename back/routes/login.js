@@ -1,8 +1,7 @@
 import express from 'express';
-import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+import { prisma } from '../prisma/index.js'; // Importar a instância que já tem o middleware
 
-const prisma = new PrismaClient();
 const router = express.Router();
 
 // Login do usuario
@@ -25,8 +24,15 @@ router.post('/login', async (req, res) => {
         if (!isPasswordValid) {
             return res.status(401).json({ error: 'Senha inválida' });
         }
+
+        // Remove a senha antes de enviar
+        const { password: _, ...userWithoutPassword } = user;
+        
         // Se a senha for válida, retorne uma resposta de sucesso
-        res.status(200).json({ message: 'Login bem-sucedido', user });
+        res.status(200).json({ 
+            message: 'Login bem-sucedido', 
+            user: userWithoutPassword 
+        });
 
     } catch (error) {
         console.error('Erro ao fazer login:', error);

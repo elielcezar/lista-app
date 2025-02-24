@@ -22,7 +22,7 @@ export const Login = () => {
             setInlineMessage({
                 message: (
                     <>
-                       Obrigado por se cadastrar!<br/>Agora você já pode fazer login e começar a gerenciar sua lista de tarefas.
+                       Obrigado por se cadastrar!<br/>Faça seu login e comece a gerenciar sua lista de tarefas.
                     </>
                 ),
                 type: 'success'

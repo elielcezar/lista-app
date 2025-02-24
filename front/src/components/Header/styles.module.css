@@ -9,17 +9,17 @@
   background-color: lightslategray;
   color: #fff;
   margin-bottom: 0;
-  padding: 15px 20px;
+  padding: 18px 20px 16px 20px;
   background: linear-gradient(90deg, rgb(129, 0, 255) 0%, rgb(201, 0, 255) 100%);
 }
 .header .hello {
   font-size: 18px;
   font-weight: 600;
   letter-spacing: -1px;
-}
-.header .hello a {
+  display: flex;
+  align-items: center;
+  gap: 5px;
   color: #fff;
-  text-decoration: none;
 }
 .header .exit {
   font-size: 15px;
