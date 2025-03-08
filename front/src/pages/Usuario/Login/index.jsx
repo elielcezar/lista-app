@@ -123,6 +123,7 @@ export const Login = () => {
                     </div>
                     <div className="extras">
                         <p>Ainda não tem uma conta?<br/><NavLink to="/cadastro-usuario">Cadastre-se aqui!</NavLink></p>                        
+                        <p><NavLink to="/esqueci-senha">Esqueceu sua senha?</NavLink></p>
                     </div>  
                 </form> 
             </div>      

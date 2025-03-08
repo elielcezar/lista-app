@@ -23,6 +23,8 @@ import Usuarios from '@/pages/Usuario/Listar';
 import Usuario from '@/pages/Usuario/Editar';
 import CadastroUsuario from '@/pages/Usuario/Cadastrar';
 import Login from '@/pages/Usuario/Login';
+import EsqueciSenha from '@/pages/Usuario/EsqueciSenha';
+import RedefinirSenha from '@/pages/Usuario/RedefinirSenha';
 
 function App() {  
     return (
@@ -43,6 +45,8 @@ function AppContent() {
             <Routes>                    
                 <Route path="/" element={<ProtectedRoute element={Home} />} />
                 <Route path="login" element={<Login />} />                    
+                <Route path="esqueci-senha" element={<EsqueciSenha />} />
+                <Route path="redefinir-senha/:token" element={<RedefinirSenha />} />
                 
                 <Route path="tarefa/edit/:id" element={<ProtectedRoute element={EditarTarefa} />} />
                 <Route path="cadastro-tarefa" element={<ProtectedRoute element={CadastrarTarefa} />} />

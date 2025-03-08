@@ -1,0 +1,27 @@
+/* front/src/pages/Usuario/RedefinirSenha/styles.module.css */
+  /* Copie os estilos do arquivo styles.module.css da página de login */
+  
+  .loading {
+    text-align: center;
+    padding: 30px;
+    font-size: 16px;
+    color: #666;
+  }
+  
+  .invalidToken {
+    text-align: center;
+    padding: 30px;
+    background: #fff;
+    border-radius: 10px;
+  }
+  
+  .newLinkButton {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 20px;
+    background: #6200ea;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+  }

@@ -18,6 +18,8 @@ model User {
   createdBy     Int?
   tarefas       Tarefa[]  
   tarefasAuthor Tarefa[] @relation("author")
+  resetToken    String?
+  resetTokenExpires DateTime?
 }
 
 model Tarefa {
