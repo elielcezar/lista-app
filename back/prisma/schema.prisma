@@ -8,16 +8,16 @@ datasource db {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  email     String    @unique
-  name      String  
-  password  String
-  role      String
-  createdAt DateTime? @default(now())  
-  updatedAt DateTime? @default(now())
-  tarefas   Tarefa[]
-  createdBy Int?
-  tarefasAuthor Tarefa[] @relation("author") // Nova relação para tarefas criadas pelo usuário
+  id            Int       @id @default(autoincrement())
+  identifier    String?   @unique
+  name          String  
+  password      String
+  role          String
+  createdAt     DateTime? @default(now())  
+  updatedAt     DateTime? @default(now())
+  createdBy     Int?
+  tarefas       Tarefa[]  
+  tarefasAuthor Tarefa[] @relation("author")
 }
 
 model Tarefa {

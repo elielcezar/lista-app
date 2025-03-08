@@ -1,10 +1,10 @@
-import { useNavigate } from 'react-router-dom';
 import { useState, useRef, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
-import { useAuth } from '@/context/AuthContext';
+import { useNavigate, NavLink } from 'react-router-dom';
 import PageTitle from '@/components/PageTitle';
 import api from '@/services/api'
 import StatusMessage from '@/components/StatusMessage';
+import { useAuth } from '@/context/AuthContext';
+import { validarIdentificador, detectarTipoIdentificador, prepararIdentificador } from '@/utils/validation';
 import logo from '@/assets/logo.webp';
 import styles from './styles.module.css';
 
@@ -15,9 +15,10 @@ function CadastroUsuario() {
     const { isAuthenticated, user } = useAuth();
     
     const [statusMessage, setStatusMessage] = useState({ message: '', type: '' });
+    const [validationError, setValidationError] = useState('');
     
     const inputName = useRef(null);
-    const inputEmail = useRef(null);
+    const inputIdentifier = useRef(null);
     const inputPassword = useRef(null);
     const [role, setRole] = useState(null);    
 
@@ -29,13 +30,46 @@ function CadastroUsuario() {
         }
     }, [isAuthenticated]);
     
+    // Validar o identificador quando o campo perder o foco
+    const handleIdentifierBlur = () => {
+        const identifier = inputIdentifier.current.value;
+        
+        if (!identifier) {
+            setValidationError('');
+            return;
+        }
+        
+        if (!validarIdentificador(identifier)) {
+            const tipo = detectarTipoIdentificador(identifier);
+            setValidationError(tipo === 'email' 
+                ? 'Email inválido. Use um formato válido (ex: nome@empresa.com.br)' 
+                : 'Informe o telefone completo, com DDD. Por exemplo: 11 5555-9999');
+        } else {
+            setValidationError('');
+        }
+    };
+    
     async function handleSubmit(e) {
         e.preventDefault();
         
+        const identifier = inputIdentifier.current.value;
+        
+        // Validar o identificador antes de enviar
+        if (!validarIdentificador(identifier)) {
+            const tipo = detectarTipoIdentificador(identifier);
+            setValidationError(tipo === 'email' 
+                ? 'Email inválido. Use um formato válido (ex: nome@dominio.com)' 
+                : 'Informe o telefone completo, com DDD. Por exemplo: 11 5555-9999');
+            return;
+        }
+        
         try {
+            // Preparar o identificador (limpar telefone ou formatar email)
+            const preparedIdentifier = prepararIdentificador(identifier);
+            
             const userData = {
                 name: inputName.current.value,
-                email: inputEmail.current.value,
+                identifier: preparedIdentifier,
                 password: inputPassword.current.value,
                 role: role,
                 createdBy: isAuthenticated ? user.id : null
@@ -50,7 +84,7 @@ function CadastroUsuario() {
         } catch (error) {
             console.error('Erro ao cadastrar usuário:', error);
             setStatusMessage({
-                message: 'Erro ao cadastrar usuário. Tente novamente.',
+                message: error.response?.data?.error || 'Erro ao cadastrar usuário. Tente novamente.',
                 type: 'error'
             });
         }
@@ -84,7 +118,16 @@ function CadastroUsuario() {
                         </div>
                         
                         <div className="form-item">
-                            <input type="email" placeholder="E-mail" ref={inputEmail} required />
+                            <input 
+                                type="text" 
+                                placeholder="Email ou Telefone" 
+                                ref={inputIdentifier} 
+                                onBlur={handleIdentifierBlur}
+                                required 
+                            />
+                            {validationError && (
+                                <div className={styles.errorMessage}>{validationError}</div>
+                            )}
                         </div>
                         
                         <div className="form-item">

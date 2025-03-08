@@ -44,4 +44,14 @@ form {
 
 .tipoUsuario {
   display: none;
+}
+
+.errorMessage {
+  font-size: 12px;
+  background: #fff7f7;
+  color: red;
+  padding: 5px;
+  border: 1px solid red;
+  margin-bottom: 20px;
+  border-radius: 5px;
 }/*# sourceMappingURL=styles.module.css.map */

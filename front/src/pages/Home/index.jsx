@@ -11,6 +11,7 @@ function Home() {
   return (
     <>      
       <PageTitle title="Tarefas Ativas"/>
+      
       <div id="main" className={styles.mainHome}>
         <div className="container">  
           {!user && <div>Carregando usuário...</div>}

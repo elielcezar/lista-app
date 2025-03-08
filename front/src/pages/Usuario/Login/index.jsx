@@ -9,9 +9,8 @@ import styles from './styles.module.css';
 
 export const Login = () => { 
     const [confirmationMessage, setConfirmationMessage] = useState({ message: '', type: '' });  
-    const [inlineMessage, setInlineMessage] = useState({ message: '', type: '' });
-    //const [isFirstLogin, setIsFirstLogin] = useState(false);
-    const inputEmail = useRef(null);
+    const [inlineMessage, setInlineMessage] = useState({ message: '', type: '' });    
+    const inputIdentifier = useRef(null);
     const inputPassword = useRef(null);
     const navigate = useNavigate();
     const { login } = useAuth();
@@ -37,7 +36,7 @@ export const Login = () => {
         
         try {
             const response = await api.post('/login', {
-                email: inputEmail.current.value,
+                identifier: inputIdentifier.current.value,
                 password: inputPassword.current.value
             });
 
@@ -97,11 +96,11 @@ export const Login = () => {
                             />
                         )}
                         <input 
-                            type="email" 
-                            name="email" 
-                            className="email" 
-                            placeholder='Email' 
-                            ref={inputEmail}
+                            type="text" 
+                            name="identifier" 
+                            className="identifier" 
+                            placeholder='Email ou Telefone' 
+                            ref={inputIdentifier}
                             onKeyPress={handleKeyPress}
                             required 
                         />

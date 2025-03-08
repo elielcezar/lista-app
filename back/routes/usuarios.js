@@ -8,15 +8,15 @@ const router = express.Router();
 router.post('/usuarios', async (req, res) => {
     
     console.log('Recebendo requisição POST /usuarios');    
-    const { name, email, role, createdBy, password } = req.body;
+    const { name, identifier, role, createdBy, password } = req.body;
 
     try {
-        console.log('Dados recebidos:', { name, email, role, createdBy, password });
+        console.log('Dados recebidos:', { name, identifier, role, createdBy, password });
         
         const hashedPassword = await bcrypt.hash(password, 10);
         const response = await prisma.user.create({
             data: {
-                email,
+                identifier,
                 name,
                 role,
                 createdBy,
@@ -38,7 +38,7 @@ router.get('/usuarios', async (req, res) => {
     console.log('Query params recebidos:', req.query);
     
     try {
-        const { name, email, createdBy } = req.query;
+        const { name, identifier, createdBy } = req.query;
         
         // Forçar o createdBy a ser obrigatório
         if (!createdBy) {
@@ -56,7 +56,7 @@ router.get('/usuarios', async (req, res) => {
         
         // Adicionar filtros opcionais
         if (name) where.name = name;
-        if (email) where.email = email;
+        if (identifier) where.identifier = identifier;
 
         console.log('Query where:', where);
 
@@ -65,7 +65,7 @@ router.get('/usuarios', async (req, res) => {
             select: {
                 id: true,
                 name: true,
-                email: true,
+                identifier: true,
                 role: true,
                 createdAt: true,
                 createdBy: true
@@ -120,7 +120,7 @@ router.get('/usuarios/:id', async (req, res) => {
 router.put('/usuarios/:id', async (req, res) => {    
     try {
         const { id } = req.params;
-        const { name, email, password, role } = req.body;   
+        const { name, identifier, password, role } = req.body;   
 
         // Validar se o ID foi fornecido
         if (!id) {
@@ -130,15 +130,15 @@ router.put('/usuarios/:id', async (req, res) => {
         }
 
         // Validar dados obrigatórios (agora sem password)
-        if (!name || !email) {
+        if (!name || !identifier) {
             return res.status(400).json({
-                error: 'Dados incompletos. Nome e email são obrigatórios.'
+                error: 'Dados incompletos. Nome e identifier são obrigatórios.'
             });
         }
 
         // Preparar objeto de atualização
         const updateData = {
-            email,
+            identifier,
             name,
             role,
             updatedAt: new Date()
@@ -173,7 +173,7 @@ router.put('/usuarios/:id', async (req, res) => {
         }        
         if (error.code === 'P2002') {
             return res.status(400).json({ 
-                error: 'Email já está em uso'
+                error: 'Usuário já está existe'
             });
         }
         res.status(500).json({ 

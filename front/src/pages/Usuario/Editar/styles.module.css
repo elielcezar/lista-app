@@ -13,4 +13,14 @@ h2.pagetitle {
 
 .tipoUsuario {
   display: none;
+}
+
+.errorMessage {
+  margin: 0 0 20px 0;
+  border: 1px solid red;
+  padding: 10px;
+  border-radius: 5px;
+  background: #fff2f2;
+  font-size: 13px;
+  color: red;
 }/*# sourceMappingURL=styles.module.css.map */

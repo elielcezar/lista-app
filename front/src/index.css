@@ -12,6 +12,9 @@ body{
 body.user-page {
   background-color: #340f8b;
 }
+body.user-page.logged-in {
+  background-color: #f9fafc;
+}
 
 *{
   margin: 0;

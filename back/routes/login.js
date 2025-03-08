@@ -7,12 +7,12 @@ const router = express.Router();
 // Login do usuario
 router.post('/login', async (req, res) => {
     
-    const { email, password } = req.body;
-    console.log(email, password)
+    const { identifier, password } = req.body;
+    console.log(identifier, password)
 
     try {        
         const user = await prisma.user.findUnique({
-            where: { email }
+            where: { identifier }
         });
 
         if (!user) {

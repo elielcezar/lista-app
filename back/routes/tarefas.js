@@ -131,14 +131,14 @@ router.get('/tarefas', async (req, res) => {
                     select: {
                         id: true,
                         name: true,
-                        email: true
+                        identifier: true
                     }
                 },
                 author: {
                     select: {
                         id: true,
                         name: true,
-                        email: true
+                        identifier: true
                     }
                 }
             }       

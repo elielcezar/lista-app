@@ -1,9 +1,9 @@
 import { useEffect, useState, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from 'react-router-dom';
 import PageTitle from '@/components/PageTitle';
 import api from "@/services/api";
+import { validarIdentificador, detectarTipoIdentificador, prepararIdentificador } from '@/utils/validation';
 import StatusMessage from '@/components/StatusMessage';
-import { useNavigate } from 'react-router-dom';
 import Loading from '@/components/Loading';
 import styles from './styles.module.css';
 
@@ -12,12 +12,13 @@ export const Usuario = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [statusMessage, setStatusMessage] = useState({ message: '', type: '' });
+    const [validationError, setValidationError] = useState('');
     const [usuario, setUsuario] = useState(null);
     const [loading, setLoading] = useState(true);
     const [role, setRole] = useState('');
     
     const inputName = useRef(null);
-    const inputEmail = useRef(null);
+    const inputIdentifier = useRef(null);
     const inputPassword = useRef(null);
 
     useEffect(() => {
@@ -39,17 +40,50 @@ export const Usuario = () => {
     useEffect(() => {
         if (usuario) {
             inputName.current.value = usuario.name;
-            inputEmail.current.value = usuario.email;
+            inputIdentifier.current.value = usuario.identifier;
         }
     }, [usuario]);
 
+    // Validar o identificador quando o campo perder o foco
+    const handleIdentifierBlur = () => {
+        const identifier = inputIdentifier.current.value;
+        
+        if (!identifier) {
+            setValidationError('');
+            return;
+        }
+        
+        if (!validarIdentificador(identifier)) {
+            const tipo = detectarTipoIdentificador(identifier);
+            setValidationError(tipo === 'email' 
+                ? 'Email inválido. Use um formato válido (ex: nome@empresa.com.br)' 
+                : 'Informe o telefone completo, com DDD. Por exemplo: 11 5555-9999');
+        } else {
+            setValidationError('');
+        }
+    };
+
     async function handleSubmit(e) {
         e.preventDefault();
+
+        const identifier = inputIdentifier.current.value;
+        
+        // Validar o identificador antes de enviar
+        if (!validarIdentificador(identifier)) {
+            const tipo = detectarTipoIdentificador(identifier);
+            setValidationError(tipo === 'email' 
+                ? 'Email inválido. Use um formato válido (ex: nome@dominio.com)' 
+                : 'Informe o telefone completo, com DDD. Por exemplo: 11 5555-9999');
+            return;
+        }
         
         try {
+            // Preparar o identificador (limpar telefone ou formatar email)
+            const preparedIdentifier = prepararIdentificador(identifier);
+
             const userData = {
                 name: inputName.current.value,
-                email: inputEmail.current.value,
+                identifier: preparedIdentifier,
                 role: role
             };
 
@@ -106,11 +140,15 @@ export const Usuario = () => {
                         
                         <div className="form-item">
                             <input 
-                                type="email" 
-                                placeholder="E-mail" 
-                                ref={inputEmail}
+                                type="text" 
+                                placeholder="E-mail ou Telefone" 
+                                ref={inputIdentifier}
+                                onBlur={handleIdentifierBlur}
                                 required 
                             />
+                            {validationError && (
+                                <div className={styles.errorMessage}>{validationError}</div>
+                            )}
                         </div>
                         
                         <div className="form-item">
