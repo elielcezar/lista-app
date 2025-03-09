@@ -1,0 +1,8 @@
+{
+  "appId": "io.tasklist.app",
+  "appName": "Task-List",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  }
+}
