@@ -175,7 +175,7 @@ router.get('/tarefas/id/:id', async (req, res) => {
                     select: {
                         id: true,
                         name: true,
-                        email: true
+                        identifier: true
                     }
                 }
             }  
@@ -245,7 +245,7 @@ router.put('/tarefas/:id', upload.fields([
                     select: {
                         id: true,
                         name: true,
-                        email: true
+                        identifier: true
                     }
                 }
             }
@@ -283,7 +283,7 @@ router.patch('/tarefas/:id/status', async (req, res) => {
                     select: {
                         id: true,
                         name: true,
-                        email: true
+                        identifier: true
                     }
                 }
             }

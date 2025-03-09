@@ -47,6 +47,8 @@ function EditarTarefa() {
     useEffect(() => {
         async function loadTarefa() {
             try {
+                console.log('carregar tarefa', id);
+                
                 const response = await api.get(`/tarefas/id/${id}`);
                 setTarefa(response.data);
                 setSelectedUser(response.data.user?.id.toString() || '');
