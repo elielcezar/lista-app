@@ -1,43 +1,59 @@
 // front/src/pages/Usuario/EsqueciSenha/index.jsx
 import { useState, useRef } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import api from '@/services/api';
 import StatusMessage from '@/components/StatusMessage';
+import { detectarTipoIdentificador } from '@/utils/validation';
 import logo from '@/assets/logo.webp';
 import styles from './styles.module.css';
 
 export default function EsqueciSenha() {
+  const navigate = useNavigate();
   const [statusMessage, setStatusMessage] = useState({ message: '', type: '' });
   const [loading, setLoading] = useState(false);
+  
   const inputIdentifier = useRef(null);
   
-  async function handleSubmit(e) {
+  async function handleSolicitarRecuperacao(e) {
     e.preventDefault();
     setLoading(true);
     
+    const identifier = inputIdentifier.current.value;
+    
+    // Detectar tipo de identificador
+    const tipo = detectarTipoIdentificador(identifier);
+    
     try {
-      console.log('entrou no try');
       const response = await api.post('/esqueci-senha', {
-        identifier: inputIdentifier.current.value
+        identifier
       });
-      console.log('response', response);
-
+      
       setStatusMessage({
         message: response.data.message,
         type: 'success'
       });
 
-      //console.log('statusMessage', statusMessage);
+      // Redirecionar com base no tipo de identificador
+      if (tipo === 'email') {
+        setTimeout(() => {
+          setStatusMessage({
+            message: '',
+            type: ''
+          });
+        }, 2000);
 
-      setTimeout(() => {
-        setStatusMessage({
-          message: '',
-          type: ''
-        });
-      }, 3000);
-      
-      // Limpar campo
-      inputIdentifier.current.value = '';
+      } else {
+        // Para telefone, redirecionar para a página de verificação de código
+        // Passando o telefone como parâmetro de estado
+        setTimeout(() => {
+          navigate('/recuperacao-whatsapp', { 
+            state: { 
+              telefone: identifier,
+              codigoEnviado: true 
+            } 
+          });
+        }, 1500);
+      }
       
     } catch (error) {
       console.error('Erro ao solicitar recuperação:', error);
@@ -59,17 +75,17 @@ export default function EsqueciSenha() {
         
         <h1><img src={logo} alt="Lista App" /></h1>
         
-        <form onSubmit={handleSubmit} className={styles.loginForm}>
+        <form onSubmit={handleSolicitarRecuperacao} className={styles.loginForm}>
           <h2 className={styles.formTitle}>Recuperação de Senha</h2>
           
           <p className={styles.instructions}>
-            Informe seu email ou telefone cadastrado para receber instruções de recuperação de senha.
+            Informe seu email ou número de WhatsApp cadastrado para receber instruções de recuperação.
           </p>
           
           <div className="form-item">
             <input 
               type="text" 
-              placeholder="Email ou Telefone" 
+              placeholder="Email ou WhatsApp" 
               ref={inputIdentifier} 
               required 
               disabled={loading}

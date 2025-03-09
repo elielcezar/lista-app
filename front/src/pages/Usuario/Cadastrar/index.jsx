@@ -87,6 +87,12 @@ function CadastroUsuario() {
                 message: error.response?.data?.error || 'Erro ao cadastrar usuário. Tente novamente.',
                 type: 'error'
             });
+            setTimeout(() => {
+                setStatusMessage({
+                  message: '',
+                  type: ''
+                });
+              }, 2000);
         }
     }
 

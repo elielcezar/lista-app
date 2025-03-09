@@ -1,0 +1,60 @@
+/* front/src/pages/Usuario/RecuperacaoWhatsApp/styles.module.css */
+/* Copie os estilos do arquivo styles.module.css da página de login */
+
+.container {
+    max-width: 400px;
+  }
+  
+  .mainlogin {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5% !important;
+  }
+  
+  h1 {
+    text-align: center;
+    padding: 40px 0 30px 0;
+    background: linear-gradient(90deg, rgb(129, 0, 255) 0%, rgb(201, 0, 255) 100%);
+    color: #fff;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    margin: 0 !important;
+    font-size: 24px;
+  }
+  
+  h1 img {
+    max-width: 200px;
+  }
+  
+  h2.formTitle {
+    margin: 15px 0 30px 0;
+  }
+  
+  form {
+    border-radius: 10px;
+  }
+  
+  .loginForm {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+  
+  .formTitle {
+    text-align: center;
+    font-weight: 500;
+    margin: 0 0 30px 0;
+  }
+  
+  .instructions {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #666;
+  }
+  
+  .errorMessage {
+    color: #e74c3c;
+    font-size: 0.85rem;
+    margin-top: 5px;
+    margin-bottom: 10px;
+  }

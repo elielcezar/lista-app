@@ -25,6 +25,7 @@ import CadastroUsuario from '@/pages/Usuario/Cadastrar';
 import Login from '@/pages/Usuario/Login';
 import EsqueciSenha from '@/pages/Usuario/EsqueciSenha';
 import RedefinirSenha from '@/pages/Usuario/RedefinirSenha';
+import RecuperacaoWhatsApp from '@/pages/Usuario/RecuperacaoWhatsApp';
 
 function App() {  
     return (
@@ -47,6 +48,7 @@ function AppContent() {
                 <Route path="login" element={<Login />} />                    
                 <Route path="esqueci-senha" element={<EsqueciSenha />} />
                 <Route path="redefinir-senha/:token" element={<RedefinirSenha />} />
+                <Route path="recuperacao-whatsapp" element={<RecuperacaoWhatsApp />} />
                 
                 <Route path="tarefa/edit/:id" element={<ProtectedRoute element={EditarTarefa} />} />
                 <Route path="cadastro-tarefa" element={<ProtectedRoute element={CadastrarTarefa} />} />
