@@ -1,10 +1,18 @@
-@charset "UTF-8";
-/* front/src/pages/Usuario/EsqueciSenha/styles.module.css */
-/* Copie os estilos do arquivo styles.module.css da página de login */
-.instructions {
+.container {
+  max-width: 400px;
+}
+
+p.instructions {
   text-align: center;
-  margin-bottom: 20px;
   color: #666;
+  margin: 0 0 20px 0;
+  font-size: 15px;
+  text-align: center;
+}
+
+.loginForm {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 
 .metodoInfo {

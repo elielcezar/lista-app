@@ -15,12 +15,7 @@ export function validarTelefone(telefone) {
   const numeroLimpo = telefone.replace(/\D/g, '');
   
   // Verifica se tem entre 10 e 11 dígitos (com DDD)
-  if (numeroLimpo.length != 11) {
-    return false;
-  }
-  
-  // Verifica se começa com dígito válido para celular (quando tem 11 dígitos)
-  if (numeroLimpo.length === 11 && numeroLimpo.charAt(2) !== '9') {
+  if (numeroLimpo.length < 10 || numeroLimpo.length > 11) {
     return false;
   }
   

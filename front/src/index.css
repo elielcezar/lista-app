@@ -151,7 +151,7 @@ button{
 }
 
 
-a.delete-button{
+button.deleteButton{
   border: 2px solid #ff0000;
   color: #ff0000;
   background: #fff;    
@@ -161,9 +161,9 @@ a.delete-button{
   gap: 10px;
   align-items: center;
   justify-content: center;
-  margin: 0;
-  
-  font-size: 14px;
+  margin: 20px 0;
+  padding: 15px;  
+  font-size: 14px;    
 
   svg{
     width: 15px;
@@ -175,12 +175,26 @@ a.delete-button{
     background-color: #ff0000;
     color: #fff;
   }
-}   
+} 
+
+button.cancelButton{
+  background-color: #fff !important;
+  color: #1b0855;
+  border: 2px solid #1b0855;
+  color: #1b0855 !important;
+
+  &:active,
+  &:hover{        
+      color: #fff;
+      background: #1b0855;
+  }
+}
+
 
 
 form .extras{  
   & p{
-    margin: 25px 0 10px 0;
+    margin: 0 0 10px 0;
     font-size: 15px;
     text-align: center;
 

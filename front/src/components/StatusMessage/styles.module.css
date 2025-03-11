@@ -57,4 +57,17 @@
 }
 .confirmationMessage.message a {
   color: #2c2141;
+}
+.confirmationMessage button.deleteButton {
+  background: red !important;
+}
+.confirmationMessage button.cancelButton {
+  background-color: #fff !important;
+  color: #1b0855;
+  border: 2px solid #1b0855;
+  color: #1b0855 !important;
+}
+.confirmationMessage button.cancelButton:active, .confirmationMessage button.cancelButton:hover {
+  color: #fff;
+  background: #1b0855;
 }/*# sourceMappingURL=styles.module.css.map */

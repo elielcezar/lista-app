@@ -1,5 +1,3 @@
-// back/utils/validation.js
-
 /**
  * Detecta se o identificador é um email ou telefone
  * @param {string} identifier - O identificador a ser verificado
@@ -30,11 +28,6 @@ export function detectarTipoIdentificador(identifier) {
     
     // Verifica se tem entre 10 e 11 dígitos (com ou sem DDD)
     if (numeroLimpo.length < 10 || numeroLimpo.length > 11) {
-      return false;
-    }
-    
-    // Verifica se começa com dígito válido para celular (quando tem 11 dígitos)
-    if (numeroLimpo.length === 11 && numeroLimpo.charAt(2) !== '9') {
       return false;
     }
     

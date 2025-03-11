@@ -17,6 +17,8 @@ function EditarTarefa() {
     const navigate = useNavigate();
     const [statusMessage, setStatusMessage] = useState({ message: '', type: '' });
 
+    const { hasRole } = useAuth();
+
     const [previewImages, setPreviewImages] = useState({
         imagemAntes: null,
         imagemDepois: null
@@ -105,9 +107,9 @@ function EditarTarefa() {
         setStatusMessage({
             message: (
                 <>
-                    Tem certeza que deseja excluir essa tarefa? Essa ação não poderá ser desfeita.
-                    <button onClick={() => handleDeleteTask(tarefa.id)} className={styles.deleteButton}>Sim, pode excluir</button>
-                    <button onClick={() => setStatusMessage({ message: '', type: '' })} className={styles.cancelButton}>Cancelar</button>
+                    <span>Tem certeza que deseja excluir essa tarefa? Essa ação não poderá ser desfeita.</span>
+                    <button onClick={() => handleDeleteTask(tarefa.id)} className="deleteButton">Sim, pode excluir</button>
+                    <button onClick={() => setStatusMessage({ message: '', type: '' })} className="cancelButton">Cancelar</button>
                 </>
             ),
             type: 'error' 
@@ -206,7 +208,7 @@ function EditarTarefa() {
     if (loading) return <Loading />;
     if (!tarefa) return <div>Tarefa não encontrada</div>;
 
-    const baseUrl = import.meta.env.VITE_UPLOADS_URL + '/';
+    //const baseUrl = import.meta.env.VITE_UPLOADS_URL + '/';
    
   return (
     <>
@@ -225,6 +227,30 @@ function EditarTarefa() {
                     <>
                     <form onSubmit={handleSubmit}>
 
+                    {hasRole(['admin', 'gerente']) && (
+                        <>
+                            <div className="form-item">
+                                <input type="text" placeholder="Título" className={styles.inputTitulo} ref={inputTitulo} required />
+                            </div>
+                            <div className="form-item">
+                                <textarea placeholder="Descrição" ref={inputDescricao} />
+                            </div>
+                        </> 
+                    )}
+
+                    {hasRole(['colaborador']) && (
+                        <>
+                            <div className="form-item">
+                                <h2>{tarefa.titulo}</h2>
+                            </div>
+                            <div className="form-item">
+                                <p>{tarefa.descricao}</p>
+                            </div>
+                        </>
+                    )}
+                        
+                         
+
                         <div className="form-item">
                             <div className={`${styles.checkbox} ${status ? styles.active : ''}`}>
                                 <input 
@@ -232,33 +258,27 @@ function EditarTarefa() {
                                     checked={status} 
                                     onChange={(e) => setStatus(e.target.checked)} 
                                 />
-                                <label onClick={handleStatusChange}>{ status ? 'Tarefa Concluída!' : 'Concluir Tarefa?' }</label>
+                                <label onClick={handleStatusChange}>{ status ? 'Tarefa concluída' : 'Concluir Tarefa?' }</label>
                             </div>
                         </div>
-
-                        <div className="form-item">
-                            <input type="text" placeholder="Título" ref={inputTitulo} required />
-                        </div>
-                        
-                        <div className="form-item">
-                            <textarea placeholder="Descrição" ref={inputDescricao} />
-                        </div>                        
-
-                        <div className="form-item">
-                            <label>Colaborador Responsável: </label>
-                            <select 
-                                value={selectedUser} 
-                                onChange={(e) => setSelectedUser(e.target.value)}
-                                required
-                            >
-                                <option value="">- Selecione um colaborador -</option>
-                                {usuarios.map(user => (
-                                    <option key={user.id} value={user.id}>
-                                        {user.name}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
+                      
+                        {hasRole(['admin', 'gerente']) && (
+                            <div className="form-item">
+                                <label>Colaborador Responsável: </label>
+                                <select 
+                                    value={selectedUser} 
+                                    onChange={(e) => setSelectedUser(e.target.value)}
+                                    required
+                                >
+                                    <option value="">- Selecione um colaborador -</option>
+                                    {usuarios.map(user => (
+                                        <option key={user.id} value={user.id}>
+                                            {user.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        )}
                         
                         {/* Exibir imagens atuais */}
                         <div className={styles.currentImages}>
@@ -271,28 +291,32 @@ function EditarTarefa() {
                                             alt="Preview Antes"
                                             className={styles.previewImage}
                                         />
-                                        <button 
+                                        {hasRole(['admin', 'gerente']) && (
+                                            <button 
                                             type="button"
                                             className={styles.deleteButton}
                                             onClick={() => handleDeleteImage('imagemAntes')}
-                                        >
-                                            <FaTrash />
-                                        </button>
+                                            >
+                                                <FaTrash />
+                                            </button>
+                                        )}
                                     </div>
                                 ) : (
                                     <p className={styles.noImage}>Nenhuma imagem selecionada</p>
                                 )}
 
-                                <div className="form-item">
-                                    <label>Selecionar:</label>
+                                {hasRole(['admin', 'gerente']) && (
+                                    <div className="form-item">
+                                        <label>Selecionar:</label>
                                     <input 
                                         type="file" 
                                         name="imagemAntes"
                                         accept="image/*"
                                         onChange={(e) => handleImageUpload(e, 'imagemAntes')}
-                                        className={styles.fileInput}
-                                    />
-                                </div>
+                                            className={styles.fileInput}
+                                        />
+                                    </div>
+                                )}
                             </div>
 
                             <div className={styles.depois}>
@@ -335,15 +359,21 @@ function EditarTarefa() {
                                 placeholder="Observações" 
                                 ref={inputObservacoes}
                             />
-                        </div>                  
-                        
+                        </div>    
+
                         <div className="form-item">
                             <button type="submit">Atualizar Tarefa</button>
-                        </div>       
+                        </div> 
 
-                         <div className="form-item">
-                            <a className='delete-button' onClick={() => askDelete()}><FaRegTrashAlt /> Excluir Tarefa</a>
-                        </div>                 
+                        {hasRole(['admin', 'gerente']) && (
+                            <div className="form-item">
+                                <a className={styles.askDelete} onClick={() => askDelete()}><FaRegTrashAlt /> Excluir Tarefa</a>
+                            </div>   
+                        )}             
+                        
+                             
+
+                                       
                     </form>                   
                 </>
                 )}

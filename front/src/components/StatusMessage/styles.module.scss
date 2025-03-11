@@ -68,4 +68,23 @@
             color: #2c2141;
         }
     }
+
+    button.deleteButton{
+        background: red !important;
+    }
+    
+    button.cancelButton{
+        background-color: #fff !important;
+        color: #1b0855;
+        border: 2px solid #1b0855;
+        color: #1b0855 !important;
+    
+        &:active,
+        &:hover{        
+            color: #fff;
+            background: #1b0855;
+        }
+    }
 }
+
+

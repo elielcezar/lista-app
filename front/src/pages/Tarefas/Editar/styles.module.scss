@@ -1,4 +1,4 @@
-h2.pagetitle{
+/*h2.pagetitle{
     padding: 7px 0;
     background: #132972;
     color: #fff;
@@ -9,22 +9,9 @@ h2.pagetitle{
     text-align: center;
     text-transform: uppercase;
     letter-spacing: 1px;
-}
+}*/
 
-.listaUsuarios{
-    background: #fff;
-    padding: 25px;
-    margin: 40px 0;
-    box-shadow: 0 5px 5px rgba(0,0,0,.1);
-
-    & .item{
-        margin: 0 0 20px 0;
-        padding: 0 0 20px 0;
-        border-bottom: 1px solid #ccc;
-    }
-}
-
-.confirmation-message{
+/*.confirmation-message{
     display: inline-block;
     transition: all .3s;
     padding: 15px;
@@ -35,7 +22,7 @@ h2.pagetitle{
     font-size: 16px;
     font-weight: 500;
     margin: 20px 0;
-}
+}*/
 
 form{
     margin: auto;
@@ -44,22 +31,28 @@ form{
     border-radius: 5px;
     box-shadow: 0 3px 3px rgba(0,0,0,.1);
 
-    .form-item{
-        margin: 1.5%;
-        max-width: 97%;
-    }
-
     .row{
         display: flex;
-        flex-direction: column;
-        //flex-wrap: wrap;
+        flex-direction: column;            
+    }   
 
-        .form-item{
-            //width: 30.3%;
-            padding: 10px;
-            border: 1px solid #ccc;            
-        }
-    }    
+    /*.form-item{            
+        margin: 1.5%;
+        max-width: 97%;
+        padding: 10px;
+        border: 1px solid red;
+        
+    }*/
+
+    .inputTitulo{
+        border: none;
+        padding: 0;
+        font-size: 28px;
+        margin: 5px 0 20px 0;
+        outline: none;
+    }
+
+    
 }
 
 .currentImages{    
@@ -130,7 +123,7 @@ form{
     padding: 10px;
     border: 2px solid #494ec1 !important;
     border-radius: 7px;
-    background: #fff;
+    background: #494ec1;
     
     input[type="checkbox"] {
         width: 25px;
@@ -145,7 +138,7 @@ form{
         cursor: pointer;
         font-weight: 500;
         margin: 0;
-        color: #494ec1;
+        color: #fff;
         width: 100%;
         padding: 3px;
         text-align: left;
@@ -165,19 +158,15 @@ form{
     }
 }
 
-.deleteButton,
-.cancelButton{
-    text-transform: uppercase;
-    font-weight: 600;
-    letter-spacing: 0;    
-    text-transform: none;
-    margin: 20px 0 0 0;    
-}
-
-.deleteButton{
+a.askDelete{
     background: #fff;
     border: 2px solid #ff0000;
     color: #ff0000;
+    border-radius: 50px;
+    max-width: 200px;
+    margin: auto;
+    padding: 4px 10px 4px 10px;
+    font-size: 14px;
 
     &:active,
     &:hover{        
@@ -186,15 +175,4 @@ form{
     }
 }
 
-.cancelButton{
-    background-color: #fff;
-    color: #1b0855;
-    border: 2px solid #1b0855;
-
-    &:active,
-    &:hover{        
-        color: #fff;
-        background: #1b0855;
-    }
-}
 

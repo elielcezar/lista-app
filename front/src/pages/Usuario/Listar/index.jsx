@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, NavLink } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
+import { detectarTipoIdentificador, formatarTelefone } from '@/utils/validation';
 import PageTitle from '@/components/PageTitle';
 import ButtonCreate from '@/components/ButtonCreate';
 import StatusMessage from '@/components/StatusMessage';
@@ -112,6 +113,12 @@ export const Usuarios = () => {
 
   const baseUrl = '/usuarios/'; 
   
+  // Função para exibir o identificador formatado
+  const exibirIdentificador = (identifier) => {
+    const tipo = detectarTipoIdentificador(identifier);
+    return tipo === 'telefone' ? formatarTelefone(identifier) : identifier;
+  };
+  
   return (
     <>
       <PageTitle title="Colaboradores"/>
@@ -134,7 +141,7 @@ export const Usuarios = () => {
                 {users.map((usuario) => (                
                     <div className={styles.item} key={usuario.id}>
                         <h3><a href={`${baseUrl}${usuario.id}`}>{usuario.name}</a></h3>
-                        <p>{usuario.email}</p>
+                        <p>{exibirIdentificador(usuario.identifier)}</p>
                         <button 
                             onClick={(e) => deleteUser(e, usuario.id)} 
                             className={styles.excluir}

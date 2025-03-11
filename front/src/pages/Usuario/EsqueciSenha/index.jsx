@@ -1,9 +1,9 @@
-// front/src/pages/Usuario/EsqueciSenha/index.jsx
 import { useState, useRef } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import api from '@/services/api';
-import StatusMessage from '@/components/StatusMessage';
 import { detectarTipoIdentificador } from '@/utils/validation';
+import StatusMessage from '@/components/StatusMessage';
+import api from '@/services/api';
+import FormTitle from '@/components/FormTitle';
 import logo from '@/assets/logo.webp';
 import styles from './styles.module.css';
 
@@ -43,8 +43,7 @@ export default function EsqueciSenha() {
         }, 2000);
 
       } else {
-        // Para telefone, redirecionar para a página de verificação de código
-        // Passando o telefone como parâmetro de estado
+        // Para telefone, redirecionar para a página de verificação de código        
         setTimeout(() => {
           navigate('/recuperacao-whatsapp', { 
             state: { 
@@ -52,7 +51,7 @@ export default function EsqueciSenha() {
               codigoEnviado: true 
             } 
           });
-        }, 1500);
+        }, 3000);
       }
       
     } catch (error) {
@@ -76,7 +75,8 @@ export default function EsqueciSenha() {
         <h1><img src={logo} alt="Lista App" /></h1>
         
         <form onSubmit={handleSolicitarRecuperacao} className={styles.loginForm}>
-          <h2 className={styles.formTitle}>Recuperação de Senha</h2>
+          
+          <FormTitle title="Recuperação de Senha" />
           
           <p className={styles.instructions}>
             Informe seu email ou número de WhatsApp cadastrado para receber instruções de recuperação.

@@ -19,10 +19,10 @@ function Home() {
           {user && !user.role && <div>Usuário sem role definido: {JSON.stringify(user)}</div>}
 
           {hasRole(['gerente', 'admin']) && (            
-              <ListaTarefasGerente />           
+              <ListaTarefasGerente status={false} />           
           )}          
           {hasRole(['colaborador']) && (             
-              <ListaTarefasColaborador />
+              <ListaTarefasColaborador status={false} />
           )}
           
         </div> 

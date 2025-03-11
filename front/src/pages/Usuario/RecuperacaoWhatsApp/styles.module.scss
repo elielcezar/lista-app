@@ -28,7 +28,7 @@
   }
   
   h2.formTitle {
-    margin: 15px 0 30px 0;
+    margin: 15px 0 20px 0;
   }
   
   form {
@@ -40,17 +40,13 @@
     border-top-right-radius: 0;
   }
   
-  .formTitle {
-    text-align: center;
-    font-weight: 500;
-    margin: 0 0 30px 0;
-  }
-  
-  .instructions {
-    text-align: center;
-    margin-bottom: 20px;
+  p.instructions {
+    text-align: center;  
     color: #666;
-  }
+    margin: 0 0 25px 0;
+    font-size: 15px;
+    text-align: center;
+  }  
   
   .errorMessage {
     color: #e74c3c;

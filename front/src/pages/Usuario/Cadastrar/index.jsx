@@ -92,7 +92,7 @@ function CadastroUsuario() {
                   message: '',
                   type: ''
                 });
-              }, 2000);
+              }, 3000);
         }
     }
 

@@ -28,7 +28,7 @@ router.post('/usuarios', async (req, res) => {
         res.status(201).json(response);
     } catch (error) {
         console.error('Erro ao criar usuário:', error);
-        res.status(500).json({ error: 'Erro ao criar usuário' });
+        res.status(500).json({ error: 'Erro ao criar usuário. Por favor, verifique se ele já foi cadastrado.' });
     }
 });
 

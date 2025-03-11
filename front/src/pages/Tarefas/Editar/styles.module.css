@@ -1,59 +1,51 @@
-h2.pagetitle {
-  padding: 7px 0;
-  background: #132972;
-  color: #fff;
-  border: none;
-  font-size: 13px;
-  font-weight: 500;
-  display: block;
-  text-align: center;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.listaUsuarios {
-  background: #fff;
-  padding: 25px;
-  margin: 40px 0;
-  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
-}
-.listaUsuarios .item {
-  margin: 0 0 20px 0;
-  padding: 0 0 20px 0;
-  border-bottom: 1px solid #ccc;
-}
-
-.confirmation-message {
-  display: inline-block;
-  transition: all 0.3s;
-  padding: 15px;
-  border-radius: 5px;
-  background-color: #c5f4ca;
-  border: 1px solid #23872c;
-  color: #23872c;
-  font-size: 16px;
-  font-weight: 500;
-  margin: 20px 0;
-}
-
+/*h2.pagetitle{
+    padding: 7px 0;
+    background: #132972;
+    color: #fff;
+    border: none;
+    font-size: 13px;
+    font-weight: 500;
+    display: block;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}*/
+/*.confirmation-message{
+    display: inline-block;
+    transition: all .3s;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: #c5f4ca;
+    border: 1px solid #23872c;
+    color: #23872c;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 20px 0;
+}*/
 form {
   margin: auto;
   background: #fff;
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 3px 3px rgba(0, 0, 0, 0.1);
-}
-form .form-item {
-  margin: 1.5%;
-  max-width: 97%;
+  /*.form-item{            
+      margin: 1.5%;
+      max-width: 97%;
+      padding: 10px;
+      border: 1px solid red;
+
+  }*/
 }
 form .row {
   display: flex;
   flex-direction: column;
 }
-form .row .form-item {
-  padding: 10px;
-  border: 1px solid #ccc;
+form .inputTitulo {
+  border: none;
+  padding: 0;
+  font-size: 28px;
+  margin: 5px 0 20px 0;
+  outline: none;
 }
 
 .currentImages {
@@ -116,7 +108,7 @@ form .row .form-item {
   padding: 10px;
   border: 2px solid #494ec1 !important;
   border-radius: 7px;
-  background: #fff;
+  background: #494ec1;
 }
 .checkbox input[type=checkbox] {
   width: 25px;
@@ -130,7 +122,7 @@ form .row .form-item {
   cursor: pointer;
   font-weight: 500;
   margin: 0;
-  color: #494ec1;
+  color: #fff;
   width: 100%;
   padding: 3px;
   text-align: left;
@@ -147,31 +139,17 @@ form .row .form-item {
   color: #fff;
 }
 
-.deleteButton,
-.cancelButton {
-  text-transform: uppercase;
-  font-weight: 600;
-  letter-spacing: 0;
-  text-transform: none;
-  margin: 20px 0 0 0;
-}
-
-.deleteButton {
+a.askDelete {
   background: #fff;
   border: 2px solid #ff0000;
   color: #ff0000;
+  border-radius: 50px;
+  max-width: 200px;
+  margin: auto;
+  padding: 4px 10px 4px 10px;
+  font-size: 14px;
 }
-.deleteButton:active, .deleteButton:hover {
+a.askDelete:active, a.askDelete:hover {
   color: #fff;
   background: #ff0000;
-}
-
-.cancelButton {
-  background-color: #fff;
-  color: #1b0855;
-  border: 2px solid #1b0855;
-}
-.cancelButton:active, .cancelButton:hover {
-  color: #fff;
-  background: #1b0855;
 }/*# sourceMappingURL=styles.module.css.map */

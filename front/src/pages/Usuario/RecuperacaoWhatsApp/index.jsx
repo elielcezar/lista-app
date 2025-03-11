@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
-import api from '@/services/api';
 import StatusMessage from '@/components/StatusMessage';
+import api from '@/services/api';
+import FormTitle from '@/components/FormTitle';
 import logo from '@/assets/logo.webp';
 import styles from './styles.module.css';
 
@@ -30,21 +31,8 @@ export default function RecuperacaoWhatsApp() {
   useEffect(() => {
     if (inputTelefone.current && telefoneRecebido) {
       inputTelefone.current.value = telefoneRecebido;
-    }
-    
-    // Se o código já foi enviado, mostrar mensagem de sucesso
-    if (codigoJaEnviado) {
-      setStatusMessage({
-        message: 'Código enviado para seu WhatsApp. Por favor, verifique seu celular.',
-        type: 'success'
-      });
-    }
-    setTimeout(() => {
-      setStatusMessage({
-        message: '',
-        type: ''
-      });
-    }, 3000);
+    }    
+   
   }, [telefoneRecebido, codigoJaEnviado]);
   
   async function handleSolicitarCodigo(e) {
@@ -54,11 +42,6 @@ export default function RecuperacaoWhatsApp() {
     try {
       await api.post('/esqueci-senha', {
         identifier: inputTelefone.current.value
-      });
-      
-      setStatusMessage({
-        message: 'Se o número estiver cadastrado, você receberá uma mensagem com o código de recuperação.',
-        type: 'success'
       });
       
       // Armazenar telefone para o próximo passo
@@ -160,7 +143,8 @@ export default function RecuperacaoWhatsApp() {
         
         {step === 1 ? (
           <form onSubmit={handleSolicitarCodigo} className={styles.loginForm}>
-            <h2 className={styles.formTitle}>Recuperação via WhatsApp</h2>
+            
+            <FormTitle title="Recuperação via WhatsApp" />
             
             <p className={styles.instructions}>
               Informe seu número de WhatsApp cadastrado para receber um código de recuperação.
@@ -189,7 +173,8 @@ export default function RecuperacaoWhatsApp() {
           </form>
         ) : (
           <form onSubmit={handleVerificarCodigo} className={styles.loginForm}>
-            <h2 className={styles.formTitle}>Verificar Código</h2>
+            
+            <FormTitle title="Verificar Código" />
             
             <p className={styles.instructions}>
               Digite o código de 6 dígitos enviado para seu WhatsApp e defina uma nova senha.
@@ -234,7 +219,9 @@ export default function RecuperacaoWhatsApp() {
             </div>
             
             <div className="extras">
-              <p><a href="#" onClick={(e) => { e.preventDefault(); setStep(1); }}>Voltar</a></p>
+              <p><a href="#" onClick={(e) => { e.preventDefault(); setStep(1); }}>Reenviar código</a></p>
+              <p>Prefere usar email? <NavLink to="/esqueci-senha">Recuperar por Email</NavLink></p>
+              <p><NavLink to="/login">Voltar para Login</NavLink></p>
             </div>
           </form>
         )}

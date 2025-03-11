@@ -1,8 +1,8 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
-import PageTitle from '@/components/PageTitle';
-import api from "@/services/api";
 import { validarIdentificador, detectarTipoIdentificador, prepararIdentificador } from '@/utils/validation';
+import api from "@/services/api";
+import PageTitle from '@/components/PageTitle';
 import StatusMessage from '@/components/StatusMessage';
 import Loading from '@/components/Loading';
 import styles from './styles.module.css';
@@ -45,7 +45,7 @@ export const Usuario = () => {
     }, [usuario]);
 
     // Validar o identificador quando o campo perder o foco
-    const handleIdentifierBlur = () => {
+    const handleIdentifierBlur = () => {        
         const identifier = inputIdentifier.current.value;
         
         if (!identifier) {
@@ -53,14 +53,14 @@ export const Usuario = () => {
             return;
         }
         
-        if (!validarIdentificador(identifier)) {
+        if (!validarIdentificador(identifier)) {            
             const tipo = detectarTipoIdentificador(identifier);
             setValidationError(tipo === 'email' 
                 ? 'Email inválido. Use um formato válido (ex: nome@empresa.com.br)' 
-                : 'Informe o telefone completo, com DDD. Por exemplo: 11 5555-9999');
+                : 'Informe o telefone completo, com DDD. Por exemplo: 11 5555-9999*');
         } else {
             setValidationError('');
-        }
+        }        
     };
 
     async function handleSubmit(e) {
@@ -73,7 +73,7 @@ export const Usuario = () => {
             const tipo = detectarTipoIdentificador(identifier);
             setValidationError(tipo === 'email' 
                 ? 'Email inválido. Use um formato válido (ex: nome@dominio.com)' 
-                : 'Informe o telefone completo, com DDD. Por exemplo: 11 5555-9999');
+                : 'Informe o telefone completo, com DDD. Por exemplo: 11 5555-9999-');
             return;
         }
         

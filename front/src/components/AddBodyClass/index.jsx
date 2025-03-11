@@ -8,7 +8,13 @@ export default function AddBodyClass() {
     
     useEffect(() => {
         // Lista de rotas de formulario de usuario que devem ter o fundo roxo        
-        const isUserPage = ['/login', '/cadastro-usuario', '/esqueci-senha', '/redefinir-senha'].includes(location.pathname);
+        const isUserPage = [
+            '/login', 
+            '/cadastro-usuario', 
+            '/esqueci-senha', 
+            '/redefinir-senha',
+            '/recuperacao-whatsapp'
+        ].includes(location.pathname);
         
         // Adiciona ou remove a classe com base na rota atual
         if (isUserPage) {
@@ -24,7 +30,7 @@ export default function AddBodyClass() {
         
     }, [location]);
 
-    // Efeito para adicionar classe quando o usuário está logado
+    // Adiciona classe quando o usuário está logado
     useEffect(() => {
         if (isAuthenticated) {
             document.body.classList.add('logged-in');
