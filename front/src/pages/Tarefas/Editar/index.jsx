@@ -214,7 +214,7 @@ function EditarTarefa() {
     <>
         <PageTitle title="Editar Tarefa" />
         
-        <div id="main">
+        <div id="main" className={styles.main}>
             <div className="container">
                 {statusMessage.message && (
                     <StatusMessage 

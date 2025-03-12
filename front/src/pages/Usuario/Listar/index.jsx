@@ -122,7 +122,7 @@ export const Usuarios = () => {
   return (
     <>
       <PageTitle title="Colaboradores"/>
-      <div id="main">
+      <div id="main" className={styles.main}>
         <div className="container">  
           {(isLoading) && (
             <Loading />

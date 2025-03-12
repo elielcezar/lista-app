@@ -5,24 +5,41 @@
         background: #fff;
         padding: 10px;
         box-shadow: 0 2px 3px rgba(0,0,0,.1);
-        border-radius: 5px;
-        border-left: 5px solid #7cda7e;
+        border-radius: 12px;        
         margin-bottom: 5px;
         display: flex;
         justify-content: flex-start;
         gap: 15px;
-        align-items: center;            
+        align-items: center;     
+        position: relative;      
+
+        /*&::before{
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: -2px;
+            width: 4px;
+            height: 40px;
+            margin-top: -20px;
+            background: #7ca4da;      
+            border-radius: 10px;      
+        }*/
 
         .checkbox{                
-            width: 10%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid #7cda7e;
+            flex: 0 0 20px;
+            border: 2px solid #7ca4da;
             background: #fff;
             border-radius: 50%;
             width: 20px;
-            height: 20px;                
+            height: 20px;
+            align-self: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 20px;
+            min-height: 20px;
+            max-width: 20px;
+            max-height: 20px;
 
             input[type="checkbox"]{
                 opacity: 0;
@@ -38,12 +55,13 @@
             h3{                    
                 font-size: 16px;
                 font-weight: 600;  
-                margin-bottom: 5px;                  
+                margin-bottom: 1px;                  
             }                
             p{
-                font-size: 14px;
-                color: #333;
+                font-size: 13px;
+                color: #5b5894;
                 font-weight: 400;
+                font-style: italic;
 
                 strong{
                     color: #666;
@@ -61,14 +79,25 @@
     }
 
     .card.finished {
-        opacity: 0.1;
-        transform: translateX(100%);
+        /*opacity: 0.1;
+        transform: translateX(100%);*/
         transition: all 0.5s ease;  
-        border-left: 5px solid #7ca4da;          
+        border-left: 5px solid #07dd4e;          
 
         .checkbox {
-            background: #7ca4da;
-            border: 2px solid #7ca4da;
+            background: #07dd4e;
+            border: 2px solid #07dd4e;
         }
+    }
+
+    .card.finished.moveRight {
+        opacity: 0.1;
+        transform: translateX(100%);
+        transition: all 0.5s ease;  /* 0.5s = 500ms */
+    }
+    .card.finished.moveLeft {
+        opacity: 0.1;
+        transform: translateX(-100%);
+        transition: all 0.5s ease;  /* 0.5s = 500ms */
     }
 }

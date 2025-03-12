@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate, NavLink } from 'react-router-dom';
 import PageTitle from '@/components/PageTitle';
+import FormTitle from '@/components/FormTitle';
 import api from '@/services/api'
 import StatusMessage from '@/components/StatusMessage';
 import { useAuth } from '@/context/AuthContext';
@@ -13,6 +14,8 @@ function CadastroUsuario() {
     const navigate = useNavigate();
 
     const { isAuthenticated, user } = useAuth();
+
+    const { hasRole } = useAuth();
     
     const [statusMessage, setStatusMessage] = useState({ message: '', type: '' });
     const [validationError, setValidationError] = useState('');
@@ -111,12 +114,10 @@ function CadastroUsuario() {
                     {!isAuthenticated ? (
                         <h1><img src={logo} alt="Task App" /></h1>
                     ) : null}                     
-                    {isAuthenticated ? (
-                        <h1>Novo Colaborador</h1>
-                    ) : null}                     
+                             
                     <form onSubmit={handleSubmit} className={styles.loginForm}>
                         {!isAuthenticated && (
-                            <h2 className={styles.formTitle}>Cadastre-se</h2>
+                            <FormTitle title="Cadastre-se" />
                         )}
 
                         <div className="form-item">

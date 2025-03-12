@@ -8,6 +8,7 @@
   left: 0;
   bottom: 0;
   width: 100%;
+  box-shadow: 0px -2px 15px rgba(30, 0, 197, 0.2);
 
   .nav{
     width: 100%;
@@ -26,9 +27,9 @@
             height: 50px;         
             margin: 0;
               a{
-                  color: #222;
+                  color: #867fa3;
                   text-decoration: none;
-                  font-size: 12px;
+                  font-size: 10px;
                   line-height: 12px;
                   font-weight: 500;
                   display: flex;
@@ -41,22 +42,22 @@
                   }
 
                   svg{
-                    width: 16px;
-                    height: 16px;
+                    width: 18px;
+                    height: 18px;
                     margin: 0 0 5px 0;
                   }
               }
           }
           li.arquivo{
             svg{
-              width: 19px;
-              height: 19px;
+              width: 20px;
+              height: 20px;
             }
           }
           li.usuarios{
             svg{
-              width: 17px;
-              height: 17px;
+              width: 20px;
+              height: 20px;
             }
           }
       }

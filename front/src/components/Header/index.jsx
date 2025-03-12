@@ -2,6 +2,7 @@ import { useNavigate, NavLink } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useLocation } from 'react-router-dom';
+import { FaRegUserCircle } from "react-icons/fa";
 import { IoMdExit } from "react-icons/io";
 
 import styles from './styles.module.css'
@@ -28,7 +29,7 @@ function Header() {
     return (
         <header className={styles.header}>            
             <p className={styles.hello}>
-                Olá {userName}!
+                <FaRegUserCircle /> Olá {userName}!
             </p>                        
             
             <a onClick={handleLogout} className={styles.exit}>

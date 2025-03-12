@@ -26,6 +26,8 @@ h1 img {
 .loginForm {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+  padding: 30px 5%;
+  margin: 0;
 }
 .loginForm .inlineMessage {
   max-width: 100%;

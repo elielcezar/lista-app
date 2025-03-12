@@ -7,6 +7,7 @@
     align-items: center;
     justify-content: center;
     padding: 5% !important;
+    background: #fff;
 }
 
 h1{
@@ -34,6 +35,8 @@ form{
 .loginForm{
     border-top-left-radius: 0;
     border-top-right-radius: 0;
+    margin: 0;
+    padding: 30px 5%;
 }
 
 .formTitle{

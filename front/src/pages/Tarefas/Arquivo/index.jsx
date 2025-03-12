@@ -10,9 +10,9 @@ function Home() {
 
   return (
     <>      
-      <PageTitle title="Tarefas Arquivadas"/>
+      <PageTitle title="Tarefas Concluídas"/>
       
-      <div id="main" className={styles.mainHome}>
+      <div id="main" className={styles.main}>
         <div className="container">  
           {!user && <div>Carregando usuário...</div>}
           

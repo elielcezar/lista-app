@@ -1,6 +1,7 @@
 h2.pagetitle{
     padding: 7px 0;
-    background: #240d4f;
+    //background: linear-gradient(90deg, rgb(129, 0, 255) 0%, rgb(201, 0, 255) 100%);
+    background: linear-gradient(90deg, #9944fb 0%, #5f3ff8 100%);
     color: #fff;
     border: none;
     font-size: 13px;
@@ -9,4 +10,7 @@ h2.pagetitle{
     text-align: center;
     text-transform: uppercase;
     letter-spacing: 1px;
+    font-size: 22px;
+    padding: 20px 5% 55px 5%;
+    text-align: left;
 }

@@ -20,19 +20,26 @@ export default function CardTarefa({ tarefa, onStatusChange }) {
             
             const card = e.target.closest(`.${styles.card}`);
             if (card) {
-                card.classList.add(styles.finished);
+                if (card.classList.contains(styles.finished)) {
+                    card.classList.add(styles.moveLeft);
+                    console.log('moveLeft');
+                } else {
+                    card.classList.add(styles.finished);
+                    card.classList.add(styles.moveRight);
+                    console.log('moveRight');
+                }
             }
 
             const response = await api.patch(`/tarefas/${tarefaId}/status`, {
                 status: !currentStatus
-            });           
-
-            console.log('Resposta da API:', response);
+            });                   
             
             if (response.status === 200) {
-                if (onStatusChange) {                    
-                    onStatusChange(tarefaId, !currentStatus);                    
-                }
+                setTimeout(() => {
+                    if (onStatusChange) {                    
+                        onStatusChange(tarefaId, !currentStatus);                    
+                    }
+                }, 500);
             }
         } catch (error) {
             console.error('Erro detalhado:', error.response?.data || error.message);
@@ -43,7 +50,7 @@ export default function CardTarefa({ tarefa, onStatusChange }) {
         }
     }
 
-    const baseUrl = import.meta.env.VITE_UPLOADS_URL + '/';
+    const baseUrl = import.meta.env.VITE_UPLOADS_URL + '/';    
 
     return (
         <>
@@ -51,7 +58,7 @@ export default function CardTarefa({ tarefa, onStatusChange }) {
                 <StatusMessage message={statusMessage.message} type={statusMessage.type} />
             )}
             <div className={styles.item} key={tarefa.id}>
-                <div className={styles.card}>    
+                <div className={`${styles.card} ${tarefa.status ? styles.finished : ''}`}>    
                     <div className={`${styles.checkbox} ${tarefa.status ? styles.active : ''}`} onClick={(e) => handleStatusChange(e, tarefa.id)} >
                         <input type="checkbox" />
                     </div>

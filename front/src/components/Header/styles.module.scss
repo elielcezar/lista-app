@@ -9,16 +9,22 @@
     color: #fff;  
     margin-bottom: 0;
     padding: 18px 20px 16px 20px;
-    background: linear-gradient(90deg, rgba(129,0,255,1) 0%, rgba(201,0,255,1) 100%);
+    //background: linear-gradient(90deg, rgba(129,0,255,1) 0%, rgba(201,0,255,1) 100%);
+    background: linear-gradient(90deg, #9944fb 0%, #5f3ff8 100%);
 
     .hello{
-        font-size: 18px;
-        font-weight: 600;
-        letter-spacing: -1px;
+        font-size: 16px;
+        font-weight: 500;        
         display: flex;
         align-items: center;
         gap: 5px;
         color: #fff;
+
+        svg{
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+        }
     }    
     .exit{
         font-size: 15px;
