@@ -40,7 +40,7 @@ function AppContent() {
     const { isAuthenticated } = useAuth();
 
     return (
-        <Router>
+        <Router basename="/app">
             <AddBodyClass />
             {isAuthenticated && <Header />}
             <Routes>                    
