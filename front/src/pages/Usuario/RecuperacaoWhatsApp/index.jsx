@@ -167,8 +167,8 @@ export default function RecuperacaoWhatsApp() {
             </div>
             
             <div className="extras">
-              <p>Prefere usar email? <NavLink to="/esqueci-senha">Recuperar por Email</NavLink></p>
-              <p>Lembrou sua senha? <NavLink to="/login">Voltar para Login</NavLink></p>
+              <p><NavLink to="/esqueci-senha">Recuperar por Email</NavLink></p>
+              <p><NavLink to="/login">Voltar para Login</NavLink></p>
             </div>
           </form>
         ) : (
@@ -220,7 +220,7 @@ export default function RecuperacaoWhatsApp() {
             
             <div className="extras">
               <p><a href="#" onClick={(e) => { e.preventDefault(); setStep(1); }}>Reenviar código</a></p>
-              <p>Prefere usar email? <NavLink to="/esqueci-senha">Recuperar por Email</NavLink></p>
+              <p><NavLink to="/esqueci-senha">Recuperar por Email</NavLink></p>
               <p><NavLink to="/login">Voltar para Login</NavLink></p>
             </div>
           </form>

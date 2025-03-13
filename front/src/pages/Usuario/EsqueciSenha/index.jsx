@@ -24,6 +24,22 @@ export default function EsqueciSenha() {
     const tipo = detectarTipoIdentificador(identifier);
     
     try {
+      
+      const payload = {
+        identifier: identifier.trim(), // Remove espaços em branco
+        tipo: tipo,        
+        telefone: tipo === 'telefone' ? identifier.replace(/\D/g, '') : null // Remove não-dígitos
+      };
+
+      console.log('Enviando requisição com:', {
+        url: `${api.defaults.baseURL}/esqueci-senha`,
+        payload,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        }
+      });
+
       const response = await api.post('/esqueci-senha', {
         identifier
       });
@@ -55,11 +71,18 @@ export default function EsqueciSenha() {
       }
       
     } catch (error) {
-      console.error('Erro ao solicitar recuperação:', error);
-      setStatusMessage({
-        message: error.response?.data?.error || 'Erro ao processar solicitação',
-        type: 'error'
-      });
+       // Log mais específico do erro
+        console.error('Erro completo:', error);
+        console.error('Configuração da requisição:', {
+          baseURL: api.defaults.baseURL,
+          headers: api.defaults.headers,
+          timeout: api.defaults.timeout
+        });
+
+        setStatusMessage({
+          message: 'Erro ao processar solicitação. Por favor, tente novamente em alguns instantes.',
+          type: 'error'
+        });
     } finally {
       setLoading(false);
     }
@@ -99,7 +122,7 @@ export default function EsqueciSenha() {
           </div>
           
           <div className="extras">
-            <p>Lembrou sua senha? <NavLink to="/login">Voltar para Login</NavLink></p>
+            <p><NavLink to="/login">Voltar para Login</NavLink></p>
           </div>
         </form>
       </div>
