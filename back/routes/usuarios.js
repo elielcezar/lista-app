@@ -1,6 +1,6 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
-import { prisma } from '../prisma/index.js'; // Importar a instância que já tem o middleware
+import { prisma } from '../prisma/index.js';
 
 const router = express.Router();
 

@@ -5,6 +5,7 @@ import InlineMessage from '@/components/InlineMessage';
 import api from '@/services/api'
 import { useAuth } from '@/context/AuthContext';
 import logo from '@/assets/logo.webp';
+import { FaRegUser } from "react-icons/fa";
 import styles from './styles.module.css';
 
 export const Login = () => { 
@@ -98,7 +99,7 @@ export const Login = () => {
                         <input 
                             type="text" 
                             name="identifier" 
-                            className="identifier" 
+                            className={styles.identifier}
                             placeholder='Email ou Telefone' 
                             ref={inputIdentifier}
                             onKeyPress={handleKeyPress}
@@ -109,7 +110,7 @@ export const Login = () => {
                         <input 
                             type="password" 
                             name="password" 
-                            className="password" 
+                            className={styles.password}
                             placeholder='Senha' 
                             ref={inputPassword}
                             onKeyPress={handleKeyPress}
