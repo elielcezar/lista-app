@@ -207,14 +207,13 @@ function EditarTarefa() {
 
     if (loading) return <Loading />;
     if (!tarefa) return <div>Tarefa não encontrada</div>;
-
-    //const baseUrl = import.meta.env.VITE_UPLOADS_URL + '/';
    
   return (
     <>
         <PageTitle title="Editar Tarefa" />
         
         <div id="main" className={styles.main}>
+
             <div className="container">
                 {statusMessage.message && (
                     <StatusMessage 
@@ -225,7 +224,18 @@ function EditarTarefa() {
 
                 {tarefa && (
                     <>
-                    <form onSubmit={handleSubmit}>
+                    <form className={styles.form} onSubmit={handleSubmit}>
+
+                    <div className={`${styles.checkboxContainer} form-item`}>
+                        <label onClick={handleStatusChange}>{ status ? 'Tarefa concluída' : 'Concluir Tarefa?' }</label>
+                        <div className={`${styles.checkbox} ${status ? styles.active : ''}`}>
+                            <input 
+                                type="checkbox" 
+                                checked={status} 
+                                onChange={(e) => setStatus(e.target.checked)} 
+                            />
+                        </div>                        
+                    </div>
 
                     {hasRole(['admin', 'gerente']) && (
                         <>
@@ -248,131 +258,115 @@ function EditarTarefa() {
                             </div>
                         </>
                     )}
-                        
-                         
 
+                    {hasRole(['admin', 'gerente']) && (
                         <div className="form-item">
-                            <div className={`${styles.checkbox} ${status ? styles.active : ''}`}>
-                                <input 
-                                    type="checkbox" 
-                                    checked={status} 
-                                    onChange={(e) => setStatus(e.target.checked)} 
-                                />
-                                <label onClick={handleStatusChange}>{ status ? 'Tarefa concluída' : 'Concluir Tarefa?' }</label>
-                            </div>
+                            <label>Colaborador Responsável: </label>
+                            <select 
+                                value={selectedUser} 
+                                onChange={(e) => setSelectedUser(e.target.value)}
+                                required
+                            >
+                                <option value="">- Selecione um colaborador -</option>
+                                {usuarios.map(user => (
+                                    <option key={user.id} value={user.id}>
+                                        {user.name}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
-                      
-                        {hasRole(['admin', 'gerente']) && (
-                            <div className="form-item">
-                                <label>Colaborador Responsável: </label>
-                                <select 
-                                    value={selectedUser} 
-                                    onChange={(e) => setSelectedUser(e.target.value)}
-                                    required
-                                >
-                                    <option value="">- Selecione um colaborador -</option>
-                                    {usuarios.map(user => (
-                                        <option key={user.id} value={user.id}>
-                                            {user.name}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                        )}
-                        
-                        {/* Exibir imagens atuais */}
-                        <div className={styles.currentImages}>
-                            <div className={styles.antes}>              
-                                <h3>Imagem Antes</h3>                      
-                                {previewImages.imagemAntes ? (
-                                    <div className={styles.imageContainer}>
-                                        <img 
-                                            src={previewImages.imagemAntes}
-                                            alt="Preview Antes"
-                                            className={styles.previewImage}
-                                        />
-                                        {hasRole(['admin', 'gerente']) && (
-                                            <button 
-                                            type="button"
-                                            className={styles.deleteButton}
-                                            onClick={() => handleDeleteImage('imagemAntes')}
-                                            >
-                                                <FaTrash />
-                                            </button>
-                                        )}
-                                    </div>
-                                ) : (
-                                    <p className={styles.noImage}>Nenhuma imagem selecionada</p>
-                                )}
-
-                                {hasRole(['admin', 'gerente']) && (
-                                    <div className="form-item">
-                                        <label>Selecionar:</label>
-                                    <input 
-                                        type="file" 
-                                        name="imagemAntes"
-                                        accept="image/*"
-                                        onChange={(e) => handleImageUpload(e, 'imagemAntes')}
-                                            className={styles.fileInput}
-                                        />
-                                    </div>
-                                )}
-                            </div>
-
-                            <div className={styles.depois}>
-                                <h3>Imagem Depois</h3>
-                                {previewImages.imagemDepois ? (
-                                    <div className={styles.imageContainer}>
-                                        <img 
-                                            src={previewImages.imagemDepois}
-                                            alt="Preview Depois"
-                                            className={styles.previewImage}
-                                        />
+                    )}
+                    
+                    {/* Exibir imagens atuais */}
+                    <div className={styles.currentImages}>
+                        <div className={styles.antes}>              
+                            <h3>Imagem Antes</h3>                      
+                            {previewImages.imagemAntes ? (
+                                <div className={styles.imageContainer}>
+                                    <img 
+                                        src={previewImages.imagemAntes}
+                                        alt="Preview Antes"
+                                        className={styles.previewImage}
+                                    />
+                                    {hasRole(['admin', 'gerente']) && (
                                         <button 
-                                            type="button"
-                                            className={styles.deleteButton}
-                                            onClick={() => handleDeleteImage('imagemDepois')}
+                                        type="button"
+                                        className={styles.deleteButton}
+                                        onClick={() => handleDeleteImage('imagemAntes')}
                                         >
                                             <FaTrash />
                                         </button>
-                                    </div>
-                                ) : (
-                                    <p className={styles.noImage}>Nenhuma imagem selecionada</p>
-                                )}
+                                    )}
+                                </div>
+                            ) : (
+                                <p className={styles.noImage}>Nenhuma imagem selecionada</p>
+                            )}
 
+                            {hasRole(['admin', 'gerente']) && (
                                 <div className="form-item">
                                     <label>Selecionar:</label>
-                                    <input 
-                                        type="file" 
-                                        name="imagemDepois"
-                                        accept="image/*"
-                                        onChange={(e) => handleImageUpload(e, 'imagemDepois')}
+                                <input 
+                                    type="file" 
+                                    name="imagemAntes"
+                                    accept="image/*"
+                                    onChange={(e) => handleImageUpload(e, 'imagemAntes')}
                                         className={styles.fileInput}
                                     />
                                 </div>
-                            </div>
-                        </div>  
+                            )}
+                        </div>
 
-                        <div className="form-item">
-                            <label>Observações:</label>
-                            <textarea 
-                                placeholder="Observações" 
-                                ref={inputObservacoes}
-                            />
-                        </div>    
+                        <div className={styles.depois}>
+                            <h3>Imagem Depois</h3>
+                            {previewImages.imagemDepois ? (
+                                <div className={styles.imageContainer}>
+                                    <img 
+                                        src={previewImages.imagemDepois}
+                                        alt="Preview Depois"
+                                        className={styles.previewImage}
+                                    />
+                                    <button 
+                                        type="button"
+                                        className={styles.deleteButton}
+                                        onClick={() => handleDeleteImage('imagemDepois')}
+                                    >
+                                        <FaTrash />
+                                    </button>
+                                </div>
+                            ) : (
+                                <p className={styles.noImage}>Nenhuma imagem selecionada</p>
+                            )}
 
-                        <div className="form-item">
-                            <button type="submit">Atualizar Tarefa</button>
-                        </div> 
-
-                        {hasRole(['admin', 'gerente']) && (
                             <div className="form-item">
-                                <a className={styles.askDelete} onClick={() => askDelete()}><FaRegTrashAlt /> Excluir Tarefa</a>
-                            </div>   
-                        )}             
-                        
-                             
+                                <label>Selecionar:</label>
+                                <input 
+                                    type="file" 
+                                    name="imagemDepois"
+                                    accept="image/*"
+                                    onChange={(e) => handleImageUpload(e, 'imagemDepois')}
+                                    className={styles.fileInput}
+                                />
+                            </div>
+                        </div>
+                    </div>  
 
+                    <div className="form-item">
+                        <label>Observações:</label>
+                        <textarea 
+                            placeholder="Observações" 
+                            ref={inputObservacoes}
+                        />
+                    </div>    
+
+                    <div className="form-item">
+                        <button type="submit">Atualizar Tarefa</button>
+                    </div> 
+
+                    {hasRole(['admin', 'gerente']) && (
+                        <div className="form-item">
+                            <a className={styles.askDelete} onClick={() => askDelete()}><FaRegTrashAlt /> Excluir Tarefa</a>
+                        </div>   
+                    )}   
                                        
                     </form>                   
                 </>

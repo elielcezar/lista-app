@@ -1,12 +1,9 @@
 import express from 'express';
-//import { PrismaClient } from '@prisma/client';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
-//import bcrypt from 'bcryptjs';
-import { prisma } from '../prisma/index.js'; // Importar a instância que já tem o middleware
+import { prisma } from '../prisma/index.js'; 
 
-//const prisma = new PrismaClient();
 const router = express.Router();
 
 // Configurar o multer para o upload de imagens
@@ -49,6 +46,15 @@ router.post('/tarefas', upload.fields([
     { name: 'imagemDepois', maxCount: 1 }
 ]), async (req, res) => {
     try {
+        console.log('Arquivos recebidos:', req.files);
+        if (req.files?.imagemAntes) {
+            console.log('Imagem Antes:', {
+                tamanho: req.files.imagemAntes[0].size,
+                tipo: req.files.imagemAntes[0].mimetype,
+                nome: req.files.imagemAntes[0].originalname
+            });
+        }
+
         const { titulo, descricao, userId, authorId, observacoes } = req.body;       
 
         // Preparar objeto de criação
@@ -75,7 +81,7 @@ router.post('/tarefas', upload.fields([
 
         res.status(201).json(tarefa);
     } catch (error) {
-        console.error('Erro ao criar tarefa:', error);
+        console.error('Erro detalhado ao criar tarefa:', error);
         res.status(500).json({ 
             error: 'Erro ao criar tarefa',
             details: error.message 

@@ -11,19 +11,7 @@
         justify-content: flex-start;
         gap: 15px;
         align-items: center;     
-        position: relative;      
-
-        /*&::before{
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: -2px;
-            width: 4px;
-            height: 40px;
-            margin-top: -20px;
-            background: #7ca4da;      
-            border-radius: 10px;      
-        }*/
+        position: relative;        
 
         .checkbox{                
             flex: 0 0 20px;
@@ -79,14 +67,18 @@
     }
 
     .card.finished {
-        /*opacity: 0.1;
-        transform: translateX(100%);*/
+        opacity: 0.6;        
         transition: all 0.5s ease;  
         border-left: 5px solid #07dd4e;          
 
         .checkbox {
             background: #07dd4e;
             border: 2px solid #07dd4e;
+        }
+
+        h3{
+            text-decoration: line-through;
+            font-style: italic;
         }
     }
 
