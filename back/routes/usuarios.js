@@ -34,46 +34,47 @@ router.post('/usuarios', async (req, res) => {
 
 // Listar usuarios
 router.get('/usuarios', async (req, res) => {
-    console.log('GET /usuarios - Início da requisição');
-    console.log('Query params recebidos:', req.query);
     
     try {
-        const { name, identifier, createdBy } = req.query;
+        const { name, identifier, createdBy } = req.query;        
         
-        // Forçar o createdBy a ser obrigatório
         if (!createdBy) {
-            return res.status(400).json({ 
+            /*return res.status(400).json({ 
                 error: 'Parâmetro createdBy é obrigatório' 
+            });*/
+            const users = await prisma.user.findMany({                
+                select: {
+                    id: true,
+                    name: true,
+                    identifier: true,
+                    role: true,
+                    createdAt: true,                    
+                }
             });
-        }
-
-        // Log para debug
-        console.log('Filtro createdBy:', createdBy);
+            res.status(200).json(users);
+        }else{
                 
-        const where = {
-            createdBy: parseInt(createdBy) // createdBy é obrigatório
-        };
-        
-        // Adicionar filtros opcionais
-        if (name) where.name = name;
-        if (identifier) where.identifier = identifier;
+            const where = {
+                createdBy: parseInt(createdBy)
+            };
+            
+            // Adicionar filtros opcionais
+            if (name) where.name = name;
+            if (identifier) where.identifier = identifier;        
 
-        console.log('Query where:', where);
-
-        const users = await prisma.user.findMany({
-            where,
-            select: {
-                id: true,
-                name: true,
-                identifier: true,
-                role: true,
-                createdAt: true,
-                createdBy: true
-            }
-        });
-        
-        console.log('Usuários encontrados:', users.length);
-        res.status(200).json(users);
+            const users = await prisma.user.findMany({
+                where,
+                select: {
+                    id: true,
+                    name: true,
+                    identifier: true,
+                    role: true,
+                    createdAt: true,
+                    createdBy: true
+                }
+            });
+            res.status(200).json(users);
+        }    
     } catch (error) {
         console.error('Erro ao buscar usuários:', error);
         res.status(500).json({ error: 'Erro ao buscar usuários' });

@@ -5,7 +5,6 @@ import usuariosRoutes from './routes/usuarios.js';
 import imoveisRoutes from './routes/tarefas.js';
 import loginRoutes from './routes/login.js';
 import senhaRoutes from './routes/senha.js';
-import testRoutes from './routes/test.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { verificarConfiguracao } from './utils/emailConfig.js';
@@ -26,7 +25,6 @@ app.use(cors());
 app.use(usuariosRoutes);
 app.use(imoveisRoutes);
 app.use(loginRoutes);
-app.use(testRoutes);
 app.use(senhaRoutes);
 // Servir arquivos estáticos da pasta uploads
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
